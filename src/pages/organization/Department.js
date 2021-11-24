@@ -144,10 +144,7 @@ export default function User() {
     setFilterName(event.target.value);
   };
   const style = {
-    position: 'absolute',
-    top: '50%',
-    left: '50%',
-    transform: 'translate(-50%, -50%)',
+    position: 'relative',
     bgcolor: 'background.paper',
     boxShadow: 24,
     p: 4
@@ -192,8 +189,9 @@ export default function User() {
       <Modal
         open={open}
         sx={{
-          '& .MuiTextField-root': { width: '25ch' },
-          '& .MuiSelect-root': { width: '25ch' }
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center'
         }}
         onClose={handleClose}
         aria-labelledby="modal-modal-title"
@@ -208,17 +206,30 @@ export default function User() {
                 </Typography>
                 <Stack direction={{ xs: 'column', sm: 'row' }} spacing={2}>
                   <TextField
+                    fullWidth
                     label="Department Name"
                     {...getFieldProps('DepartmentName')}
                     variant="outlined"
                   />
-                  <TextField label="Phone" {...getFieldProps('Phone')} variant="outlined" />
+                  <TextField
+                    fullWidth
+                    label="Phone"
+                    {...getFieldProps('Phone')}
+                    variant="outlined"
+                  />
                 </Stack>
                 <Stack direction={{ xs: 'column', sm: 'row' }} spacing={2}>
-                  <TextField label="Email" {...getFieldProps('Email')} variant="outlined" />
+                  <TextField
+                    fullWidth
+                    multiline
+                    rows={4}
+                    label="Note"
+                    {...getFieldProps('Note')}
+                    variant="outlined"
+                  />
                 </Stack>
                 <LoadingButton fullWidth size="large" type="submit" variant="contained">
-                  Add Account
+                  Add Department
                 </LoadingButton>
               </Stack>
             </Box>
