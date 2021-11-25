@@ -10,10 +10,13 @@ import Products from './pages/Products';
 import Blog from './pages/Blog';
 import User from './pages/User';
 import NotFound from './pages/Page404';
+// Organization
 import Profile from './pages/organization/Profile';
 import Department from './pages/organization/Department';
 import Shift from './pages/organization/Shift';
 import Group from './pages/organization/Group';
+import Work from './pages/organization/Work';
+import Speciality from './pages/organization/Specialities';
 
 // ----------------------------------------------------------------------
 
@@ -38,6 +41,8 @@ export default function Router() {
         { path: 'profile', element: <Profile /> },
         { path: 'department', element: <Department /> },
         { path: 'shift', element: <Shift /> },
+        { path: 'work', element: <Work /> },
+        { path: 'specialities', element: <Speciality /> },
         { path: 'group', element: <Group /> }
       ]
     },
