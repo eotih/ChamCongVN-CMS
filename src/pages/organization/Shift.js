@@ -136,6 +136,13 @@ export default function Shift() {
     setSelected(newSelected);
   };
 
+  const convertDateTime = (date) => {
+    const newDate = new Date(date);
+    const hour = newDate.getHours();
+    const min = newDate.getMinutes();
+    const sec = newDate.getSeconds();
+    return `${hour}:${min}:${sec}`;
+  };
   const handleChangePage = (event, newPage) => {
     setPage(newPage);
   };
@@ -157,24 +164,27 @@ export default function Shift() {
   const formik = useFormik({
     initialValues: {
       ShiftName: '',
-      StartShift: '',
-      EndShift: ''
+      StartShift: convertDateTime(timeStart),
+      EndShift: convertDateTime(timeEnd)
     },
     onSubmit: () => {
-      console.log(timeStart);
-      // axios
-      //   .post(`Organization/AddOrEditShift`, formik.values)
-      //   .then((res) => {
-      //     if (res.data.Status === 'Success') {
-      //       alert('Thêm thành công');
-      //       window.location.reload();
-      //     } else {
-      //       alert('Thêm thất bại');
-      //     }
-      //   })
-      //   .catch((err) => {
-      //     console.log(err);
-      //   });
+      axios
+        .post(`Organization/AddOrEditShift`, {
+          ShiftName: formik.values.ShiftName,
+          StartShift: convertDateTime(timeStart),
+          EndShift: convertDateTime(timeEnd)
+        })
+        .then((res) => {
+          if (res.data.Status === 'Success') {
+            alert('Thêm thành công');
+            window.location.reload();
+          } else {
+            alert('Thêm thất bại');
+          }
+        })
+        .catch((err) => {
+          console.log(err);
+        });
     }
   });
   const { handleSubmit, getFieldProps } = formik;
@@ -223,21 +233,19 @@ export default function Shift() {
                       onChange={(newValue) => {
                         setTimeStart(newValue);
                       }}
-                      renderInput={(params) => (
-                        <TextField {...getFieldProps('StartShift')} {...params} />
-                      )}
+                      renderInput={(params) => <TextField {...params} />}
                     />
                   </LocalizationProvider>
                   <LocalizationProvider dateAdapter={AdapterDateFns}>
                     <TimePicker
                       label="Time End"
                       value={timeEnd}
+                      views={['hours', 'minutes', 'seconds']}
+                      inputFormat="HH:mm:ss"
                       onChange={(newValue) => {
                         setTimeEnd(newValue);
                       }}
-                      renderInput={(params) => (
-                        <TextField {...getFieldProps('EndShift')} {...params} />
-                      )}
+                      renderInput={(params) => <TextField {...params} />}
                     />
                   </LocalizationProvider>
                 </Stack>
@@ -306,6 +314,7 @@ export default function Shift() {
                               onChange={(event) => handleClick(event, ShiftName)}
                             />
                           </TableCell>
+                          <TableCell align="left">{ShiftID}</TableCell>
                           <TableCell align="left">{ShiftName}</TableCell>
                           <TableCell align="left">{StartShift}</TableCell>
                           <TableCell align="left">{EndShift}</TableCell>
