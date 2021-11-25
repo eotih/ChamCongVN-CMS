@@ -12,6 +12,7 @@ import User from './pages/User';
 import NotFound from './pages/Page404';
 import Profile from './pages/organization/Profile';
 import Department from './pages/organization/Department';
+import Shift from './pages/organization/Shift';
 
 // ----------------------------------------------------------------------
 
@@ -34,7 +35,8 @@ export default function Router() {
       element: <DashboardLayout />,
       children: [
         { path: 'profile', element: <Profile /> },
-        { path: 'department', element: <Department /> }
+        { path: 'department', element: <Department /> },
+        { path: 'shift', element: <Shift /> }
       ]
     },
     {

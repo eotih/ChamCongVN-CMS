@@ -38,21 +38,17 @@ import Page from '../../components/Page';
 import Label from '../../components/Label';
 import Scrollbar from '../../components/Scrollbar';
 import SearchNotFound from '../../components/SearchNotFound';
-import {
-  DepartListHead,
-  DepartListToolbar,
-  DepartMoreMenu
-} from '../../components/_dashboard/department';
+import { ShiftListHead, ShiftListToolbar, ShiftMoreMenu } from '../../components/_dashboard/shift';
 //
 import USERLIST from '../../_mocks_/user';
 
 // ----------------------------------------------------------------------
 
 const TABLE_HEAD = [
-  { id: 'DepartmentID', label: 'DepartmentID', alignRight: false },
-  { id: 'DepartmentName', label: 'Department Name', alignRight: false },
-  { id: 'Phone', label: 'Phone', alignRight: false },
-  { id: 'Note', label: 'Note', alignRight: false },
+  { id: 'ShiftID', label: 'ShiftID', alignRight: false },
+  { id: 'ShiftName', label: 'Shift Name', alignRight: false },
+  { id: 'StartShift', label: 'Start Shift', alignRight: false },
+  { id: 'EndShift', label: 'End Shift', alignRight: false },
   { id: '' }
 ];
 
@@ -185,7 +181,7 @@ export default function User() {
   const isUserNotFound = filteredUsers.length === 0;
 
   return (
-    <Page title="Department | Minimal-UI">
+    <Page title="Shift | Minimal-UI">
       <Modal
         open={open}
         sx={{
@@ -202,34 +198,32 @@ export default function User() {
             <Box sx={style}>
               <Stack spacing={1}>
                 <Typography id="modal-modal-title" variant="h6" component="h2">
-                  Add Department
+                  Add Shift
                 </Typography>
                 <Stack direction={{ xs: 'column', sm: 'row' }} spacing={2}>
                   <TextField
                     fullWidth
-                    label="Department Name"
-                    {...getFieldProps('DepartmentName')}
-                    variant="outlined"
-                  />
-                  <TextField
-                    fullWidth
-                    label="Phone"
-                    {...getFieldProps('Phone')}
+                    label="Shift Name"
+                    {...getFieldProps('ShiftName')}
                     variant="outlined"
                   />
                 </Stack>
                 <Stack direction={{ xs: 'column', sm: 'row' }} spacing={2}>
                   <TextField
                     fullWidth
-                    multiline
-                    rows={4}
-                    label="Note"
-                    {...getFieldProps('Note')}
+                    label="Start Shift"
+                    {...getFieldProps('StartShift')}
+                    variant="outlined"
+                  />
+                  <TextField
+                    fullWidth
+                    label="End Shift"
+                    {...getFieldProps('EndShift')}
                     variant="outlined"
                   />
                 </Stack>
                 <LoadingButton fullWidth size="large" type="submit" variant="contained">
-                  Add Department
+                  Add Shift
                 </LoadingButton>
               </Stack>
             </Box>
@@ -239,7 +233,7 @@ export default function User() {
       <Container>
         <Stack direction="row" alignItems="center" justifyContent="space-between" mb={5}>
           <Typography variant="h4" gutterBottom>
-            Department
+            Shift
           </Typography>
           <Button
             onClick={handleOpen}
@@ -248,12 +242,12 @@ export default function User() {
             to="#"
             startIcon={<Icon icon={plusFill} />}
           >
-            New Department
+            New Shift
           </Button>
         </Stack>
 
         <Card>
-          <DepartListToolbar
+          <ShiftListToolbar
             numSelected={selected.length}
             filterName={filterName}
             onFilterName={handleFilterByName}
@@ -262,7 +256,7 @@ export default function User() {
           <Scrollbar>
             <TableContainer sx={{ minWidth: 800 }}>
               <Table>
-                <DepartListHead
+                <ShiftListHead
                   order={order}
                   orderBy={orderBy}
                   headLabel={TABLE_HEAD}
@@ -314,7 +308,7 @@ export default function User() {
                           </TableCell>
 
                           <TableCell align="right">
-                            <DepartMoreMenu />
+                            <ShiftMoreMenu />
                           </TableCell>
                         </TableRow>
                       );
