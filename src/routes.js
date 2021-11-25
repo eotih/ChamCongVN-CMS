@@ -10,12 +10,18 @@ import Products from './pages/Products';
 import Blog from './pages/Blog';
 import User from './pages/User';
 import NotFound from './pages/Page404';
+// Organization
 import Profile from './pages/organization/Profile';
 import Department from './pages/organization/Department';
 import Shift from './pages/organization/Shift';
 import Group from './pages/organization/Group';
+<<<<<<< HEAD
 import Role from './pages/organization/Role';
 import Degree from './pages/organization/Degree';
+=======
+import Work from './pages/organization/Work';
+import Specialty from './pages/organization/Specialities';
+>>>>>>> 994cef03d1d536ef277ce60fa84331f97f9f8140
 
 // ----------------------------------------------------------------------
 
@@ -40,9 +46,15 @@ export default function Router() {
         { path: 'profile', element: <Profile /> },
         { path: 'department', element: <Department /> },
         { path: 'shift', element: <Shift /> },
+<<<<<<< HEAD
         { path: 'group', element: <Group /> },
         { path: 'role', element: <Role /> },
         { path: 'degree', element: <Degree /> }
+=======
+        { path: 'work', element: <Work /> },
+        { path: 'specialities', element: <Specialty /> },
+        { path: 'group', element: <Group /> }
+>>>>>>> 994cef03d1d536ef277ce60fa84331f97f9f8140
       ]
     },
     {
