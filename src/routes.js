@@ -13,6 +13,7 @@ import NotFound from './pages/Page404';
 import Profile from './pages/organization/Profile';
 import Department from './pages/organization/Department';
 import Shift from './pages/organization/Shift';
+import Group from './pages/organization/Group';
 
 // ----------------------------------------------------------------------
 
@@ -36,7 +37,8 @@ export default function Router() {
       children: [
         { path: 'profile', element: <Profile /> },
         { path: 'department', element: <Department /> },
-        { path: 'shift', element: <Shift /> }
+        { path: 'shift', element: <Shift /> },
+        { path: 'group', element: <Group /> }
       ]
     },
     {

@@ -33,17 +33,16 @@ import Page from '../../components/Page';
 import Label from '../../components/Label';
 import Scrollbar from '../../components/Scrollbar';
 import SearchNotFound from '../../components/SearchNotFound';
-import { ShiftListHead, ShiftListToolbar, ShiftMoreMenu } from '../../components/_dashboard/shift';
+import { GroupListHead, GroupListToolbar, GroupMoreMenu } from '../../components/_dashboard/group';
 //
 import USERLIST from '../../_mocks_/user';
 
 // ----------------------------------------------------------------------
 
 const TABLE_HEAD = [
-  { id: 'ShiftID', label: 'ShiftID', alignRight: false },
-  { id: 'ShiftName', label: 'Shift Name', alignRight: false },
-  { id: 'StartShift', label: 'Start Shift', alignRight: false },
-  { id: 'EndShift', label: 'End Shift', alignRight: false },
+  { id: 'GroupID', label: 'GroupID', alignRight: false },
+  { id: 'GroupName', label: 'Group Name', alignRight: false },
+  { id: 'Note', label: 'Note', alignRight: false },
   { id: '' }
 ];
 
@@ -176,7 +175,7 @@ export default function User() {
   const isUserNotFound = filteredUsers.length === 0;
 
   return (
-    <Page title="Shift | Minimal-UI">
+    <Page title="Group | Minimal-UI">
       <Modal
         open={open}
         sx={{
@@ -193,32 +192,28 @@ export default function User() {
             <Box sx={style}>
               <Stack spacing={1}>
                 <Typography id="modal-modal-title" variant="h6" component="h2">
-                  Add Shift
+                  Add Group
                 </Typography>
                 <Stack direction={{ xs: 'column', sm: 'row' }} spacing={2}>
                   <TextField
                     fullWidth
-                    label="Shift Name"
-                    {...getFieldProps('ShiftName')}
+                    label="Group Name"
+                    {...getFieldProps('GroupName')}
                     variant="outlined"
                   />
                 </Stack>
                 <Stack direction={{ xs: 'column', sm: 'row' }} spacing={2}>
                   <TextField
                     fullWidth
-                    label="Start Shift"
-                    {...getFieldProps('StartShift')}
-                    variant="outlined"
-                  />
-                  <TextField
-                    fullWidth
-                    label="End Shift"
-                    {...getFieldProps('EndShift')}
+                    multiline
+                    rows={4}
+                    label="Note"
+                    {...getFieldProps('Note')}
                     variant="outlined"
                   />
                 </Stack>
                 <LoadingButton fullWidth size="large" type="submit" variant="contained">
-                  Add Shift
+                  Add Group
                 </LoadingButton>
               </Stack>
             </Box>
@@ -228,7 +223,7 @@ export default function User() {
       <Container>
         <Stack direction="row" alignItems="center" justifyContent="space-between" mb={5}>
           <Typography variant="h4" gutterBottom>
-            Shift
+            Group
           </Typography>
           <Button
             onClick={handleOpen}
@@ -237,12 +232,12 @@ export default function User() {
             to="#"
             startIcon={<Icon icon={plusFill} />}
           >
-            New Shift
+            New Group
           </Button>
         </Stack>
 
         <Card>
-          <ShiftListToolbar
+          <GroupListToolbar
             numSelected={selected.length}
             filterName={filterName}
             onFilterName={handleFilterByName}
@@ -251,7 +246,7 @@ export default function User() {
           <Scrollbar>
             <TableContainer sx={{ minWidth: 800 }}>
               <Table>
-                <ShiftListHead
+                <GroupListHead
                   order={order}
                   orderBy={orderBy}
                   headLabel={TABLE_HEAD}
@@ -303,7 +298,7 @@ export default function User() {
                           </TableCell>
 
                           <TableCell align="right">
-                            <ShiftMoreMenu />
+                            <GroupMoreMenu />
                           </TableCell>
                         </TableRow>
                       );
