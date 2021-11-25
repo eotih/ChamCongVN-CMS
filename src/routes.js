@@ -14,6 +14,8 @@ import Profile from './pages/organization/Profile';
 import Department from './pages/organization/Department';
 import Shift from './pages/organization/Shift';
 import Group from './pages/organization/Group';
+import Role from './pages/organization/Role';
+import Degree from './pages/organization/Degree';
 
 // ----------------------------------------------------------------------
 
@@ -38,7 +40,9 @@ export default function Router() {
         { path: 'profile', element: <Profile /> },
         { path: 'department', element: <Department /> },
         { path: 'shift', element: <Shift /> },
-        { path: 'group', element: <Group /> }
+        { path: 'group', element: <Group /> },
+        { path: 'role', element: <Role /> },
+        { path: 'degree', element: <Degree /> }
       ]
     },
     {
