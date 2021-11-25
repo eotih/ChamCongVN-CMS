@@ -39,12 +39,12 @@ const SearchStyle = styled(OutlinedInput)(({ theme }) => ({
 
 // ----------------------------------------------------------------------
 
-SpecialityListToolbar.propTypes = {
+SpecialtyListToolbar.propTypes = {
   numSelected: PropTypes.number,
   filterName: PropTypes.string,
   onFilterName: PropTypes.func
 };
-export default function SpecialityListToolbar({ numSelected, filterName, onFilterName }) {
+export default function SpecialtyListToolbar({ numSelected, filterName, onFilterName }) {
   return (
     <RootStyle
       sx={{

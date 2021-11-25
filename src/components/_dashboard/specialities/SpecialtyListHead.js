@@ -5,7 +5,7 @@ import { Box, Checkbox, TableRow, TableCell, TableHead, TableSortLabel } from '@
 
 // ----------------------------------------------------------------------
 
-SpecialityListHead.propTypes = {
+SpecialtyListHead.propTypes = {
   order: PropTypes.oneOf(['asc', 'desc']),
   orderBy: PropTypes.string,
   rowCount: PropTypes.number,
@@ -15,7 +15,7 @@ SpecialityListHead.propTypes = {
   onSelectAllClick: PropTypes.func
 };
 
-export default function SpecialityListHead({
+export default function SpecialtyListHead({
   order,
   orderBy,
   rowCount,

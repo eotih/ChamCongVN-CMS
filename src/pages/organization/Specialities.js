@@ -34,9 +34,9 @@ import Label from '../../components/Label';
 import Scrollbar from '../../components/Scrollbar';
 import SearchNotFound from '../../components/SearchNotFound';
 import {
-  SpecialityListHead,
-  SpecialityListToolbar,
-  SpecialityMoreMenu
+  SpecialtyListHead,
+  SpecialtyListToolbar,
+  SpecialtyMoreMenu
 } from '../../components/_dashboard/specialities';
 //
 import USERLIST from '../../_mocks_/user';
@@ -44,8 +44,8 @@ import USERLIST from '../../_mocks_/user';
 // ----------------------------------------------------------------------
 
 const TABLE_HEAD = [
-  { id: 'SpecialityID', label: 'SpecialityID', alignRight: false },
-  { id: 'SpecialityName', label: 'Speciality Name', alignRight: false },
+  { id: 'SpecialtyID', label: 'SpecialtyID', alignRight: false },
+  { id: 'SpecialtyName', label: 'Specialty Name', alignRight: false },
   { id: 'Note', label: 'Note', alignRight: false },
   { id: '' }
 ];
@@ -179,7 +179,7 @@ export default function User() {
   const isUserNotFound = filteredUsers.length === 0;
 
   return (
-    <Page title="Speciality | Minimal-UI">
+    <Page title="Specialty | Minimal-UI">
       <Modal
         open={open}
         sx={{
@@ -196,13 +196,13 @@ export default function User() {
             <Box sx={style}>
               <Stack spacing={1}>
                 <Typography id="modal-modal-title" variant="h6" component="h2">
-                  Add Speciality
+                  Add Specialty
                 </Typography>
                 <Stack direction={{ xs: 'column', sm: 'row' }} spacing={2}>
                   <TextField
                     fullWidth
-                    label="Speciality Name"
-                    {...getFieldProps('SpecialityName')}
+                    label="Specialty Name"
+                    {...getFieldProps('SpecialtyName')}
                     variant="outlined"
                   />
                 </Stack>
@@ -217,7 +217,7 @@ export default function User() {
                   />
                 </Stack>
                 <LoadingButton fullWidth size="large" type="submit" variant="contained">
-                  Add Speciality
+                  Add Specialty
                 </LoadingButton>
               </Stack>
             </Box>
@@ -227,7 +227,7 @@ export default function User() {
       <Container>
         <Stack direction="row" alignItems="center" justifyContent="space-between" mb={5}>
           <Typography variant="h4" gutterBottom>
-            Speciality
+            Specialty
           </Typography>
           <Button
             onClick={handleOpen}
@@ -236,12 +236,12 @@ export default function User() {
             to="#"
             startIcon={<Icon icon={plusFill} />}
           >
-            New Speciality
+            New Specialty
           </Button>
         </Stack>
 
         <Card>
-          <SpecialityListToolbar
+          <SpecialtyListToolbar
             numSelected={selected.length}
             filterName={filterName}
             onFilterName={handleFilterByName}
@@ -250,7 +250,7 @@ export default function User() {
           <Scrollbar>
             <TableContainer sx={{ minWidth: 800 }}>
               <Table>
-                <SpecialityListHead
+                <SpecialtyListHead
                   order={order}
                   orderBy={orderBy}
                   headLabel={TABLE_HEAD}
@@ -302,7 +302,7 @@ export default function User() {
                           </TableCell>
 
                           <TableCell align="right">
-                            <SpecialityMoreMenu />
+                            <SpecialtyMoreMenu />
                           </TableCell>
                         </TableRow>
                       );

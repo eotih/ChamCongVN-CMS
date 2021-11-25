@@ -8,7 +8,7 @@ import moreVerticalFill from '@iconify/icons-eva/more-vertical-fill';
 import { Menu, MenuItem, IconButton, ListItemIcon, ListItemText } from '@mui/material';
 // ----------------------------------------------------------------------
 
-export default function SpecialityMoreMenu() {
+export default function SpecialtyMoreMenu() {
   const ref = useRef(null);
   const [isOpen, setIsOpen] = useState(false);
 

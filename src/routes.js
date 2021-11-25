@@ -16,7 +16,7 @@ import Department from './pages/organization/Department';
 import Shift from './pages/organization/Shift';
 import Group from './pages/organization/Group';
 import Work from './pages/organization/Work';
-import Speciality from './pages/organization/Specialities';
+import Specialty from './pages/organization/Specialities';
 
 // ----------------------------------------------------------------------
 
@@ -42,7 +42,7 @@ export default function Router() {
         { path: 'department', element: <Department /> },
         { path: 'shift', element: <Shift /> },
         { path: 'work', element: <Work /> },
-        { path: 'specialities', element: <Speciality /> },
+        { path: 'specialities', element: <Specialty /> },
         { path: 'group', element: <Group /> }
       ]
     },

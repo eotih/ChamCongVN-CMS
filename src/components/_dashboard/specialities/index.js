@@ -1,3 +1,3 @@
-export { default as SpecialityListHead } from './SpecialityListHead';
-export { default as SpecialityListToolbar } from './SpecialityListToolbar';
-export { default as SpecialityMoreMenu } from './SpecialityMoreMenu';
+export { default as SpecialtyListHead } from './SpecialtyListHead';
+export { default as SpecialtyListToolbar } from './SpecialtyListToolbar';
+export { default as SpecialtyMoreMenu } from './SpecialtyMoreMenu';
