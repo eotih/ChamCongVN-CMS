@@ -59,10 +59,8 @@ const sidebarConfig = [
     icon: getIcon(roundAttachMoney),
     children: [
       { title: 'Salary Table', path: '/salary/salarytable' },
-      { title: 'Salary Days', path: '/salary/salarydays' },
       { title: 'Salary Deduct', path: '/salary/salarydeduct' },
       { title: 'Overtime Salary', path: '/salary/overtimesalary' },
-      { title: 'Bonus Salary', path: '/salary/bonussalary' },
       { title: 'Salary', path: '/salary/salaries' }
     ]
   },
