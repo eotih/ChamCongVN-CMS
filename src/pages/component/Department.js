@@ -289,10 +289,10 @@ export default function Department() {
                           </TableCell>
                           <TableCell align="left">{DepartmentID}</TableCell>
                           <TableCell align="left">{DepartmentName}</TableCell>
-                          <TableCell align="left">{Note}</TableCell>
                           <TableCell align="left">{Phone}</TableCell>
+                          <TableCell align="left">{Note}</TableCell>
                           <TableCell align="right">
-                            <DepartMoreMenu />
+                            <DepartMoreMenu dulieu={row} />
                           </TableCell>
                         </TableRow>
                       );

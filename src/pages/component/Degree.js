@@ -286,7 +286,7 @@ export default function Degree() {
                           <TableCell align="left">{DegreeName}</TableCell>
                           <TableCell align="left">{Note}</TableCell>
                           <TableCell align="right">
-                            <DegreeMoreMenu />
+                            <DegreeMoreMenu dulieu={row} />
                           </TableCell>
                         </TableRow>
                       );

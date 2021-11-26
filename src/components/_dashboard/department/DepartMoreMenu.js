@@ -22,11 +22,10 @@ import { LoadingButton } from '@mui/lab';
 import axios from '../../../functions/Axios';
 // ----------------------------------------------------------------------
 
-export default function DepartMoreMenu() {
+export default function DepartMoreMenu(Department) {
   const ref = useRef(null);
   const [isOpen, setIsOpen] = useState(false);
   const [open, setOpen] = useState(false);
-  const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
 
   const style = {
@@ -45,11 +44,11 @@ export default function DepartMoreMenu() {
       axios
         .post(`Component/AddOrEditDepartment`, formik.values)
         .then((res) => {
-          if (res.data.Status === 'Success') {
-            alert('Thêm thành công');
+          if (res.data.Status === 'Updated') {
+            alert('Department Updated');
             window.location.reload();
           } else {
-            alert('Thêm thất bại');
+            alert('Department not Update');
           }
         })
         .catch((err) => {
@@ -57,6 +56,13 @@ export default function DepartMoreMenu() {
         });
     }
   });
+  const handleOpen = () => {
+    formik.setFieldValue('DepartmentID', Department.dulieu.DepartmentID);
+    formik.setFieldValue('DepartmentName', Department.dulieu.DepartmentName);
+    formik.setFieldValue('Note', Department.dulieu.Note);
+    formik.setFieldValue('Phone', Department.dulieu.Phone);
+    setOpen(true);
+  };
   const { handleSubmit, getFieldProps } = formik;
 
   return (
@@ -88,61 +94,61 @@ export default function DepartMoreMenu() {
           to="#"
           sx={{ color: 'text.secondary' }}
         >
-          <Modal
-            open={open}
-            sx={{
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center'
-            }}
-            onClose={handleClose}
-            aria-labelledby="modal-modal-title"
-            aria-describedby="modal-modal-description"
-          >
-            <FormikProvider value={formik}>
-              <Form autoComplete="off" noValidate onSubmit={handleSubmit}>
-                <Box sx={style}>
-                  <Stack spacing={1}>
-                    <Typography id="modal-modal-title" variant="h6" component="h2">
-                      Edit Department
-                    </Typography>
-                    <Stack direction={{ xs: 'column', sm: 'row' }} spacing={2}>
-                      <TextField
-                        fullWidth
-                        label="Department Name"
-                        {...getFieldProps('DepartmentName')}
-                        variant="outlined"
-                      />
-                      <TextField
-                        fullWidth
-                        label="Phone"
-                        {...getFieldProps('Phone')}
-                        variant="outlined"
-                      />
-                    </Stack>
-                    <Stack direction={{ xs: 'column', sm: 'row' }} spacing={2}>
-                      <TextField
-                        fullWidth
-                        multiline
-                        rows={4}
-                        label="Note"
-                        {...getFieldProps('Note')}
-                        variant="outlined"
-                      />
-                    </Stack>
-                    <LoadingButton fullWidth size="large" type="submit" variant="contained">
-                      Edit Department
-                    </LoadingButton>
-                  </Stack>
-                </Box>
-              </Form>
-            </FormikProvider>
-          </Modal>
           <ListItemIcon>
             <Icon icon={editFill} width={24} height={24} />
           </ListItemIcon>
           <ListItemText primary="Edit" primaryTypographyProps={{ variant: 'body2' }} />
         </MenuItem>
+        <Modal
+          open={open}
+          sx={{
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center'
+          }}
+          onClose={handleClose}
+          aria-labelledby="modal-modal-title"
+          aria-describedby="modal-modal-description"
+        >
+          <FormikProvider value={formik}>
+            <Form autoComplete="off" noValidate onSubmit={handleSubmit}>
+              <Box sx={style}>
+                <Stack spacing={1}>
+                  <Typography id="modal-modal-title" variant="h6" component="h2">
+                    Edit Department
+                  </Typography>
+                  <Stack direction={{ xs: 'column', sm: 'row' }} spacing={2}>
+                    <TextField
+                      fullWidth
+                      label="Department Name"
+                      {...getFieldProps('DepartmentName')}
+                      variant="outlined"
+                    />
+                    <TextField
+                      fullWidth
+                      label="Phone"
+                      {...getFieldProps('Phone')}
+                      variant="outlined"
+                    />
+                  </Stack>
+                  <Stack direction={{ xs: 'column', sm: 'row' }} spacing={2}>
+                    <TextField
+                      fullWidth
+                      multiline
+                      rows={4}
+                      label="Note"
+                      {...getFieldProps('Note')}
+                      variant="outlined"
+                    />
+                  </Stack>
+                  <LoadingButton fullWidth size="large" type="submit" variant="contained">
+                    Edit Department
+                  </LoadingButton>
+                </Stack>
+              </Box>
+            </Form>
+          </FormikProvider>
+        </Modal>
       </Menu>
     </>
   );
