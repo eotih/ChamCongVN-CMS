@@ -1,4 +1,3 @@
-/* eslint-disable jsx-a11y/label-has-associated-control */
 import * as React from 'react';
 import { filter } from 'lodash';
 import { Icon } from '@iconify/react';
@@ -23,8 +22,8 @@ import {
   TableContainer,
   TablePagination,
   Modal,
-  TextField,
   Box,
+  TextField,
   FormControl,
   InputLabel,
   Select,
@@ -42,20 +41,19 @@ import Label from '../../components/Label';
 import Scrollbar from '../../components/Scrollbar';
 import SearchNotFound from '../../components/SearchNotFound';
 import {
-  DeductListHead,
-  DeductListToolbar,
-  DeductMoreMenu
-} from '../../components/_dashboard/salarydeduct';
+  LaudatoryListHead,
+  LaudatoryListToolbar,
+  LaudatoryMoreMenu
+} from '../../components/_dashboard/laudatory';
 //
 import USERLIST from '../../_mocks_/user';
 
 // ----------------------------------------------------------------------
 
 const TABLE_HEAD = [
-  { id: 'DeductionEmployeesID', label: 'DeductID', alignRight: false },
   { id: 'Employee', label: 'Employee', alignRight: false },
-  { id: 'DeductionName', label: 'Deduction Name', alignRight: false },
-  { id: 'DeductionDate', label: 'Deduction Date', alignRight: false },
+  { id: 'LaudatoryName', label: 'Laudatory Name', alignRight: false },
+  { id: 'LaudatoryDate', label: 'Laudatory Date', alignRight: false },
   { id: 'Reason', label: 'Reason', alignRight: false },
   { id: 'Amount', label: 'Amount', alignRight: false },
   { id: '' }
@@ -191,93 +189,93 @@ export default function User() {
 
   const emptyRows = page > 0 ? Math.max(0, (1 + page) * rowsPerPage - USERLIST.length) : 0;
 
-  const filteredUsers = applySortFilter(USERLIST, getComparator(order, orderBy), filterName);
+  const filteredLaudatorys = applySortFilter(USERLIST, getComparator(order, orderBy), filterName);
 
-  const isUserNotFound = filteredUsers.length === 0;
+  const isLaudatoryNotFound = filteredLaudatorys.length === 0;
 
   return (
-    <Page title="Deduct | Minimal-UI">
-      <Modal
-        open={open}
-        sx={{
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'center'
-        }}
-        onClose={handleClose}
-        aria-labelledby="modal-modal-title"
-        aria-describedby="modal-modal-description"
-      >
-        <FormikProvider value={formik}>
-          <Form autoComplete="off" noValidate onSubmit={handleSubmit}>
-            <Box sx={style}>
-              <Stack spacing={1}>
-                <Typography id="modal-modal-title" variant="h6" component="h2">
-                  Add Deduct
-                </Typography>
-                <Stack direction={{ xs: 'column', sm: 'row' }} spacing={2}>
-                  <TextField
-                    fullWidth
-                    label="Deduction Name"
-                    {...getFieldProps('DeductionName')}
-                    variant="outlined"
-                  />
-                  <FormControl fullWidth>
-                    <InputLabel id="demo-simple-select-label">Employee Name</InputLabel>
-                    <Select
-                      labelId="demo-simple-select-label"
-                      id="demo-simple-select"
-                      value={EmployeeName}
-                      label="Employee Name"
-                      onChange={handleChange}
-                    >
-                      <MenuItem value={1}>My</MenuItem>
-                      <MenuItem value={2}>Hieu</MenuItem>
-                      <MenuItem value={3}>Thanh</MenuItem>
-                    </Select>
-                  </FormControl>
-                </Stack>
-                <Stack direction={{ xs: 'column', sm: 'row' }} spacing={2}>
-                  <LocalizationProvider dateAdapter={AdapterDateFns}>
-                    <DatePicker
-                      label="Deduction Date"
-                      views={['day', 'month', 'year']}
-                      value={value}
-                      onChange={(newValue) => {
-                        setValue(newValue);
-                      }}
-                      renderInput={(params) => <TextField {...params} />}
-                    />
-                  </LocalizationProvider>
-                  <TextField
-                    fullWidth
-                    label="Amount"
-                    {...getFieldProps('Amount')}
-                    variant="outlined"
-                  />
-                </Stack>
-                <Stack direction={{ xs: 'column', sm: 'row' }} spacing={2}>
-                  <TextField
-                    fullWidth
-                    multiline
-                    rows={4}
-                    label="Reason"
-                    {...getFieldProps('Reason')}
-                    variant="outlined"
-                  />
-                </Stack>
-                <LoadingButton fullWidth size="large" type="submit" variant="contained">
-                  Add Deduct
-                </LoadingButton>
-              </Stack>
-            </Box>
-          </Form>
-        </FormikProvider>
-      </Modal>
+    <Page title="Laudatory | Minimal-UI">
       <Container>
+        <Modal
+          open={open}
+          sx={{
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center'
+          }}
+          onClose={handleClose}
+          aria-labelledby="modal-modal-title"
+          aria-describedby="modal-modal-description"
+        >
+          <FormikProvider value={formik}>
+            <Form autoComplete="off" noValidate onSubmit={handleSubmit}>
+              <Box sx={style}>
+                <Stack spacing={1}>
+                  <Typography id="modal-modal-title" variant="h6" component="h2">
+                    Add Laudatory
+                  </Typography>
+                  <Stack direction={{ xs: 'column', sm: 'row' }} spacing={2}>
+                    <TextField
+                      fullWidth
+                      label="Laudatory Name"
+                      {...getFieldProps('LaudatoryName')}
+                      variant="outlined"
+                    />
+                    <FormControl fullWidth>
+                      <InputLabel id="demo-simple-select-label">Employee Name</InputLabel>
+                      <Select
+                        labelId="demo-simple-select-label"
+                        id="demo-simple-select"
+                        value={EmployeeName}
+                        label="Employee Name"
+                        onChange={handleChange}
+                      >
+                        <MenuItem value={1}>My</MenuItem>
+                        <MenuItem value={2}>Hieu</MenuItem>
+                        <MenuItem value={3}>Thanh</MenuItem>
+                      </Select>
+                    </FormControl>
+                  </Stack>
+                  <Stack direction={{ xs: 'column', sm: 'row' }} spacing={2}>
+                    <LocalizationProvider dateAdapter={AdapterDateFns}>
+                      <DatePicker
+                        label="Laudatory Date"
+                        views={['day', 'month', 'year']}
+                        value={value}
+                        onChange={(newValue) => {
+                          setValue(newValue);
+                        }}
+                        renderInput={(params) => <TextField {...params} />}
+                      />
+                    </LocalizationProvider>
+                    <TextField
+                      fullWidth
+                      label="Amount"
+                      {...getFieldProps('Amount')}
+                      variant="outlined"
+                    />
+                  </Stack>
+                  <Stack direction={{ xs: 'column', sm: 'row' }} spacing={2}>
+                    <TextField
+                      fullWidth
+                      multiline
+                      rows={4}
+                      label="Reason"
+                      {...getFieldProps('Reason')}
+                      variant="outlined"
+                    />
+                  </Stack>
+                  <LoadingButton fullWidth size="large" type="submit" variant="contained">
+                    Add Laudatory
+                  </LoadingButton>
+                </Stack>
+              </Box>
+            </Form>
+          </FormikProvider>
+        </Modal>
         <Stack direction="row" alignItems="center" justifyContent="space-between" mb={5}>
           <Typography variant="h4" gutterBottom>
-            Deduct
+            Laudatory
           </Typography>
           <Button
             onClick={handleOpen}
@@ -286,12 +284,12 @@ export default function User() {
             to="#"
             startIcon={<Icon icon={plusFill} />}
           >
-            New Deduct
+            New Laudatory
           </Button>
         </Stack>
 
         <Card>
-          <DeductListToolbar
+          <LaudatoryListToolbar
             numSelected={selected.length}
             filterName={filterName}
             onFilterName={handleFilterByName}
@@ -300,7 +298,7 @@ export default function User() {
           <Scrollbar>
             <TableContainer sx={{ minWidth: 800 }}>
               <Table>
-                <DeductListHead
+                <LaudatoryListHead
                   order={order}
                   orderBy={orderBy}
                   headLabel={TABLE_HEAD}
@@ -310,7 +308,7 @@ export default function User() {
                   onSelectAllClick={handleSelectAllClick}
                 />
                 <TableBody>
-                  {filteredUsers
+                  {filteredLaudatorys
                     .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                     .map((row) => {
                       const { id, name, role, status, company, avatarUrl, isVerified } = row;
@@ -352,7 +350,7 @@ export default function User() {
                           </TableCell>
 
                           <TableCell align="right">
-                            <DeductMoreMenu />
+                            <LaudatoryMoreMenu />
                           </TableCell>
                         </TableRow>
                       );
@@ -363,7 +361,7 @@ export default function User() {
                     </TableRow>
                   )}
                 </TableBody>
-                {isUserNotFound && (
+                {isLaudatoryNotFound && (
                   <TableBody>
                     <TableRow>
                       <TableCell align="center" colSpan={6} sx={{ py: 3 }}>
