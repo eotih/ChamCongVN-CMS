@@ -51,6 +51,7 @@ import USERLIST from '../../_mocks_/user';
 // ----------------------------------------------------------------------
 
 const TABLE_HEAD = [
+  { id: 'LaudatoryID', label: 'LaudatoryID', alignRight: false },
   { id: 'Employee', label: 'Employee', alignRight: false },
   { id: 'LaudatoryName', label: 'Laudatory Name', alignRight: false },
   { id: 'LaudatoryDate', label: 'Laudatory Date', alignRight: false },

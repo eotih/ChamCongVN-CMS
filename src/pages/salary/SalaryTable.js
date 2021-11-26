@@ -1,4 +1,5 @@
 /* eslint-disable jsx-a11y/label-has-associated-control */
+import * as React from 'react';
 import { filter } from 'lodash';
 import { Icon } from '@iconify/react';
 import { sentenceCase } from 'change-case';
@@ -23,8 +24,15 @@ import {
   TablePagination,
   Modal,
   TextField,
-  Box
+  Box,
+  FormControl,
+  InputLabel,
+  Select,
+  MenuItem
 } from '@mui/material';
+import AdapterDateFns from '@mui/lab/AdapterDateFns';
+import LocalizationProvider from '@mui/lab/LocalizationProvider';
+import DatePicker from '@mui/lab/DatePicker';
 
 import { LoadingButton } from '@mui/lab';
 import axios from '../../functions/Axios';
@@ -86,6 +94,8 @@ function applySortFilter(array, comparator, query) {
 
 export default function User() {
   const [page, setPage] = useState(0);
+  const [value, setValue] = React.useState(new Date());
+  const [month, setMonth] = React.useState('');
   const [order, setOrder] = useState('asc');
   const [selected, setSelected] = useState([]);
   const [orderBy, setOrderBy] = useState('name');
@@ -173,6 +183,9 @@ export default function User() {
         });
     }
   });
+  const handleChange = (event) => {
+    setMonth(event.target.value);
+  };
   const { handleSubmit, getFieldProps } = formik;
 
   const emptyRows = page > 0 ? Math.max(0, (1 + page) * rowsPerPage - USERLIST.length) : 0;
@@ -210,13 +223,40 @@ export default function User() {
                   />
                 </Stack>
                 <Stack direction={{ xs: 'column', sm: 'row' }} spacing={2}>
-                  <TextField
-                    fullWidth
-                    label="month"
-                    {...getFieldProps('month')}
-                    variant="outlined"
-                  />
-                  <TextField fullWidth label="year" {...getFieldProps('year')} variant="outlined" />
+                  <FormControl fullWidth>
+                    <InputLabel id="demo-simple-select-label">Month</InputLabel>
+                    <Select
+                      labelId="demo-simple-select-label"
+                      id="demo-simple-select"
+                      value={month}
+                      label="Month"
+                      onChange={handleChange}
+                    >
+                      <MenuItem value={1}>January</MenuItem>
+                      <MenuItem value={2}>February</MenuItem>
+                      <MenuItem value={3}>March</MenuItem>
+                      <MenuItem value={4}>April</MenuItem>
+                      <MenuItem value={5}>May</MenuItem>
+                      <MenuItem value={6}>June</MenuItem>
+                      <MenuItem value={7}>July</MenuItem>
+                      <MenuItem value={8}>August</MenuItem>
+                      <MenuItem value={9}>September</MenuItem>
+                      <MenuItem value={10}>October</MenuItem>
+                      <MenuItem value={11}>November</MenuItem>
+                      <MenuItem value={12}>December</MenuItem>
+                    </Select>
+                  </FormControl>
+                  <LocalizationProvider dateAdapter={AdapterDateFns}>
+                    <DatePicker
+                      views={['year']}
+                      label="Year"
+                      value={value}
+                      onChange={(newValue) => {
+                        setValue(newValue);
+                      }}
+                      renderInput={(params) => <TextField {...params} helperText={null} />}
+                    />
+                  </LocalizationProvider>
                 </Stack>
                 <Stack direction={{ xs: 'column', sm: 'row' }} spacing={2}>
                   <TextField
