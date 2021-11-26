@@ -22,11 +22,10 @@ import { LoadingButton } from '@mui/lab';
 import axios from '../../../functions/Axios';
 // ----------------------------------------------------------------------
 
-export default function DegreeMoreMenu() {
+export default function DegreeMoreMenu(Degree) {
   const ref = useRef(null);
   const [isOpen, setIsOpen] = useState(false);
   const [open, setOpen] = useState(false);
-  const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
 
   const style = {
@@ -45,8 +44,8 @@ export default function DegreeMoreMenu() {
       axios
         .post(`Component/AddOrEditDegrees`, formik.values)
         .then((res) => {
-          if (res.data.Status === 'Success') {
-            alert('Thêm thành công');
+          if (res.data.Status === 'Updated') {
+            alert('Degree Updated');
             window.location.reload();
           } else {
             alert('Thêm thất bại');
@@ -57,6 +56,12 @@ export default function DegreeMoreMenu() {
         });
     }
   });
+  const handleOpen = () => {
+    formik.setFieldValue('DegreeID', Degree.dulieu.DegreeID);
+    formik.setFieldValue('DegreeName', Degree.dulieu.DegreeName);
+    formik.setFieldValue('Note', Degree.dulieu.Note);
+    setOpen(true);
+  };
   const { handleSubmit, getFieldProps } = formik;
 
   return (

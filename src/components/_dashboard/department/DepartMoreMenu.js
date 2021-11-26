@@ -22,11 +22,10 @@ import { LoadingButton } from '@mui/lab';
 import axios from '../../../functions/Axios';
 // ----------------------------------------------------------------------
 
-export default function DepartMoreMenu() {
+export default function DepartMoreMenu(Department) {
   const ref = useRef(null);
   const [isOpen, setIsOpen] = useState(false);
   const [open, setOpen] = useState(false);
-  const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
 
   const style = {
@@ -45,11 +44,11 @@ export default function DepartMoreMenu() {
       axios
         .post(`Component/AddOrEditDepartment`, formik.values)
         .then((res) => {
-          if (res.data.Status === 'Success') {
-            alert('Thêm thành công');
+          if (res.data.Status === 'Updated') {
+            alert('Department Updated');
             window.location.reload();
           } else {
-            alert('Thêm thất bại');
+            alert('Department not Update');
           }
         })
         .catch((err) => {
@@ -57,6 +56,13 @@ export default function DepartMoreMenu() {
         });
     }
   });
+  const handleOpen = () => {
+    formik.setFieldValue('DepartmentID', Department.dulieu.DepartmentID);
+    formik.setFieldValue('DepartmentName', Department.dulieu.DepartmentName);
+    formik.setFieldValue('Note', Department.dulieu.Note);
+    formik.setFieldValue('Phone', Department.dulieu.Phone);
+    setOpen(true);
+  };
   const { handleSubmit, getFieldProps } = formik;
 
   return (
