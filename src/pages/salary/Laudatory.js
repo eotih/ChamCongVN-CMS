@@ -2,7 +2,7 @@ import * as React from 'react';
 import { filter } from 'lodash';
 import { Icon } from '@iconify/react';
 import { sentenceCase } from 'change-case';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useFormik, Form, FormikProvider } from 'formik';
 import plusFill from '@iconify/icons-eva/plus-fill';
 import { Link as RouterLink } from 'react-router-dom';
@@ -45,12 +45,15 @@ import {
   LaudatoryListToolbar,
   LaudatoryMoreMenu
 } from '../../components/_dashboard/laudatory';
+import { getAllLaudatorys } from '../../functions/Salary';
+import { getAllEmployees } from '../../functions/Employee';
 //
-import USERLIST from '../../_mocks_/user';
+import laudatory from '../../_mocks_/user';
 
 // ----------------------------------------------------------------------
 
 const TABLE_HEAD = [
+  { id: 'LaudatoryEmployeeID', label: 'LaudatoryEmployeeID', alignRight: false },
   { id: 'Employee', label: 'Employee', alignRight: false },
   { id: 'LaudatoryName', label: 'Laudatory Name', alignRight: false },
   { id: 'LaudatoryDate', label: 'Laudatory Date', alignRight: false },
@@ -93,16 +96,27 @@ function applySortFilter(array, comparator, query) {
 export default function User() {
   const [page, setPage] = useState(0);
   const [EmployeeName, setEmployeeName] = React.useState('');
-  const [value, setValue] = React.useState(new Date());
+  const [laudate, setLauDate] = React.useState(new Date());
   const [order, setOrder] = useState('asc');
   const [selected, setSelected] = useState([]);
   const [orderBy, setOrderBy] = useState('name');
   const [filterName, setFilterName] = useState('');
+  const [laudatory, setLaudatory] = useState([]);
+  const [employee, setEmployee] = useState([]);
+  const [employees, setEmployees] = useState([]);
   const [rowsPerPage, setRowsPerPage] = useState(5);
   const [open, setOpen] = useState(false);
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
 
+  useEffect(() => {
+    getAllLaudatorys().then((res) => {
+      setLaudatory(res);
+    });
+    getAllEmployees().then((res) => {
+      setEmployee(res);
+    });
+  }, []);
   const handleRequestSort = (event, property) => {
     const isAsc = orderBy === property && order === 'asc';
     setOrder(isAsc ? 'desc' : 'asc');
@@ -111,7 +125,7 @@ export default function User() {
 
   const handleSelectAllClick = (event) => {
     if (event.target.checked) {
-      const newSelecteds = USERLIST.map((n) => n.name);
+      const newSelecteds = laudatory.map((n) => n.name);
       setSelected(newSelecteds);
       return;
     }
@@ -148,6 +162,13 @@ export default function User() {
   const handleFilterByName = (event) => {
     setFilterName(event.target.value);
   };
+  const convertDateTime = (date) => {
+    const newDate = new Date(date);
+    const hour = newDate.getHours();
+    const min = newDate.getMinutes();
+    const sec = newDate.getSeconds();
+    return `${hour}:${min}:${sec}`;
+  };
   const style = {
     position: 'relative',
     bgcolor: 'background.paper',
@@ -156,18 +177,17 @@ export default function User() {
   };
   const formik = useFormik({
     initialValues: {
-      FullName: '',
-      Image: '',
-      Phone: '',
-      Email: '',
-      Password: '',
-      RoleID: '',
-      Address: '',
+      EmployeeID: '',
+      LaudatoryName: '',
+      LaudatoryDate: convertDateTime(laudate),
+      Reason: '',
+      Amount: '',
+      CreatedBy: '',
       remember: true
     },
     onSubmit: () => {
       axios
-        .post(`Organization/AddOrEditAccount`, formik.values)
+        .post(`Salary/AddOrEditLaudatoryEmployee`, formik.values)
         .then((res) => {
           if (res.data.Status === 'Success') {
             alert('Thêm thành công');
@@ -184,12 +204,13 @@ export default function User() {
   const { handleSubmit, getFieldProps } = formik;
 
   const handleChange = (event) => {
-    setEmployeeName(event.target.value);
+    formik.setFieldValue('EmployeeID', event.target.value);
+    setEmployees(event.target.value);
   };
 
-  const emptyRows = page > 0 ? Math.max(0, (1 + page) * rowsPerPage - USERLIST.length) : 0;
+  const emptyRows = page > 0 ? Math.max(0, (1 + page) * rowsPerPage - laudatory.length) : 0;
 
-  const filteredLaudatorys = applySortFilter(USERLIST, getComparator(order, orderBy), filterName);
+  const filteredLaudatorys = applySortFilter(laudatory, getComparator(order, orderBy), filterName);
 
   const isLaudatoryNotFound = filteredLaudatorys.length === 0;
 
@@ -224,15 +245,18 @@ export default function User() {
                     <FormControl fullWidth>
                       <InputLabel id="demo-simple-select-label">Employee Name</InputLabel>
                       <Select
-                        labelId="demo-simple-select-label"
-                        id="demo-simple-select"
-                        value={EmployeeName}
-                        label="Employee Name"
+                        labelId="select-label"
+                        label="Employee"
+                        value={employees}
+                        {...getFieldProps('EmployeeID')}
+                        variant="outlined"
                         onChange={handleChange}
                       >
-                        <MenuItem value={1}>My</MenuItem>
-                        <MenuItem value={2}>Hieu</MenuItem>
-                        <MenuItem value={3}>Thanh</MenuItem>
+                        {employee.map((item) => (
+                          <MenuItem key={item.emp.EmployeeID} value={item.emp.EmployeeID}>
+                            {item.emp.FullName}
+                          </MenuItem>
+                        ))}
                       </Select>
                     </FormControl>
                   </Stack>
@@ -241,9 +265,9 @@ export default function User() {
                       <DatePicker
                         label="Laudatory Date"
                         views={['day', 'month', 'year']}
-                        value={value}
+                        value={laudate}
                         onChange={(newValue) => {
-                          setValue(newValue);
+                          setLauDate(newValue);
                         }}
                         renderInput={(params) => <TextField {...params} />}
                       />
@@ -302,22 +326,24 @@ export default function User() {
                   order={order}
                   orderBy={orderBy}
                   headLabel={TABLE_HEAD}
-                  rowCount={USERLIST.length}
+                  rowCount={laudatory.length}
                   numSelected={selected.length}
                   onRequestSort={handleRequestSort}
                   onSelectAllClick={handleSelectAllClick}
                 />
                 <TableBody>
-                  {filteredLaudatorys
+                  {laudatory
                     .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                     .map((row) => {
-                      const { id, name, role, status, company, avatarUrl, isVerified } = row;
-                      const isItemSelected = selected.indexOf(name) !== -1;
+                      const { LaudatoryEmployeeID, LaudatoryName, LaudatoryDate, Reason, Amount } =
+                        row.LaudatoryEmployee;
+                      const { FullName, Image } = row.Employee;
+                      const isItemSelected = selected.indexOf(FullName) !== -1;
 
                       return (
                         <TableRow
                           hover
-                          key={id}
+                          key={LaudatoryEmployeeID}
                           tabIndex={-1}
                           role="checkbox"
                           selected={isItemSelected}
@@ -326,29 +352,21 @@ export default function User() {
                           <TableCell padding="checkbox">
                             <Checkbox
                               checked={isItemSelected}
-                              onChange={(event) => handleClick(event, name)}
+                              onChange={(event) => handleClick(event, FullName)}
                             />
                           </TableCell>
                           <TableCell component="th" scope="row" padding="none">
                             <Stack direction="row" alignItems="center" spacing={2}>
-                              <Avatar alt={name} src={avatarUrl} />
+                              <Avatar alt={FullName} src={Image} />
                               <Typography variant="subtitle2" noWrap>
-                                {name}
+                                {FullName}
                               </Typography>
                             </Stack>
                           </TableCell>
-                          <TableCell align="left">{company}</TableCell>
-                          <TableCell align="left">{role}</TableCell>
-                          <TableCell align="left">{isVerified ? 'Yes' : 'No'}</TableCell>
-                          <TableCell align="left">
-                            <Label
-                              variant="ghost"
-                              color={(status === 'banned' && 'error') || 'success'}
-                            >
-                              {sentenceCase(status)}
-                            </Label>
-                          </TableCell>
-
+                          <TableCell align="left">{LaudatoryName}</TableCell>
+                          <TableCell align="left">{LaudatoryDate}</TableCell>
+                          <TableCell align="left">{Reason}</TableCell>
+                          <TableCell align="left">{Amount}</TableCell>
                           <TableCell align="right">
                             <LaudatoryMoreMenu />
                           </TableCell>
@@ -377,7 +395,7 @@ export default function User() {
           <TablePagination
             rowsPerPageOptions={[5, 10, 25]}
             component="div"
-            count={USERLIST.length}
+            count={laudatory.length}
             rowsPerPage={rowsPerPage}
             page={page}
             onPageChange={handleChangePage}

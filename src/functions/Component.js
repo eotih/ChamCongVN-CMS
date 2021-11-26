@@ -1,22 +1,23 @@
 import Axios from './Axios';
 
-export async function getAllDepartments() {
+async function getAllDepartments() {
   const res = await Axios.get('Component/GetAllDepartment');
   return res.data;
 }
-export async function getAllGroups() {
+async function getAllGroups() {
   const res = await Axios.get('Component/GetAllGroup');
   return res.data;
 }
-export async function getAllDegrees() {
+async function getAllDegrees() {
   const res = await Axios.get('Component/GetAllDegrees');
   return res.data;
 }
-export async function getAllSpecialities() {
+async function getAllSpecialities() {
   const res = await Axios.get('Component/GetAllSpecialities');
   return res.data;
 }
-export async function getAllWorks() {
+async function getAllWorks() {
   const res = await Axios.get('Component/GetAllWork');
   return res.data;
 }
+export { getAllWorks, getAllSpecialities, getAllDegrees, getAllDepartments, getAllGroups };

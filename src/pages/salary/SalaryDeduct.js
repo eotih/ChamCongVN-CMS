@@ -2,7 +2,6 @@
 import * as React from 'react';
 import { filter } from 'lodash';
 import { Icon } from '@iconify/react';
-import { sentenceCase } from 'change-case';
 import { useState, useEffect } from 'react';
 import { useFormik, Form, FormikProvider } from 'formik';
 import plusFill from '@iconify/icons-eva/plus-fill';
@@ -38,7 +37,6 @@ import { LoadingButton } from '@mui/lab';
 import axios from '../../functions/Axios';
 // components
 import Page from '../../components/Page';
-import Label from '../../components/Label';
 import Scrollbar from '../../components/Scrollbar';
 import SearchNotFound from '../../components/SearchNotFound';
 import {
@@ -95,7 +93,7 @@ function applySortFilter(array, comparator, query) {
 
 export default function User() {
   const [page, setPage] = useState(0);
-  const [value, setValue] = React.useState(new Date());
+  const [deductdate, setDeductDate] = React.useState(new Date());
   const [order, setOrder] = useState('asc');
   const [selected, setSelected] = useState([]);
   const [orderBy, setOrderBy] = useState('name');
@@ -181,7 +179,7 @@ export default function User() {
     initialValues: {
       EmployeeID: '',
       DeductionName: '',
-      DeductionDate: convertDateTime(value),
+      DeductionDate: convertDateTime(deductdate),
       Reason: '',
       Amount: '',
       CreatedBy: '',
@@ -261,9 +259,9 @@ export default function User() {
                     <DatePicker
                       label="Deduction Date"
                       views={['day', 'month', 'year']}
-                      value={value}
+                      value={deductdate}
                       onChange={(newValue) => {
-                        setValue(newValue);
+                        setDeductDate(newValue);
                       }}
                       renderInput={(params) => <TextField {...params} />}
                     />
