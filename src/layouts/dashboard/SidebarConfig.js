@@ -1,12 +1,9 @@
 import { Icon } from '@iconify/react';
 import pieChart2Fill from '@iconify/icons-eva/pie-chart-2-fill';
 import peopleFill from '@iconify/icons-eva/people-fill';
-import shoppingBagFill from '@iconify/icons-eva/shopping-bag-fill';
-import fileTextFill from '@iconify/icons-eva/file-text-fill';
 import lockFill from '@iconify/icons-eva/lock-fill';
-import personAddFill from '@iconify/icons-eva/person-add-fill';
-import alertTriangleFill from '@iconify/icons-eva/alert-triangle-fill';
 import roundAttachMoney from '@iconify/icons-ic/round-attach-money';
+import briefcaseFill from '@iconify/icons-eva/briefcase-fill';
 
 // ----------------------------------------------------------------------
 
@@ -24,32 +21,48 @@ const sidebarConfig = [
     icon: getIcon(peopleFill),
     children: [
       {
-        title: 'Department',
-        path: '/organization/department'
-      },
-      {
         title: 'Shift',
         path: '/organization/shift'
       },
       {
-        title: 'Group',
-        path: '/organization/group'
+        title: 'Account',
+        path: '/organization/account'
       },
       {
         title: 'Role',
         path: '/organization/role'
       },
       {
+        title: 'Position',
+        path: '/organization/position'
+      }
+    ]
+  },
+  {
+    title: 'Component',
+    path: '/component',
+    icon: getIcon(briefcaseFill),
+    children: [
+      { title: 'State', path: '/component/state' },
+      {
+        title: 'Work',
+        path: '/component/work'
+      },
+      {
+        title: 'Group',
+        path: '/component/group'
+      },
+      {
+        title: 'Department',
+        path: '/component/department'
+      },
+      {
         title: 'Degree',
-        path: '/organization/degree'
+        path: '/component/degree'
       },
       {
         title: 'Specialities',
-        path: '/organization/specialities'
-      },
-      {
-        title: 'Work',
-        path: '/organization/work'
+        path: '/component/specialities'
       }
     ]
   },
@@ -60,34 +73,19 @@ const sidebarConfig = [
     children: [
       { title: 'Salary Table', path: '/salary/salarytable' },
       { title: 'Salary Deduct', path: '/salary/salarydeduct' },
+      { title: 'laudatory', path: '/salary/laudatory' },
       { title: 'Overtime Salary', path: '/salary/overtimesalary' },
       { title: 'Salary', path: '/salary/salaries' }
     ]
   },
   {
-    title: 'product',
-    path: '/dashboard/products',
-    icon: getIcon(shoppingBagFill)
-  },
-  {
-    title: 'blog',
-    path: '/dashboard/blog',
-    icon: getIcon(fileTextFill)
-  },
-  {
-    title: 'login',
-    path: '/login',
-    icon: getIcon(lockFill)
-  },
-  {
-    title: 'register',
-    path: '/register',
-    icon: getIcon(personAddFill)
-  },
-  {
-    title: 'Not found',
-    path: '/404',
-    icon: getIcon(alertTriangleFill)
+    title: 'TimeKeeper',
+    path: '/timekeeper',
+    icon: getIcon(lockFill),
+    children: [
+      { title: 'Check In', path: '/timekeeper/checkin' },
+      { title: 'Check Out', path: '/timekeeper/checkout' }
+    ]
   }
 ];
 
