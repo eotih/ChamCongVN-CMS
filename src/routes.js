@@ -12,13 +12,14 @@ import User from './pages/User';
 import NotFound from './pages/Page404';
 // Organization
 import Profile from './pages/organization/Profile';
-import Department from './pages/organization/Department';
 import Shift from './pages/organization/Shift';
-import Group from './pages/organization/Group';
 import Role from './pages/organization/Role';
-import Degree from './pages/organization/Degree';
-import Work from './pages/organization/Work';
-import Specialty from './pages/organization/Specialities';
+// Component
+import Work from './pages/component/Work';
+import Group from './pages/component/Group';
+import Department from './pages/component/Department';
+import Degree from './pages/component/Degree';
+import Specialty from './pages/component/Specialities';
 // Salary
 import SalaryTable from './pages/salary/SalaryTable';
 import SalaryDeduct from './pages/salary/SalaryDeduct';
@@ -44,13 +45,20 @@ export default function Router() {
       element: <DashboardLayout />,
       children: [
         { path: 'profile', element: <Profile /> },
-        { path: 'department', element: <Department /> },
         { path: 'shift', element: <Shift /> },
-        { path: 'role', element: <Role /> },
-        { path: 'degree', element: <Degree /> },
+        { path: 'role', element: <Role /> }
+      ]
+    },
+    {
+      path: '/component',
+      element: <DashboardLayout />,
+      children: [
+        // { path: 'state', element: <State /> },
         { path: 'work', element: <Work /> },
-        { path: 'specialities', element: <Specialty /> },
-        { path: 'group', element: <Group /> }
+        { path: 'group', element: <Group /> },
+        { path: 'department', element: <Department /> },
+        { path: 'degree', element: <Degree /> },
+        { path: 'specialities', element: <Specialty /> }
       ]
     },
     {
