@@ -19,6 +19,9 @@ import Role from './pages/organization/Role';
 import Degree from './pages/organization/Degree';
 import Work from './pages/organization/Work';
 import Specialty from './pages/organization/Specialities';
+// Salary
+import SalaryTable from './pages/salary/SalaryTable';
+import SalaryDeduct from './pages/salary/SalaryDeduct';
 
 // ----------------------------------------------------------------------
 
@@ -48,6 +51,14 @@ export default function Router() {
         { path: 'work', element: <Work /> },
         { path: 'specialities', element: <Specialty /> },
         { path: 'group', element: <Group /> }
+      ]
+    },
+    {
+      path: '/salary',
+      element: <DashboardLayout />,
+      children: [
+        { path: 'salarytable', element: <SalaryTable /> },
+        { path: 'salarydeduct', element: <SalaryDeduct /> }
       ]
     },
     {
