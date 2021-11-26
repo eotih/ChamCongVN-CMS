@@ -14,6 +14,7 @@ import NotFound from './pages/Page404';
 import Profile from './pages/organization/Profile';
 import Shift from './pages/organization/Shift';
 import Role from './pages/organization/Role';
+import Position from './pages/organization/Position';
 // Component
 import Work from './pages/component/Work';
 import Group from './pages/component/Group';
@@ -47,7 +48,8 @@ export default function Router() {
       children: [
         { path: 'profile', element: <Profile /> },
         { path: 'shift', element: <Shift /> },
-        { path: 'role', element: <Role /> }
+        { path: 'role', element: <Role /> },
+        { path: 'position', element: <Position /> }
       ]
     },
     {
