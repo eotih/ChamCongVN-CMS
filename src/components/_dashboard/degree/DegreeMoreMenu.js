@@ -89,55 +89,55 @@ export default function DegreeMoreMenu() {
           sx={{ color: 'text.secondary' }}
         >
           {' '}
-          <Modal
-            open={open}
-            sx={{
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center'
-            }}
-            onClose={handleClose}
-            aria-labelledby="modal-modal-title"
-            aria-describedby="modal-modal-description"
-          >
-            <FormikProvider value={formik}>
-              <Form autoComplete="off" noValidate onSubmit={handleSubmit}>
-                <Box sx={style}>
-                  <Stack spacing={1}>
-                    <Typography id="modal-modal-title" variant="h6" component="h2">
-                      Edit Degree
-                    </Typography>
-                    <Stack direction={{ xs: 'column', sm: 'row' }} spacing={2}>
-                      <TextField
-                        fullWidth
-                        label="Degree Name"
-                        {...getFieldProps('DegreeName')}
-                        variant="outlined"
-                      />
-                    </Stack>
-                    <Stack direction={{ xs: 'column', sm: 'row' }} spacing={2}>
-                      <TextField
-                        fullWidth
-                        multiline
-                        rows={4}
-                        label="Note"
-                        {...getFieldProps('Note')}
-                        variant="outlined"
-                      />
-                    </Stack>
-                    <LoadingButton fullWidth size="large" type="submit" variant="contained">
-                      Edit Degree
-                    </LoadingButton>
-                  </Stack>
-                </Box>
-              </Form>
-            </FormikProvider>
-          </Modal>
           <ListItemIcon>
             <Icon icon={editFill} width={24} height={24} />
           </ListItemIcon>
           <ListItemText primary="Edit" primaryTypographyProps={{ variant: 'body2' }} />
         </MenuItem>
+        <Modal
+          open={open}
+          sx={{
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center'
+          }}
+          onClose={handleClose}
+          aria-labelledby="modal-modal-title"
+          aria-describedby="modal-modal-description"
+        >
+          <FormikProvider value={formik}>
+            <Form autoComplete="off" noValidate onSubmit={handleSubmit}>
+              <Box sx={style}>
+                <Stack spacing={1}>
+                  <Typography id="modal-modal-title" variant="h6" component="h2">
+                    Edit Degree
+                  </Typography>
+                  <Stack direction={{ xs: 'column', sm: 'row' }} spacing={2}>
+                    <TextField
+                      fullWidth
+                      label="Degree Name"
+                      {...getFieldProps('DegreeName')}
+                      variant="outlined"
+                    />
+                  </Stack>
+                  <Stack direction={{ xs: 'column', sm: 'row' }} spacing={2}>
+                    <TextField
+                      fullWidth
+                      multiline
+                      rows={4}
+                      label="Note"
+                      {...getFieldProps('Note')}
+                      variant="outlined"
+                    />
+                  </Stack>
+                  <LoadingButton fullWidth size="large" type="submit" variant="contained">
+                    Edit Degree
+                  </LoadingButton>
+                </Stack>
+              </Box>
+            </Form>
+          </FormikProvider>
+        </Modal>
       </Menu>
     </>
   );
