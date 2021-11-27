@@ -1,7 +1,6 @@
 import * as React from 'react';
 import { filter } from 'lodash';
 import { Icon } from '@iconify/react';
-import { sentenceCase } from 'change-case';
 import { useState, useEffect } from 'react';
 import { useFormik, Form, FormikProvider } from 'formik';
 import plusFill from '@iconify/icons-eva/plus-fill';
@@ -37,7 +36,6 @@ import { LoadingButton } from '@mui/lab';
 import axios from '../../functions/Axios';
 // components
 import Page from '../../components/Page';
-import Label from '../../components/Label';
 import Scrollbar from '../../components/Scrollbar';
 import SearchNotFound from '../../components/SearchNotFound';
 import {
@@ -94,7 +92,6 @@ function applySortFilter(array, comparator, query) {
 
 export default function User() {
   const [page, setPage] = useState(0);
-  const [EmployeeName, setEmployeeName] = React.useState('');
   const [laudate, setLauDate] = React.useState(new Date());
   const [order, setOrder] = useState('asc');
   const [selected, setSelected] = useState([]);
@@ -163,10 +160,10 @@ export default function User() {
   };
   const convertDateTime = (date) => {
     const newDate = new Date(date);
-    const day = newDate.getDay();
-    const month = newDate.getMonth();
-    const year = newDate.get();
-    return `${day}:${month}:${year}`;
+    const day = newDate.getDate();
+    const month = newDate.getMonth() + 1;
+    const year = newDate.getFullYear();
+    return `${day}/${month}/${year}`;
   };
   const style = {
     position: 'relative',
@@ -185,8 +182,16 @@ export default function User() {
       remember: true
     },
     onSubmit: () => {
+      console.log(formik.values);
       axios
-        .post(`Salary/AddOrEditLaudatoryEmployee`, formik.values)
+        .post(`Salary/AddOrEditLaudatoryEmployee`, {
+          EmployeeID: formik.values.EmployeeID,
+          LaudatoryName: formik.values.LaudatoryName,
+          Reason: formik.values.Reason,
+          Amount: formik.values.Amount,
+          CreatedBy: formik.values.CreatedBy,
+          LaudatoryDate: laudate
+        })
         .then((res) => {
           if (res.data.Status === 'Success') {
             alert('Thêm thành công');
@@ -337,7 +342,7 @@ export default function User() {
                       const { LaudatoryEmployeeID, LaudatoryName, LaudatoryDate, Reason, Amount } =
                         row.LaudatoryEmployee;
                       const { FullName, Image } = row;
-                      const isItemSelected = selected.indexOf(LaudatoryName) !== -1;
+                      const isItemSelected = selected.indexOf(FullName) !== -1;
 
                       return (
                         <TableRow
@@ -364,11 +369,11 @@ export default function User() {
                             </Stack>
                           </TableCell>
                           <TableCell align="left">{LaudatoryName}</TableCell>
-                          <TableCell align="left">{LaudatoryDate}</TableCell>
+                          <TableCell align="left">{convertDateTime(LaudatoryDate)}</TableCell>
                           <TableCell align="left">{Reason}</TableCell>
                           <TableCell align="left">{Amount}</TableCell>
                           <TableCell align="right">
-                            <LaudatoryMoreMenu />
+                            <LaudatoryMoreMenu dulieu={row} />
                           </TableCell>
                         </TableRow>
                       );

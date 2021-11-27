@@ -22,11 +22,10 @@ import { LoadingButton } from '@mui/lab';
 import axios from '../../../functions/Axios';
 // ----------------------------------------------------------------------
 
-export default function SpecialtyMoreMenu() {
+export default function SpecialtyMoreMenu(Specialty) {
   const ref = useRef(null);
   const [isOpen, setIsOpen] = useState(false);
   const [open, setOpen] = useState(false);
-  const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
 
   const style = {
@@ -46,11 +45,11 @@ export default function SpecialtyMoreMenu() {
       axios
         .post(`Component/AddOrEditSpecialities`, formik.values)
         .then((res) => {
-          if (res.data.Status === 'Success') {
-            alert('Thêm thành công');
+          if (res.data.Status === 'Updated') {
+            alert('Specialty Updated');
             window.location.reload();
           } else {
-            alert('Thêm thất bại');
+            alert('Specialty not Updated');
           }
         })
         .catch((err) => {
@@ -58,6 +57,12 @@ export default function SpecialtyMoreMenu() {
         });
     }
   });
+  const handleOpen = () => {
+    formik.setFieldValue('SpecialtyID', Specialty.dulieu.SpecialtyID);
+    formik.setFieldValue('SpecialtyName', Specialty.dulieu.SpecialtyName);
+    formik.setFieldValue('Note', Specialty.dulieu.Note);
+    setOpen(true);
+  };
   const { handleSubmit, getFieldProps } = formik;
   return (
     <>
@@ -109,7 +114,7 @@ export default function SpecialtyMoreMenu() {
               <Box sx={style}>
                 <Stack spacing={1}>
                   <Typography id="modal-modal-title" variant="h6" component="h2">
-                    Add Specialty
+                    Edit Specialty
                   </Typography>
                   <Stack direction={{ xs: 'column', sm: 'row' }} spacing={2}>
                     <TextField
@@ -130,7 +135,7 @@ export default function SpecialtyMoreMenu() {
                     />
                   </Stack>
                   <LoadingButton fullWidth size="large" type="submit" variant="contained">
-                    Add Specialty
+                    Edit Specialty
                   </LoadingButton>
                 </Stack>
               </Box>

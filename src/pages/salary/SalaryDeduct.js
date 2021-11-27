@@ -136,7 +136,7 @@ export default function User() {
     const newDate = new Date(date);
     const day = newDate.getDay();
     const month = newDate.getMonth();
-    const year = newDate.getFullYear();
+    const year = newDate.getUTCFullYear();
     return `${day}:${month}:${year}`;
   };
   const handleClick = (event, name) => {
@@ -339,7 +339,7 @@ export default function User() {
                     .map((row) => {
                       const { DeductionEmployeeID, DeductionName, DeductionDate, Reason, Amount } =
                         row.DeductionEmployee;
-                      const { FullName, Image } = row.Employee;
+                      const { FullName, Image } = row;
                       const isItemSelected = selected.indexOf(FullName) !== -1;
 
                       return (

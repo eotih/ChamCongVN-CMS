@@ -22,11 +22,10 @@ import { LoadingButton } from '@mui/lab';
 import axios from '../../../functions/Axios';
 // ----------------------------------------------------------------------
 
-export default function GroupMoreMenu() {
+export default function GroupMoreMenu(Group) {
   const ref = useRef(null);
   const [isOpen, setIsOpen] = useState(false);
   const [open, setOpen] = useState(false);
-  const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
 
   const style = {
@@ -37,6 +36,7 @@ export default function GroupMoreMenu() {
   };
   const formik = useFormik({
     initialValues: {
+      GroupID: '',
       GroupName: '',
       Note: '',
       remember: true
@@ -45,11 +45,11 @@ export default function GroupMoreMenu() {
       axios
         .post(`Component/AddOrEditGroup`, formik.values)
         .then((res) => {
-          if (res.data.Status === 'Success') {
-            alert('Thêm thành công');
+          if (res.data.Status === 'Updated') {
+            alert('Group Updated');
             window.location.reload();
           } else {
-            alert('Thêm thất bại');
+            alert('Group not Updated');
           }
         })
         .catch((err) => {
@@ -57,6 +57,12 @@ export default function GroupMoreMenu() {
         });
     }
   });
+  const handleOpen = () => {
+    formik.setFieldValue('GroupID', Group.dulieu.GroupID);
+    formik.setFieldValue('GroupName', Group.dulieu.GroupName);
+    formik.setFieldValue('Note', Group.dulieu.Note);
+    setOpen(true);
+  };
   const { handleSubmit, getFieldProps } = formik;
   return (
     <>
