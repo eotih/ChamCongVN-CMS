@@ -11,6 +11,7 @@ import Blog from './pages/Blog';
 import User from './pages/User';
 import NotFound from './pages/Page404';
 // Organization
+import Account from './pages/organization/Account';
 import Profile from './pages/organization/Profile';
 import Shift from './pages/organization/Shift';
 import Role from './pages/organization/Role';
@@ -46,6 +47,7 @@ export default function Router() {
       path: '/organization',
       element: <DashboardLayout />,
       children: [
+        { path: 'account', element: <Account /> },
         { path: 'profile', element: <Profile /> },
         { path: 'shift', element: <Shift /> },
         { path: 'role', element: <Role /> },
