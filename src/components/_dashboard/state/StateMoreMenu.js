@@ -22,12 +22,13 @@ import { LoadingButton } from '@mui/lab';
 import axios from '../../../functions/Axios';
 // ----------------------------------------------------------------------
 
-export default function WorkMoreMenu() {
+export default function StateMoreMenu() {
   const ref = useRef(null);
   const [isOpen, setIsOpen] = useState(false);
   const [open, setOpen] = useState(false);
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
+
   const style = {
     position: 'relative',
     bgcolor: 'background.paper',
@@ -36,13 +37,12 @@ export default function WorkMoreMenu() {
   };
   const formik = useFormik({
     initialValues: {
-      WorkName: '',
-      Note: '',
+      StateName: '',
       remember: true
     },
     onSubmit: () => {
       axios
-        .post(`Component/AddOrEditWork`, formik.values)
+        .post(``, formik.values)
         .then((res) => {
           if (res.data.Status === 'Success') {
             alert('Thêm thành công');
@@ -57,6 +57,7 @@ export default function WorkMoreMenu() {
     }
   });
   const { handleSubmit, getFieldProps } = formik;
+
   return (
     <>
       <IconButton ref={ref} onClick={() => setIsOpen(true)}>
@@ -107,28 +108,18 @@ export default function WorkMoreMenu() {
               <Box sx={style}>
                 <Stack spacing={1}>
                   <Typography id="modal-modal-title" variant="h6" component="h2">
-                    Edit Work
+                    Edit State
                   </Typography>
                   <Stack direction={{ xs: 'column', sm: 'row' }} spacing={2}>
                     <TextField
                       fullWidth
-                      label="Work Name"
-                      {...getFieldProps('WorkName')}
-                      variant="outlined"
-                    />
-                  </Stack>
-                  <Stack direction={{ xs: 'column', sm: 'row' }} spacing={2}>
-                    <TextField
-                      fullWidth
-                      multiline
-                      rows={4}
-                      label="Note"
-                      {...getFieldProps('Note')}
+                      label="State Name"
+                      {...getFieldProps('StateName')}
                       variant="outlined"
                     />
                   </Stack>
                   <LoadingButton fullWidth size="large" type="submit" variant="contained">
-                    Edit Work
+                    Edit State
                   </LoadingButton>
                 </Stack>
               </Box>

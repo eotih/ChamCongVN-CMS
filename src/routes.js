@@ -12,11 +12,12 @@ import User from './pages/User';
 import NotFound from './pages/Page404';
 // Organization
 import Account from './pages/organization/Account';
-import Profile from './pages/organization/Profile';
+import Profile from './pages/Profile';
 import Shift from './pages/organization/Shift';
 import Role from './pages/organization/Role';
 import Position from './pages/organization/Position';
 // Component
+import State from './pages/component/State';
 import Work from './pages/component/Work';
 import Group from './pages/component/Group';
 import Department from './pages/component/Department';
@@ -58,7 +59,7 @@ export default function Router() {
       path: '/component',
       element: <DashboardLayout />,
       children: [
-        // { path: 'state', element: <State /> },
+        { path: 'state', element: <State /> },
         { path: 'work', element: <Work /> },
         { path: 'group', element: <Group /> },
         { path: 'department', element: <Department /> },

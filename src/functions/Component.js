@@ -20,4 +20,15 @@ async function getAllWorks() {
   const res = await Axios.get('Component/GetAllWork');
   return res.data;
 }
-export { getAllWorks, getAllSpecialities, getAllDegrees, getAllDepartments, getAllGroups };
+async function getAllState() {
+  const res = await Axios.get('Component/GetAllState');
+  return res.data;
+}
+export {
+  getAllWorks,
+  getAllSpecialities,
+  getAllDegrees,
+  getAllDepartments,
+  getAllGroups,
+  getAllState
+};
