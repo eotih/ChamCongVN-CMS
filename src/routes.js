@@ -27,6 +27,7 @@ import Specialty from './pages/component/Specialities';
 import SalaryTable from './pages/salary/SalaryTable';
 import SalaryDeduct from './pages/salary/SalaryDeduct';
 import Laudatory from './pages/salary/Laudatory';
+import Overtime from './pages/salary/OvertimeSalary';
 
 // ----------------------------------------------------------------------
 
@@ -73,7 +74,8 @@ export default function Router() {
       children: [
         { path: 'salarytable', element: <SalaryTable /> },
         { path: 'salarydeduct', element: <SalaryDeduct /> },
-        { path: 'laudatory', element: <Laudatory /> }
+        { path: 'laudatory', element: <Laudatory /> },
+        { path: 'overtimesalary', element: <Overtime /> }
       ]
     },
     {
