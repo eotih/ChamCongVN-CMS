@@ -22,11 +22,10 @@ import { LoadingButton } from '@mui/lab';
 import axios from '../../../functions/Axios';
 // ----------------------------------------------------------------------
 
-export default function PositionMoreMenu() {
+export default function PositionMoreMenu(Position) {
   const ref = useRef(null);
   const [isOpen, setIsOpen] = useState(false);
   const [open, setOpen] = useState(false);
-  const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
 
   const style = {
@@ -43,13 +42,13 @@ export default function PositionMoreMenu() {
     },
     onSubmit: () => {
       axios
-        .post(``, formik.values)
+        .post(`Organization/AddOrEditPosition`, formik.values)
         .then((res) => {
-          if (res.data.Status === 'Success') {
-            alert('Thêm thành công');
+          if (res.data.Status === 'Updated') {
+            alert('Position Updated');
             window.location.reload();
           } else {
-            alert('Thêm thất bại');
+            alert('Position not Updated');
           }
         })
         .catch((err) => {
@@ -57,6 +56,12 @@ export default function PositionMoreMenu() {
         });
     }
   });
+  const handleOpen = () => {
+    formik.setFieldValue('PositionID', Position.dulieu.PositionID);
+    formik.setFieldValue('PositionName', Position.dulieu.PositionName);
+    formik.setFieldValue('Note', Position.dulieu.Note);
+    setOpen(true);
+  };
   const { handleSubmit, getFieldProps } = formik;
   return (
     <>

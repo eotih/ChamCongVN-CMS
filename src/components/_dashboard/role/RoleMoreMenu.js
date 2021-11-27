@@ -22,11 +22,10 @@ import { LoadingButton } from '@mui/lab';
 import axios from '../../../functions/Axios';
 // ----------------------------------------------------------------------
 
-export default function RoleMoreMenu() {
+export default function RoleMoreMenu(Role) {
   const ref = useRef(null);
   const [isOpen, setIsOpen] = useState(false);
   const [open, setOpen] = useState(false);
-  const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
 
   const style = {
@@ -44,11 +43,11 @@ export default function RoleMoreMenu() {
       axios
         .post(`Organization/AddOrEditRole`, formik.values)
         .then((res) => {
-          if (res.data.Status === 'Success') {
-            alert('Thêm thành công');
+          if (res.data.Status === 'Updated') {
+            alert('Role Updated');
             window.location.reload();
           } else {
-            alert('Thêm thất bại');
+            alert('Role not Updated');
           }
         })
         .catch((err) => {
@@ -56,6 +55,12 @@ export default function RoleMoreMenu() {
         });
     }
   });
+  const handleOpen = () => {
+    formik.setFieldValue('RoleID', Role.dulieu.RoleID);
+    formik.setFieldValue('RoleName', Role.dulieu.RoleName);
+    setOpen(true);
+  };
+
   const { handleSubmit, getFieldProps } = formik;
 
   return (

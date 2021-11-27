@@ -25,13 +25,12 @@ import TimePicker from '@mui/lab/TimePicker';
 import axios from '../../../functions/Axios';
 // ----------------------------------------------------------------------
 
-export default function ShiftMoreMenu() {
+export default function ShiftMoreMenu(Shift) {
   const ref = useRef(null);
   const [isOpen, setIsOpen] = useState(false);
-  const [timeStart, setTimeStart] = useState(null);
-  const [timeEnd, setTimeEnd] = useState(null);
+  const [timeStart, setTimeStart] = useState([]);
+  const [timeEnd, setTimeEnd] = useState([]);
   const [open, setOpen] = useState(false);
-  const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
 
   const convertDateTime = (date) => {
@@ -49,6 +48,7 @@ export default function ShiftMoreMenu() {
   };
   const formik = useFormik({
     initialValues: {
+      ShiftID: '',
       ShiftName: '',
       StartShift: convertDateTime(timeStart),
       EndShift: convertDateTime(timeEnd)
@@ -56,16 +56,17 @@ export default function ShiftMoreMenu() {
     onSubmit: () => {
       axios
         .post(`Organization/AddOrEditShift`, {
+          ShiftID: formik.values.ShiftID,
           ShiftName: formik.values.ShiftName,
           StartShift: convertDateTime(timeStart),
           EndShift: convertDateTime(timeEnd)
         })
         .then((res) => {
-          if (res.data.Status === 'Success') {
-            alert('Thêm thành công');
+          if (res.data.Status === 'Updated') {
+            alert('Shift Updated');
             window.location.reload();
           } else {
-            alert('Thêm thất bại');
+            alert('Shift not Updated');
           }
         })
         .catch((err) => {
@@ -73,6 +74,15 @@ export default function ShiftMoreMenu() {
         });
     }
   });
+  const handleOpen = () => {
+    formik.setFieldValue('ShiftID', Shift.dulieu.ShiftID);
+    formik.setFieldValue('ShiftName', Shift.dulieu.ShiftName);
+    formik.setFieldValue('StartShift', Shift.dulieu.StartShift);
+    formik.setFieldValue('EndShift', Shift.dulieu.EndShift);
+    setTimeStart(new Date(`12/12/2000 ${Shift.dulieu.StartShift}`));
+    setTimeEnd(new Date(`12/12/2000 ${Shift.dulieu.EndShift}`));
+    setOpen(true);
+  };
   const { handleSubmit, getFieldProps } = formik;
   return (
     <>
@@ -139,8 +149,8 @@ export default function ShiftMoreMenu() {
                       <TimePicker
                         label="Time Start"
                         views={['hours', 'minutes', 'seconds']}
-                        inputFormat="HH:mm:ss"
                         value={timeStart}
+                        inputFormat="HH:mm:ss"
                         onChange={(newValue) => {
                           setTimeStart(newValue);
                         }}

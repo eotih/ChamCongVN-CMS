@@ -48,7 +48,6 @@ import {
 import { getAllLaudatorys } from '../../functions/Salary';
 import { getAllEmployees } from '../../functions/Employee';
 //
-import laudatory from '../../_mocks_/user';
 
 // ----------------------------------------------------------------------
 
@@ -164,10 +163,10 @@ export default function User() {
   };
   const convertDateTime = (date) => {
     const newDate = new Date(date);
-    const hour = newDate.getHours();
-    const min = newDate.getMinutes();
-    const sec = newDate.getSeconds();
-    return `${hour}:${min}:${sec}`;
+    const day = newDate.getDay();
+    const month = newDate.getMonth();
+    const year = newDate.get();
+    return `${day}:${month}:${year}`;
   };
   const style = {
     position: 'relative',
@@ -179,7 +178,7 @@ export default function User() {
     initialValues: {
       EmployeeID: '',
       LaudatoryName: '',
-      LaudatoryDate: convertDateTime(laudate),
+      LaudatoryDate: laudate,
       Reason: '',
       Amount: '',
       CreatedBy: '',
@@ -337,8 +336,8 @@ export default function User() {
                     .map((row) => {
                       const { LaudatoryEmployeeID, LaudatoryName, LaudatoryDate, Reason, Amount } =
                         row.LaudatoryEmployee;
-                      const { FullName, Image } = row.Employee;
-                      const isItemSelected = selected.indexOf(FullName) !== -1;
+                      const { FullName, Image } = row;
+                      const isItemSelected = selected.indexOf(LaudatoryName) !== -1;
 
                       return (
                         <TableRow
@@ -355,6 +354,7 @@ export default function User() {
                               onChange={(event) => handleClick(event, FullName)}
                             />
                           </TableCell>
+                          <TableCell align="left">{LaudatoryEmployeeID}</TableCell>
                           <TableCell component="th" scope="row" padding="none">
                             <Stack direction="row" alignItems="center" spacing={2}>
                               <Avatar alt={FullName} src={Image} />

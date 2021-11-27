@@ -267,7 +267,7 @@ export default function Role() {
                         <TableCell align="left">{RoleID}</TableCell>
                         <TableCell align="left">{RoleName}</TableCell>
                         <TableCell align="right">
-                          <RoleMoreMenu />
+                          <RoleMoreMenu dulieu={row} />
                         </TableCell>
                       </TableRow>
                     );

@@ -46,6 +46,7 @@ import { getAllPosition } from '../../functions/Organization';
 const TABLE_HEAD = [
   { id: 'PositionID', label: 'PositionID', alignRight: false },
   { id: 'PositionName', label: 'Position Name', alignRight: false },
+  { id: 'Note', label: 'Note', alignRight: false },
   { id: '' }
 ];
 
@@ -155,7 +156,7 @@ export default function Position() {
     },
     onSubmit: () => {
       axios
-        .post(``, formik.values)
+        .post(`Organization/AddOrEditPosition`, formik.values)
         .then((res) => {
           if (res.data.Status === 'Success') {
             alert('Thêm thành công');
@@ -261,7 +262,7 @@ export default function Position() {
                 <TableBody>
                   {Position.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map(
                     (row) => {
-                      const { PositionID, PositionName } = row;
+                      const { PositionID, PositionName, Note } = row;
                       const isItemSelected = selected.indexOf(PositionName) !== -1;
 
                       return (
@@ -281,8 +282,9 @@ export default function Position() {
                           </TableCell>
                           <TableCell align="left">{PositionID}</TableCell>
                           <TableCell align="left">{PositionName}</TableCell>
+                          <TableCell align="left">{Note}</TableCell>
                           <TableCell align="right">
-                            <PositionMoreMenu />
+                            <PositionMoreMenu dulieu={row} />
                           </TableCell>
                         </TableRow>
                       );

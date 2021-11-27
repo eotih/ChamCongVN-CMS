@@ -2,7 +2,6 @@
 import * as React from 'react';
 import { filter } from 'lodash';
 import { Icon } from '@iconify/react';
-import { sentenceCase } from 'change-case';
 import { useState, useEffect } from 'react';
 import { useFormik, Form, FormikProvider } from 'formik';
 import plusFill from '@iconify/icons-eva/plus-fill';
@@ -12,7 +11,6 @@ import {
   Card,
   Table,
   Stack,
-  Avatar,
   Button,
   Checkbox,
   TableRow,
@@ -38,7 +36,6 @@ import { LoadingButton } from '@mui/lab';
 import axios from '../../functions/Axios';
 // components
 import Page from '../../components/Page';
-import Label from '../../components/Label';
 import Scrollbar from '../../components/Scrollbar';
 import SearchNotFound from '../../components/SearchNotFound';
 import {
@@ -48,7 +45,6 @@ import {
 } from '../../components/_dashboard/salarytable';
 import { getAllSalaryTables } from '../../functions/Salary';
 //
-import salarytable from '../../_mocks_/user';
 
 // ----------------------------------------------------------------------
 
@@ -95,7 +91,7 @@ function applySortFilter(array, comparator, query) {
 
 export default function User() {
   const [page, setPage] = useState(0);
-  const [value, setValue] = React.useState(new Date());
+  const [year, setYear] = React.useState(new Date());
   const [month, setMonth] = React.useState('');
   const [order, setOrder] = useState('asc');
   const [selected, setSelected] = useState([]);
@@ -148,7 +144,11 @@ export default function User() {
   const handleChangePage = (event, newPage) => {
     setPage(newPage);
   };
-
+  const convertDateTime = (date) => {
+    const newDate = new Date(date);
+    const years = newDate.getFullYear();
+    return `${years}`;
+  };
   const handleChangeRowsPerPage = (event) => {
     setRowsPerPage(parseInt(event.target.value, 10));
     setPage(0);
@@ -167,7 +167,7 @@ export default function User() {
     initialValues: {
       SalaryTableName: '',
       Month: '',
-      Year: '',
+      Year: convertDateTime(year),
       MinSalary: '',
       TotalTimeRegulation: '',
       CreatedBy: '',
@@ -175,7 +175,13 @@ export default function User() {
     },
     onSubmit: () => {
       axios
-        .post(`Salary/AddOrEditSalaryTable`, formik.values)
+        .post(`Salary/AddOrEditSalaryTable`, {
+          SalaryTableName: formik.values.SalaryTableName,
+          Month: formik.values.SalaryTableName,
+          MinSalary: formik.values.SalaryTableName,
+          TotalTimeRegulation: formik.values.SalaryTableName,
+          Year: convertDateTime(year)
+        })
         .then((res) => {
           if (res.data.Status === 'Success') {
             alert('Thêm thành công');
@@ -190,6 +196,7 @@ export default function User() {
     }
   });
   const handleChange = (event) => {
+    formik.setFieldValue('Month', event.target.value);
     setMonth(event.target.value);
   };
   const { handleSubmit, getFieldProps } = formik;
@@ -256,9 +263,9 @@ export default function User() {
                     <DatePicker
                       views={['year']}
                       label="Year"
-                      value={value}
+                      value={year}
                       onChange={(newValue) => {
-                        setValue(newValue);
+                        setYear(newValue);
                       }}
                       renderInput={(params) => <TextField {...params} helperText={null} />}
                     />
@@ -357,7 +364,7 @@ export default function User() {
                           <TableCell align="left">{MinSalary}</TableCell>
                           <TableCell align="left">{TotalTimeRegulation}</TableCell>
                           <TableCell align="right">
-                            <SalarytbMoreMenu />
+                            <SalarytbMoreMenu dulieu={row} />
                           </TableCell>
                         </TableRow>
                       );
