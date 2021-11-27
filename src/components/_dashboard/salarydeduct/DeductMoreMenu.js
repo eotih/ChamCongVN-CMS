@@ -108,7 +108,12 @@ export default function DeductMoreMenu() {
           <ListItemText primary="Delete" primaryTypographyProps={{ variant: 'body2' }} />
         </MenuItem>
 
-        <MenuItem component={RouterLink} to="#" sx={{ color: 'text.secondary' }}>
+        <MenuItem
+          onClick={handleOpen}
+          component={RouterLink}
+          to="#"
+          sx={{ color: 'text.secondary' }}
+        >
           <ListItemIcon>
             <Icon icon={editFill} width={24} height={24} />
           </ListItemIcon>
@@ -130,7 +135,7 @@ export default function DeductMoreMenu() {
               <Box sx={style}>
                 <Stack spacing={1}>
                   <Typography id="modal-modal-title" variant="h6" component="h2">
-                    Add Deduct
+                    Edit Deduct
                   </Typography>
                   <Stack direction={{ xs: 'column', sm: 'row' }} spacing={2}>
                     <TextField
@@ -187,7 +192,7 @@ export default function DeductMoreMenu() {
                     />
                   </Stack>
                   <LoadingButton fullWidth size="large" type="submit" variant="contained">
-                    Add Deduct
+                    Edit Deduct
                   </LoadingButton>
                 </Stack>
               </Box>
