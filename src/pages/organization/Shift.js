@@ -319,7 +319,7 @@ export default function Shift() {
                           <TableCell align="left">{StartShift}</TableCell>
                           <TableCell align="left">{EndShift}</TableCell>
                           <TableCell align="right">
-                            <ShiftMoreMenu />
+                            <ShiftMoreMenu dulieu={row} />
                           </TableCell>
                         </TableRow>
                       );

@@ -30,13 +30,12 @@ import { LoadingButton } from '@mui/lab';
 import axios from '../../../functions/Axios';
 // ----------------------------------------------------------------------
 
-export default function SalarytbMoreMenu() {
-  const [value, setValue] = React.useState(new Date());
+export default function SalarytbMoreMenu(SalaryTable) {
+  const [year, setYear] = useState([]);
   const [month, setMonth] = React.useState('');
   const ref = useRef(null);
   const [isOpen, setIsOpen] = useState(false);
   const [open, setOpen] = useState(false);
-  const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
 
   const style = {
@@ -45,25 +44,39 @@ export default function SalarytbMoreMenu() {
     boxShadow: 24,
     p: 4
   };
+  const convertDateTime = (date) => {
+    const newDate = new Date(date);
+    const years = newDate.getFullYear();
+    return `${years}`;
+  };
   const formik = useFormik({
     initialValues: {
+      SalaryTableID: '',
       SalaryTableName: '',
       Month: '',
-      Year: '',
+      Year: convertDateTime(year),
       MinSalary: '',
       TotalTimeRegulation: '',
-      CreatedBy: '',
+      UpdatedBy: '',
       remember: true
     },
     onSubmit: () => {
       axios
-        .post(`Salary/AddOrEditSalaryTable`, formik.values)
+        .post(`Salary/AddOrEditSalaryTable`, {
+          SalaryTableID: formik.values.SalaryTableID,
+          SalaryTableName: formik.values.SalaryTableName,
+          Month: formik.values.Month,
+          MinSalary: formik.values.MinSalary,
+          TotalTimeRegulation: formik.values.TotalTimeRegulation,
+          UpdatedBy: formik.values.UpdatedBy,
+          Year: convertDateTime(year)
+        })
         .then((res) => {
-          if (res.data.Status === 'Success') {
-            alert('Thêm thành công');
+          if (res.data.Status === 'Updated') {
+            alert('Salary Table Updated');
             window.location.reload();
           } else {
-            alert('Thêm thất bại');
+            alert('Salary Table not Updated');
           }
         })
         .catch((err) => {
@@ -71,7 +84,19 @@ export default function SalarytbMoreMenu() {
         });
     }
   });
+  const handleOpen = () => {
+    formik.setFieldValue('SalaryTableID', SalaryTable.dulieu.SalaryTableID);
+    formik.setFieldValue('SalaryTableName', SalaryTable.dulieu.SalaryTableName);
+    formik.setFieldValue('MinSalary', SalaryTable.dulieu.MinSalary);
+    formik.setFieldValue('TotalTimeRegulation', SalaryTable.dulieu.TotalTimeRegulation);
+    formik.setFieldValue('Year', SalaryTable.dulieu.Year);
+    formik.setFieldValue('Month', SalaryTable.dulieu.Month);
+    setYear(new Date(`12/12/${SalaryTable.dulieu.Year} 10:00:00`));
+    setMonth(SalaryTable.dulieu.Month);
+    setOpen(true);
+  };
   const handleChange = (event) => {
+    formik.setFieldValue('Month', event.target.value);
     setMonth(event.target.value);
   };
   const { handleSubmit, getFieldProps } = formik;
@@ -125,7 +150,7 @@ export default function SalarytbMoreMenu() {
               <Box sx={style}>
                 <Stack spacing={1}>
                   <Typography id="modal-modal-title" variant="h6" component="h2">
-                    Add Salary Table
+                    Edit Salary Table
                   </Typography>
                   <Stack direction={{ xs: 'column', sm: 'row' }} spacing={2}>
                     <TextField
@@ -163,9 +188,9 @@ export default function SalarytbMoreMenu() {
                       <DatePicker
                         views={['year']}
                         label="Year"
-                        value={value}
+                        value={year}
                         onChange={(newValue) => {
-                          setValue(newValue);
+                          setYear(newValue);
                         }}
                         renderInput={(params) => <TextField {...params} helperText={null} />}
                       />
@@ -186,7 +211,7 @@ export default function SalarytbMoreMenu() {
                     />
                   </Stack>
                   <LoadingButton fullWidth size="large" type="submit" variant="contained">
-                    Add Salary Table
+                    Edit Salary Table
                   </LoadingButton>
                 </Stack>
               </Box>

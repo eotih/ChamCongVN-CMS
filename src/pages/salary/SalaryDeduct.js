@@ -134,10 +134,10 @@ export default function User() {
   };
   const convertDateTime = (date) => {
     const newDate = new Date(date);
-    const hour = newDate.getHours();
-    const min = newDate.getMinutes();
-    const sec = newDate.getSeconds();
-    return `${hour}:${min}:${sec}`;
+    const day = newDate.getDay();
+    const month = newDate.getMonth();
+    const year = newDate.getUTCFullYear();
+    return `${day}:${month}:${year}`;
   };
   const handleClick = (event, name) => {
     const selectedIndex = selected.indexOf(name);
@@ -187,7 +187,14 @@ export default function User() {
     },
     onSubmit: () => {
       axios
-        .post(`Salary/AddOrEditDeductionEmployee`, formik.values)
+        .post(`Salary/AddOrEditDeductionEmployee`, {
+          EmployeeID: formik.values.EmployeeID,
+          DeductionName: formik.values.DeductionName,
+          Reason: formik.values.Reason,
+          Amount: formik.values.Amount,
+          CreatedBy: formik.values.CreatedBy,
+          DeductionDate: convertDateTime(deductdate)
+        })
         .then((res) => {
           if (res.data.Status === 'Success') {
             alert('Thêm thành công');
@@ -332,7 +339,7 @@ export default function User() {
                     .map((row) => {
                       const { DeductionEmployeeID, DeductionName, DeductionDate, Reason, Amount } =
                         row.DeductionEmployee;
-                      const { FullName, Image } = row.Employee;
+                      const { FullName, Image } = row;
                       const isItemSelected = selected.indexOf(FullName) !== -1;
 
                       return (

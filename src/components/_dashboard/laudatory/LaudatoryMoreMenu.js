@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { Icon } from '@iconify/react';
-import { useRef, useState } from 'react';
+import { useRef, useState, useEffect } from 'react';
 import { useFormik, Form, FormikProvider } from 'formik';
 import editFill from '@iconify/icons-eva/edit-fill';
 import { Link as RouterLink } from 'react-router-dom';
@@ -25,29 +25,25 @@ import {
 import DatePicker from '@mui/lab/DatePicker';
 import AdapterDateFns from '@mui/lab/AdapterDateFns';
 import LocalizationProvider from '@mui/lab/LocalizationProvider';
-
 import { LoadingButton } from '@mui/lab';
 import axios from '../../../functions/Axios';
+import { getAllEmployees } from '../../../functions/Employee';
 // --------------------------------------------------
 // ----------------------------------------------------------------------
 
-export default function LaudatoryMoreMenu() {
+export default function LaudatoryMoreMenu(Laudatory) {
   const ref = useRef(null);
   const [employee, setEmployee] = useState([]);
   const [employees, setEmployees] = useState([]);
-  const [laudate, setLauDate] = React.useState(new Date());
+  const [laudate, setLauDate] = useState([]);
   const [isOpen, setIsOpen] = useState(false);
   const [open, setOpen] = useState(false);
-  const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
-
-  const convertDateTime = (date) => {
-    const newDate = new Date(date);
-    const hour = newDate.getHours();
-    const min = newDate.getMinutes();
-    const sec = newDate.getSeconds();
-    return `${hour}:${min}:${sec}`;
-  };
+  useEffect(() => {
+    getAllEmployees().then((res) => {
+      setEmployee(res);
+    });
+  }, []);
   const style = {
     position: 'relative',
     bgcolor: 'background.paper',
@@ -56,9 +52,10 @@ export default function LaudatoryMoreMenu() {
   };
   const formik = useFormik({
     initialValues: {
+      LaudatoryEmployeeID: '',
       EmployeeID: '',
       LaudatoryName: '',
-      LaudatoryDate: convertDateTime(laudate),
+      LaudatoryDate: laudate,
       Reason: '',
       Amount: '',
       CreatedBy: '',
@@ -66,13 +63,21 @@ export default function LaudatoryMoreMenu() {
     },
     onSubmit: () => {
       axios
-        .post(`Salary/AddOrEditLaudatoryEmployee`, formik.values)
+        .post(`Salary/AddOrEditLaudatoryEmployee`, {
+          LaudatoryEmployeeID: formik.values.LaudatoryEmployeeID,
+          EmployeeID: formik.values.EmployeeID,
+          LaudatoryName: formik.values.LaudatoryName,
+          Reason: formik.values.Reason,
+          Amount: formik.values.Amount,
+          UpdatedBy: formik.values.UpdatedBy,
+          LaudatoryDate: laudate
+        })
         .then((res) => {
-          if (res.data.Status === 'Success') {
-            alert('Thêm thành công');
+          if (res.data.Status === 'Updated') {
+            alert('Laudatory Updated');
             window.location.reload();
           } else {
-            alert('Thêm thất bại');
+            alert('Laudatory not Updated');
           }
         })
         .catch((err) => {
@@ -80,6 +85,18 @@ export default function LaudatoryMoreMenu() {
         });
     }
   });
+  const handleOpen = () => {
+    formik.setFieldValue(
+      'LaudatoryEmployeeID',
+      Laudatory.dulieu.LaudatoryEmployee.LaudatoryEmployeeID
+    );
+    formik.setFieldValue('LaudatoryName', Laudatory.dulieu.LaudatoryEmployee.LaudatoryName);
+    formik.setFieldValue('Reason', Laudatory.dulieu.LaudatoryEmployee.Reason);
+    formik.setFieldValue('Amount', Laudatory.dulieu.LaudatoryEmployee.Amount);
+    formik.setFieldValue('EmployeeID', Laudatory.dulieu.EmployeeID);
+    setLauDate(new Date(`${Laudatory.dulieu.LaudatoryEmployee.LaudatoryDate}`));
+    setOpen(true);
+  };
   const { handleSubmit, getFieldProps } = formik;
   const handleChange = (event) => {
     formik.setFieldValue('EmployeeID', event.target.value);
