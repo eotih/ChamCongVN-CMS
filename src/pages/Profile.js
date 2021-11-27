@@ -24,8 +24,8 @@ import {
 import { styled } from '@mui/material/styles';
 import md5 from 'md5';
 import { LoadingButton } from '@mui/lab';
-import axios from '../../functions/Axios';
-import Page from '../../components/Page';
+import axios from '../functions/Axios';
+import Page from '../components/Page';
 
 export default function EditAccount() {
   const [Maritalstatus, setMaritalStatus] = useState('');
