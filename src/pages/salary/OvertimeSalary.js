@@ -48,8 +48,6 @@ import {
 import { getAllOvertimes } from '../../functions/Salary';
 import { getAllEmployees } from '../../functions/Employee';
 //
-import Overtime from '../../_mocks_/user';
-
 // ----------------------------------------------------------------------
 
 const TABLE_HEAD = [
@@ -319,15 +317,15 @@ export default function User() {
                 <TableBody>
                   {Overtime.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map(
                     (row) => {
-                      const { OvertimeEmployeeID, OvertimeName, OvertimeDate, Reason, Amount } =
-                        row.OvertimeEmployee;
+                      const { OvertimeSalaryID, OvertimeName, OvertimeDate, Reason, Amount } =
+                        row.OvertimeSalary;
                       const { FullName, Image } = row.Employee;
                       const isItemSelected = selected.indexOf(FullName) !== -1;
 
                       return (
                         <TableRow
                           hover
-                          key={OvertimeEmployeeID}
+                          key={OvertimeSalaryID}
                           tabIndex={-1}
                           role="checkbox"
                           selected={isItemSelected}

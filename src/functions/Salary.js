@@ -1,7 +1,7 @@
 import Axios from './Axios';
 
 async function getAllOvertimes() {
-  const res = await Axios.get('Salary/GetAllDeductionEmployee');
+  const res = await Axios.get('Salary/GetAllOvertimeSalary');
   return res.data;
 }
 async function getAllDeductions() {
