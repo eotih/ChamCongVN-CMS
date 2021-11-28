@@ -1,3 +1,4 @@
+/* eslint-disable no-restricted-globals */
 import { Icon } from '@iconify/react';
 import { useRef, useState } from 'react';
 import { useFormik, Form, FormikProvider } from 'formik';
@@ -81,7 +82,23 @@ export default function DepartMoreMenu(Department) {
         anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
         transformOrigin={{ vertical: 'top', horizontal: 'right' }}
       >
-        <MenuItem sx={{ color: 'text.secondary' }}>
+        <MenuItem
+          onClick={() => {
+            if (confirm('Are you sure you want to delete this department?')) {
+              axios
+                .delete(`Component/DeleteDepartment?ID=${Department.dulieu.DepartmentID}`)
+                .then((res) => {
+                  if (res.data.Status === 'Delete') {
+                    alert('Department Deleted');
+                    window.location.reload();
+                  } else {
+                    alert('Department Not Deleted');
+                  }
+                });
+            }
+          }}
+          sx={{ color: 'text.secondary' }}
+        >
           <ListItemIcon>
             <Icon icon={trash2Outline} width={24} height={24} />
           </ListItemIcon>

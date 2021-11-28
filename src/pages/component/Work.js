@@ -282,7 +282,7 @@ export default function Work() {
                           <TableCell align="left">{WorkName}</TableCell>
                           <TableCell align="left">{Note}</TableCell>
                           <TableCell align="right">
-                            <WorkMoreMenu />
+                            <WorkMoreMenu dulieu={row} />
                           </TableCell>
                         </TableRow>
                       );

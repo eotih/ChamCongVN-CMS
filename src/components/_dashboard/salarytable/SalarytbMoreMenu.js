@@ -1,3 +1,4 @@
+/* eslint-disable no-restricted-globals */
 import * as React from 'react';
 import { Icon } from '@iconify/react';
 import { useRef, useState } from 'react';
@@ -116,7 +117,23 @@ export default function SalarytbMoreMenu(SalaryTable) {
         anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
         transformOrigin={{ vertical: 'top', horizontal: 'right' }}
       >
-        <MenuItem sx={{ color: 'text.secondary' }}>
+        <MenuItem
+          onClick={() => {
+            if (confirm('Are you sure you want to delete this salary table?')) {
+              axios
+                .delete(`Salary/DeleteSalaryTable?ID=${SalaryTable.dulieu.SalaryTableID}`)
+                .then((res) => {
+                  if (res.data.Status === 'Delete') {
+                    alert('Salary Table Deleted');
+                    window.location.reload();
+                  } else {
+                    alert('Salary Table Not Deleted');
+                  }
+                });
+            }
+          }}
+          sx={{ color: 'text.secondary' }}
+        >
           <ListItemIcon>
             <Icon icon={trash2Outline} width={24} height={24} />
           </ListItemIcon>

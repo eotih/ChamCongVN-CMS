@@ -1,3 +1,4 @@
+/* eslint-disable no-restricted-globals */
 import * as React from 'react';
 import { Icon } from '@iconify/react';
 import { useRef, useState, useEffect } from 'react';
@@ -119,7 +120,25 @@ export default function LaudatoryMoreMenu(Laudatory) {
         anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
         transformOrigin={{ vertical: 'top', horizontal: 'right' }}
       >
-        <MenuItem sx={{ color: 'text.secondary' }}>
+        <MenuItem
+          onClick={() => {
+            if (confirm('Are you sure you want to delete this laudatory?')) {
+              axios
+                .delete(
+                  `Salary/DeleteLaudatoryEmployee?ID=${Laudatory.dulieu.LaudatoryEmployee.LaudatoryEmployeeID}`
+                )
+                .then((res) => {
+                  if (res.data.Status === 'Delete') {
+                    alert('Laudatory Deleted');
+                    window.location.reload();
+                  } else {
+                    alert('Laudatory Not Deleted');
+                  }
+                });
+            }
+          }}
+          sx={{ color: 'text.secondary' }}
+        >
           <ListItemIcon>
             <Icon icon={trash2Outline} width={24} height={24} />
           </ListItemIcon>

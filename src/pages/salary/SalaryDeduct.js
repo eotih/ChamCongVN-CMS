@@ -134,10 +134,10 @@ export default function User() {
   };
   const convertDateTime = (date) => {
     const newDate = new Date(date);
-    const day = newDate.getDay();
-    const month = newDate.getMonth();
+    const day = newDate.getDate();
+    const month = newDate.getMonth() + 1;
     const year = newDate.getUTCFullYear();
-    return `${day}:${month}:${year}`;
+    return `${day}/${month}/${year}`;
   };
   const handleClick = (event, name) => {
     const selectedIndex = selected.indexOf(name);
@@ -179,7 +179,7 @@ export default function User() {
     initialValues: {
       EmployeeID: '',
       DeductionName: '',
-      DeductionDate: convertDateTime(deductdate),
+      DeductionDate: deductdate,
       Reason: '',
       Amount: '',
       CreatedBy: '',
@@ -193,7 +193,7 @@ export default function User() {
           Reason: formik.values.Reason,
           Amount: formik.values.Amount,
           CreatedBy: formik.values.CreatedBy,
-          DeductionDate: convertDateTime(deductdate)
+          DeductionDate: deductdate
         })
         .then((res) => {
           if (res.data.Status === 'Success') {
@@ -367,11 +367,11 @@ export default function User() {
                             </Stack>
                           </TableCell>
                           <TableCell align="left">{DeductionName}</TableCell>
-                          <TableCell align="left">{DeductionDate}</TableCell>
+                          <TableCell align="left">{convertDateTime(DeductionDate)}</TableCell>
                           <TableCell align="left">{Reason}</TableCell>
                           <TableCell align="left">{Amount}</TableCell>
                           <TableCell align="right">
-                            <DeductMoreMenu />
+                            <DeductMoreMenu dulieu={row} />
                           </TableCell>
                         </TableRow>
                       );

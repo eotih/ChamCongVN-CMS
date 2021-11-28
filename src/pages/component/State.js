@@ -151,7 +151,7 @@ export default function State() {
     },
     onSubmit: () => {
       axios
-        .post(``, formik.values)
+        .post(`Component/AddOrEditState`, formik.values)
         .then((res) => {
           if (res.data.Status === 'Success') {
             alert('Thêm thành công');
@@ -267,7 +267,7 @@ export default function State() {
                         <TableCell align="left">{StateID}</TableCell>
                         <TableCell align="left">{StateName}</TableCell>
                         <TableCell align="right">
-                          <StateMoreMenu />
+                          <StateMoreMenu dulieu={row} />
                         </TableCell>
                       </TableRow>
                     );

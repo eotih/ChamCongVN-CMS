@@ -1,6 +1,7 @@
+/* eslint-disable no-restricted-globals */
 import * as React from 'react';
 import { Icon } from '@iconify/react';
-import { useRef, useState } from 'react';
+import { useRef, useState, useEffect } from 'react';
 import { useFormik, Form, FormikProvider } from 'formik';
 import editFill from '@iconify/icons-eva/edit-fill';
 import { Link as RouterLink } from 'react-router-dom';
@@ -25,29 +26,24 @@ import {
 import DatePicker from '@mui/lab/DatePicker';
 import AdapterDateFns from '@mui/lab/AdapterDateFns';
 import LocalizationProvider from '@mui/lab/LocalizationProvider';
-
 import { LoadingButton } from '@mui/lab';
 import axios from '../../../functions/Axios';
+import { getAllEmployees } from '../../../functions/Employee';
 // ----------------------------------------------------------------------
 
-export default function DeductMoreMenu() {
+export default function DeductMoreMenu(Deduct) {
   const ref = useRef(null);
-  const [deductdate, setDeductDate] = React.useState(new Date());
+  const [deductdate, setDeductDate] = useState([]);
   const [employee, setEmployee] = useState([]);
   const [employees, setEmployees] = useState([]);
   const [isOpen, setIsOpen] = useState(false);
   const [open, setOpen] = useState(false);
-  const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
-
-  const convertDateTime = (date) => {
-    const newDate = new Date(date);
-    const hour = newDate.getHours();
-    const min = newDate.getMinutes();
-    const sec = newDate.getSeconds();
-    return `${hour}:${min}:${sec}`;
-  };
-
+  useEffect(() => {
+    getAllEmployees().then((res) => {
+      setEmployee(res);
+    });
+  }, []);
   const style = {
     position: 'relative',
     bgcolor: 'background.paper',
@@ -56,23 +52,32 @@ export default function DeductMoreMenu() {
   };
   const formik = useFormik({
     initialValues: {
+      DeductionEmployeeID: '',
       EmployeeID: '',
       DeductionName: '',
-      DeductionDate: convertDateTime(deductdate),
+      DeductionDate: deductdate,
       Reason: '',
       Amount: '',
-      CreatedBy: '',
+      UpdatedBy: '',
       remember: true
     },
     onSubmit: () => {
       axios
-        .post(`Salary/AddOrEditDeductionEmployee`, formik.values)
+        .post(`Salary/AddOrEditDeductionEmployee`, {
+          DeductionEmployeeID: formik.values.DeductionEmployeeID,
+          EmployeeID: formik.values.EmployeeID,
+          DeductionName: formik.values.DeductionName,
+          Reason: formik.values.Reason,
+          Amount: formik.values.Amount,
+          UpdatedBy: formik.values.UpdatedBy,
+          DeductionDate: deductdate
+        })
         .then((res) => {
-          if (res.data.Status === 'Success') {
-            alert('Thêm thành công');
+          if (res.data.Status === 'Updated') {
+            alert('Dedduction Updated');
             window.location.reload();
           } else {
-            alert('Thêm thất bại');
+            alert('Dedduction not Updated');
           }
         })
         .catch((err) => {
@@ -80,6 +85,18 @@ export default function DeductMoreMenu() {
         });
     }
   });
+  const handleOpen = () => {
+    const { DeductionEmployeeID, DeductionName, DeductionDate, Reason, Amount } =
+      Deduct.dulieu.DeductionEmployee;
+    const { EmployeeID } = Deduct.dulieu;
+    formik.setFieldValue('DeductionEmployeeID', DeductionEmployeeID);
+    formik.setFieldValue('DeductionName', DeductionName);
+    formik.setFieldValue('Reason', Reason);
+    formik.setFieldValue('Amount', Amount);
+    formik.setFieldValue('EmployeeID', EmployeeID);
+    setDeductDate(new Date(`${DeductionDate}`));
+    setOpen(true);
+  };
   const { handleSubmit, getFieldProps } = formik;
   const handleChange = (event) => {
     formik.setFieldValue('EmployeeID', event.target.value);
@@ -101,7 +118,25 @@ export default function DeductMoreMenu() {
         anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
         transformOrigin={{ vertical: 'top', horizontal: 'right' }}
       >
-        <MenuItem sx={{ color: 'text.secondary' }}>
+        <MenuItem
+          onClick={() => {
+            if (confirm('Are you sure you want to delete this deduction?')) {
+              axios
+                .delete(
+                  `Salary/DeleteDeductionEmployee?ID=${Deduct.dulieu.DeductionEmployee.DeductionEmployeeID}`
+                )
+                .then((res) => {
+                  if (res.data.Status === 'Delete') {
+                    alert('Deduction Deleted');
+                    window.location.reload();
+                  } else {
+                    alert('Deduction Not Deleted');
+                  }
+                });
+            }
+          }}
+          sx={{ color: 'text.secondary' }}
+        >
           <ListItemIcon>
             <Icon icon={trash2Outline} width={24} height={24} />
           </ListItemIcon>

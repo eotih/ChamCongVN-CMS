@@ -1,3 +1,4 @@
+/* eslint-disable no-restricted-globals */
 import { Icon } from '@iconify/react';
 import { useRef, useState } from 'react';
 import { useFormik, Form, FormikProvider } from 'formik';
@@ -100,7 +101,21 @@ export default function ShiftMoreMenu(Shift) {
         anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
         transformOrigin={{ vertical: 'top', horizontal: 'right' }}
       >
-        <MenuItem sx={{ color: 'text.secondary' }}>
+        <MenuItem
+          onClick={() => {
+            if (confirm('Are you sure you want to delete this shift?')) {
+              axios.delete(`Organization/DeleteShift?ID=${Shift.dulieu.ShiftID}`).then((res) => {
+                if (res.data.Status === 'Delete') {
+                  alert('Shift Deleted');
+                  window.location.reload();
+                } else {
+                  alert('Shift Not Deleted');
+                }
+              });
+            }
+          }}
+          sx={{ color: 'text.secondary' }}
+        >
           <ListItemIcon>
             <Icon icon={trash2Outline} width={24} height={24} />
           </ListItemIcon>
