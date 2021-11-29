@@ -24,6 +24,7 @@ import Department from './pages/component/Department';
 import Degree from './pages/component/Degree';
 import Specialty from './pages/component/Specialities';
 // Salary
+import Salary from './pages/salary/Salary';
 import SalaryTable from './pages/salary/SalaryTable';
 import SalaryDeduct from './pages/salary/SalaryDeduct';
 import Laudatory from './pages/salary/Laudatory';
@@ -72,6 +73,7 @@ export default function Router() {
       path: '/salary',
       element: <DashboardLayout />,
       children: [
+        { path: 'salaries', element: <Salary /> },
         { path: 'salarytable', element: <SalaryTable /> },
         { path: 'salarydeduct', element: <SalaryDeduct /> },
         { path: 'laudatory', element: <Laudatory /> },
