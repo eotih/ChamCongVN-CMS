@@ -1,3 +1,4 @@
+/* eslint-disable no-restricted-globals */
 import { Icon } from '@iconify/react';
 import { useRef, useState } from 'react';
 import { useFormik, Form, FormikProvider } from 'formik';
@@ -22,11 +23,10 @@ import { LoadingButton } from '@mui/lab';
 import axios from '../../../functions/Axios';
 // ----------------------------------------------------------------------
 
-export default function WorkMoreMenu() {
+export default function WorkMoreMenu(Work) {
   const ref = useRef(null);
   const [isOpen, setIsOpen] = useState(false);
   const [open, setOpen] = useState(false);
-  const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
   const style = {
     position: 'relative',
@@ -36,6 +36,7 @@ export default function WorkMoreMenu() {
   };
   const formik = useFormik({
     initialValues: {
+      WorkID: '',
       WorkName: '',
       Note: '',
       remember: true
@@ -44,11 +45,11 @@ export default function WorkMoreMenu() {
       axios
         .post(`Component/AddOrEditWork`, formik.values)
         .then((res) => {
-          if (res.data.Status === 'Success') {
-            alert('Thêm thành công');
+          if (res.data.Status === 'Updated') {
+            alert('Work Updated');
             window.location.reload();
           } else {
-            alert('Thêm thất bại');
+            alert('Work not Updated');
           }
         })
         .catch((err) => {
@@ -56,6 +57,11 @@ export default function WorkMoreMenu() {
         });
     }
   });
+  const handleOpen = () => {
+    formik.setFieldValue('WorkID', Work.dulieu.WorkID);
+    formik.setFieldValue('WorkName', Work.dulieu.WorkName);
+    setOpen(true);
+  };
   const { handleSubmit, getFieldProps } = formik;
   return (
     <>
@@ -73,13 +79,26 @@ export default function WorkMoreMenu() {
         anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
         transformOrigin={{ vertical: 'top', horizontal: 'right' }}
       >
-        <MenuItem sx={{ color: 'text.secondary' }}>
+        <MenuItem
+          onClick={() => {
+            if (confirm('Are you sure you want to delete this work?')) {
+              axios.delete(`Component/DeleteWork?ID=${Work.dulieu.WorkID}`).then((res) => {
+                if (res.data.Status === 'Delete') {
+                  alert('Work Deleted');
+                  window.location.reload();
+                } else {
+                  alert('Work Not Deleted');
+                }
+              });
+            }
+          }}
+          sx={{ color: 'text.secondary' }}
+        >
           <ListItemIcon>
             <Icon icon={trash2Outline} width={24} height={24} />
           </ListItemIcon>
           <ListItemText primary="Delete" primaryTypographyProps={{ variant: 'body2' }} />
         </MenuItem>
-
         <MenuItem
           onClick={handleOpen}
           component={RouterLink}

@@ -1,3 +1,4 @@
+/* eslint-disable no-restricted-globals */
 import { Icon } from '@iconify/react';
 import { useRef, useState } from 'react';
 import { useFormik, Form, FormikProvider } from 'formik';
@@ -79,7 +80,21 @@ export default function RoleMoreMenu(Role) {
         anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
         transformOrigin={{ vertical: 'top', horizontal: 'right' }}
       >
-        <MenuItem sx={{ color: 'text.secondary' }}>
+        <MenuItem
+          onClick={() => {
+            if (confirm('Are you sure you want to delete this role?')) {
+              axios.delete(`Organization/DeleteRole?ID=${Role.dulieu.RoleID}`).then((res) => {
+                if (res.data.Status === 'Delete') {
+                  alert('Role Deleted');
+                  window.location.reload();
+                } else {
+                  alert('Role Not Deleted');
+                }
+              });
+            }
+          }}
+          sx={{ color: 'text.secondary' }}
+        >
           <ListItemIcon>
             <Icon icon={trash2Outline} width={24} height={24} />
           </ListItemIcon>
