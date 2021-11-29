@@ -2,7 +2,6 @@
 import * as React from 'react';
 import { filter } from 'lodash';
 import { Icon } from '@iconify/react';
-import { sentenceCase } from 'change-case';
 import { useState, useEffect } from 'react';
 import { useFormik, Form, FormikProvider } from 'formik';
 import plusFill from '@iconify/icons-eva/plus-fill';
@@ -35,7 +34,6 @@ import { LoadingButton } from '@mui/lab';
 import axios from '../../functions/Axios';
 // components
 import Page from '../../components/Page';
-import Label from '../../components/Label';
 import Scrollbar from '../../components/Scrollbar';
 import SearchNotFound from '../../components/SearchNotFound';
 import {
@@ -43,7 +41,8 @@ import {
   AccountListToolbar,
   AccountMoreMenu
 } from '../../components/_dashboard/account';
-import { getAllAccount } from '../../functions/Organization';
+import { getAllAccount, getAllRole } from '../../functions/Organization';
+import { getAllEmployees } from '../../functions/Employee';
 //
 
 // ----------------------------------------------------------------------
@@ -52,8 +51,8 @@ const TABLE_HEAD = [
   { id: 'AccountID', label: 'AccountID', alignRight: false },
   { id: 'Employee', label: 'Employee', alignRight: false },
   { id: 'Role', label: 'Role', alignRight: false },
-  { id: 'State', label: 'State', alignRight: false },
   { id: 'Email', label: 'Email', alignRight: false },
+  { id: 'State', label: 'State', alignRight: false },
   { id: '' }
 ];
 
@@ -94,10 +93,9 @@ export default function Account() {
   const [selected, setSelected] = useState([]);
   const [orderBy, setOrderBy] = useState('name');
   const [filterName, setFilterName] = useState('');
-  const [Account, setAccount] = useState([]);
-  const [role, setRole] = React.useState('');
-  const [state, setState] = React.useState('');
-  const [employee, setEmployee] = React.useState('');
+  const [account, setAccount] = useState([]);
+  const [employee, setEmployee] = useState([]);
+  const [role, setRole] = useState([]);
   const [rowsPerPage, setRowsPerPage] = useState(5);
   const [open, setOpen] = useState(false);
   const handleOpen = () => setOpen(true);
@@ -106,6 +104,12 @@ export default function Account() {
   useEffect(() => {
     getAllAccount().then((res) => {
       setAccount(res);
+    });
+    getAllEmployees().then((res) => {
+      setEmployee(res);
+    });
+    getAllRole().then((res) => {
+      setRole(res);
     });
   }, []);
   const handleRequestSort = (event, property) => {
@@ -116,7 +120,7 @@ export default function Account() {
 
   const handleSelectAllClick = (event) => {
     if (event.target.checked) {
-      const newSelecteds = Account.map((n) => n.name);
+      const newSelecteds = account.map((n) => n.name);
       setSelected(newSelecteds);
       return;
     }
@@ -161,12 +165,16 @@ export default function Account() {
   };
   const formik = useFormik({
     initialValues: {
-      AccountName: '',
+      EmployeeID: '',
+      RoleID: '',
+      Email: '',
+      Password: '',
+      CreatedBy: '',
       remember: true
     },
     onSubmit: () => {
       axios
-        .post(``, formik.values)
+        .post(`Organization/AddAccount`, formik.values)
         .then((res) => {
           if (res.data.Status === 'Success') {
             alert('Thêm thành công');
@@ -183,17 +191,14 @@ export default function Account() {
   const { handleSubmit, getFieldProps } = formik;
 
   const handleChangeRole = (event) => {
-    setRole(event.target.value);
-  };
-  const handleChangeState = (event) => {
-    setState(event.target.value);
+    formik.setFieldValue('RoleID', event.target.value);
   };
   const handleChangeEmployee = (event) => {
-    setEmployee(event.target.value);
+    formik.setFieldValue('EmployeeID', event.target.value);
   };
-  const emptyRows = page > 0 ? Math.max(0, (1 + page) * rowsPerPage - Account.length) : 0;
+  const emptyRows = page > 0 ? Math.max(0, (1 + page) * rowsPerPage - account.length) : 0;
 
-  const filteredUsers = applySortFilter(Account, getComparator(order, orderBy), filterName);
+  const filteredUsers = applySortFilter(account, getComparator(order, orderBy), filterName);
 
   const isUserNotFound = filteredUsers.length === 0;
 
@@ -238,12 +243,15 @@ export default function Account() {
                     <Select
                       labelId="demo-simple-select-label"
                       id="demo-simple-select"
-                      value={employee}
+                      {...getFieldProps('EmployeeID')}
                       label="Employee"
                       onChange={handleChangeEmployee}
                     >
-                      <MenuItem value={1}>Hieu</MenuItem>
-                      <MenuItem value={2}>Thanh</MenuItem>
+                      {employee.map((item) => (
+                        <MenuItem key={item.emp.EmployeeID} value={item.emp.EmployeeID}>
+                          {item.emp.FullName}
+                        </MenuItem>
+                      ))}
                     </Select>
                   </FormControl>
                   <FormControl fullWidth>
@@ -251,25 +259,15 @@ export default function Account() {
                     <Select
                       labelId="demo-simple-select-label"
                       id="demo-simple-select"
-                      value={role}
+                      {...getFieldProps('RoleID')}
                       label="Role"
                       onChange={handleChangeRole}
                     >
-                      <MenuItem value={1}>Admin</MenuItem>
-                      <MenuItem value={2}>Staff</MenuItem>
-                    </Select>
-                  </FormControl>
-                  <FormControl fullWidth>
-                    <InputLabel id="demo-simple-select-label">State</InputLabel>
-                    <Select
-                      labelId="demo-simple-select-label"
-                      id="demo-simple-select"
-                      value={state}
-                      label="State"
-                      onChange={handleChangeState}
-                    >
-                      <MenuItem value={1}>Approved</MenuItem>
-                      <MenuItem value={2}>NotApproved</MenuItem>
+                      {role.map((item) => (
+                        <MenuItem key={item.RoleID} value={item.RoleID}>
+                          {item.RoleName}
+                        </MenuItem>
+                      ))}
                     </Select>
                   </FormControl>
                 </Stack>
@@ -311,41 +309,53 @@ export default function Account() {
                   order={order}
                   orderBy={orderBy}
                   headLabel={TABLE_HEAD}
-                  rowCount={Account.length}
+                  rowCount={account.length}
                   numSelected={selected.length}
                   onRequestSort={handleRequestSort}
                   onSelectAllClick={handleSelectAllClick}
                 />
                 <TableBody>
-                  {Account.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map(
-                    (row) => {
-                      const { AccountID, AccountName } = row;
-                      const isItemSelected = selected.indexOf(AccountName) !== -1;
+                  {account
+                    .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+                    .map((row) => {
+                      const { AccountID, Email } = row.Account;
+                      const { FullName, Image } = row.Employee;
+                      const { RoleName, StateName } = row;
+                      const isItemSelected = selected.indexOf(FullName) !== -1;
 
                       return (
                         <TableRow
                           hover
                           key={AccountID}
                           tabIndex={-1}
-                          Account="checkbox"
+                          account="checkbox"
                           selected={isItemSelected}
                           aria-checked={isItemSelected}
                         >
                           <TableCell padding="checkbox">
                             <Checkbox
                               checked={isItemSelected}
-                              onChange={(event) => handleClick(event, AccountName)}
+                              onChange={(event) => handleClick(event, FullName)}
                             />
                           </TableCell>
                           <TableCell align="left">{AccountID}</TableCell>
-                          <TableCell align="left">{AccountName}</TableCell>
+                          <TableCell component="th" scope="row" padding="none">
+                            <Stack direction="row" alignItems="center" spacing={2}>
+                              <Avatar alt={FullName} src={Image} />
+                              <Typography variant="subtitle2" noWrap>
+                                {FullName}
+                              </Typography>
+                            </Stack>
+                          </TableCell>
+                          <TableCell align="left">{RoleName}</TableCell>
+                          <TableCell align="left">{Email}</TableCell>
+                          <TableCell align="left">{StateName}</TableCell>
                           <TableCell align="right">
-                            <AccountMoreMenu />
+                            <AccountMoreMenu dulieu={row} />
                           </TableCell>
                         </TableRow>
                       );
-                    }
-                  )}
+                    })}
                   {emptyRows > 0 && (
                     <TableRow style={{ height: 53 * emptyRows }}>
                       <TableCell colSpan={6} />
@@ -368,7 +378,7 @@ export default function Account() {
           <TablePagination
             rowsPerPageOptions={[5, 10, 25]}
             component="div"
-            count={Account.length}
+            count={account.length}
             rowsPerPage={rowsPerPage}
             page={page}
             onPageChange={handleChangePage}

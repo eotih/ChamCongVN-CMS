@@ -1,6 +1,7 @@
+/* eslint-disable no-restricted-globals */
 import * as React from 'react';
 import { Icon } from '@iconify/react';
-import { useRef, useState } from 'react';
+import { useRef, useState, useEffect } from 'react';
 import { useFormik, Form, FormikProvider } from 'formik';
 import editFill from '@iconify/icons-eva/edit-fill';
 import { Link as RouterLink } from 'react-router-dom';
@@ -24,6 +25,9 @@ import {
 } from '@mui/material';
 import { LoadingButton } from '@mui/lab';
 import axios from '../../../functions/Axios';
+import { getAllEmployees } from '../../../functions/Employee';
+import { getAllState } from '../../../functions/Component';
+import { getAllRole } from '../../../functions/Organization';
 // ----------------------------------------------------------------------
 
 export default function AccountMoreMenu(Account) {
@@ -31,10 +35,24 @@ export default function AccountMoreMenu(Account) {
   const [isOpen, setIsOpen] = useState(false);
   const [open, setOpen] = useState(false);
   const handleClose = () => setOpen(false);
-  const [role, setRole] = React.useState('');
-  const [state, setState] = React.useState('');
-  const [employee, setEmployee] = React.useState('');
+  const [role, setRole] = useState([]);
+  const [state, setState] = useState([]);
+  const [employee, setEmployee] = useState([]);
+  const [roles, setRoles] = useState([]);
+  const [states, setStates] = useState([]);
+  const [employees, setEmployees] = useState([]);
 
+  useEffect(() => {
+    getAllEmployees().then((res) => {
+      setEmployee(res);
+    });
+    getAllRole().then((res) => {
+      setRole(res);
+    });
+    getAllState().then((res) => {
+      setState(res);
+    });
+  }, []);
   const style = {
     position: 'relative',
     bgcolor: 'background.paper',
@@ -43,19 +61,20 @@ export default function AccountMoreMenu(Account) {
   };
   const formik = useFormik({
     initialValues: {
-      AccountName: '',
-      Note: '',
+      AccountID: '',
+      StateID: '',
+      UpdatedBy: '',
       remember: true
     },
     onSubmit: () => {
       axios
-        .post(`Component/AddOrEditAccounts`, formik.values)
+        .post(`Organization/EditAccount`, formik.values)
         .then((res) => {
           if (res.data.Status === 'Updated') {
             alert('Account Updated');
             window.location.reload();
           } else {
-            alert('Thêm thất bại');
+            alert('Account not Updated');
           }
         })
         .catch((err) => {
@@ -64,21 +83,29 @@ export default function AccountMoreMenu(Account) {
     }
   });
   const handleOpen = () => {
-    formik.setFieldValue('AccountID', Account.dulieu.AccountID);
-    formik.setFieldValue('AccountName', Account.dulieu.AccountName);
-    formik.setFieldValue('Note', Account.dulieu.Note);
+    const { AccountID, Email, StateID, EmployeeID, RoleID } = Account.dulieu.Account;
+    const { FullName } = Account.dulieu.Employee;
+    formik.setFieldValue('AccountID', AccountID);
+    formik.setFieldValue('FullName', FullName);
+    formik.setFieldValue('Email', Email);
+    formik.setFieldValue('EmployeeID', EmployeeID);
+    formik.setFieldValue('StateID', StateID);
+    formik.setFieldValue('RoleID', RoleID);
     setOpen(true);
   };
   const { handleSubmit, getFieldProps } = formik;
 
   const handleChangeRole = (event) => {
-    setRole(event.target.value);
+    formik.setFieldValue('RoleID', event.target.value);
+    setRoles(event.target.value);
   };
   const handleChangeState = (event) => {
-    setState(event.target.value);
+    formik.setFieldValue('StateID', event.target.value);
+    setStates(event.target.value);
   };
   const handleChangeEmployee = (event) => {
-    setEmployee(event.target.value);
+    formik.setFieldValue('EmployeeID', event.target.value);
+    setEmployees(event.target.value);
   };
   return (
     <>
@@ -96,7 +123,23 @@ export default function AccountMoreMenu(Account) {
         anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
         transformOrigin={{ vertical: 'top', horizontal: 'right' }}
       >
-        <MenuItem sx={{ color: 'text.secondary' }}>
+        <MenuItem
+          onClick={() => {
+            if (confirm('Are you sure you want to delete this account?')) {
+              axios
+                .delete(`Organization/DeleteAccount?ID=${Account.dulieu.Account.AccountID}`)
+                .then((res) => {
+                  if (res.data.Status === 'Delete') {
+                    alert('Account Deleted');
+                    window.location.reload();
+                  } else {
+                    alert('Account Not Deleted');
+                  }
+                });
+            }
+          }}
+          sx={{ color: 'text.secondary' }}
+        >
           <ListItemIcon>
             <Icon icon={trash2Outline} width={24} height={24} />
           </ListItemIcon>
@@ -140,13 +183,6 @@ export default function AccountMoreMenu(Account) {
                       {...getFieldProps('Email')}
                       variant="outlined"
                     />
-                    <TextField
-                      fullWidth
-                      type="password"
-                      label="Password"
-                      {...getFieldProps('Password')}
-                      variant="outlined"
-                    />
                   </Stack>
                   <Stack direction={{ xs: 'column', sm: 'row' }} spacing={2}>
                     <FormControl fullWidth>
@@ -154,12 +190,16 @@ export default function AccountMoreMenu(Account) {
                       <Select
                         labelId="demo-simple-select-label"
                         id="demo-simple-select"
-                        value={employee}
+                        value={employees}
+                        {...getFieldProps('EmployeeID')}
                         label="Employee"
                         onChange={handleChangeEmployee}
                       >
-                        <MenuItem value={1}>Hieu</MenuItem>
-                        <MenuItem value={2}>Thanh</MenuItem>
+                        {employee.map((item) => (
+                          <MenuItem key={item.emp.EmployeeID} value={item.emp.EmployeeID}>
+                            {item.emp.FullName}
+                          </MenuItem>
+                        ))}
                       </Select>
                     </FormControl>
                     <FormControl fullWidth>
@@ -167,12 +207,16 @@ export default function AccountMoreMenu(Account) {
                       <Select
                         labelId="demo-simple-select-label"
                         id="demo-simple-select"
-                        value={role}
+                        value={roles}
+                        {...getFieldProps('RoleID')}
                         label="Role"
                         onChange={handleChangeRole}
                       >
-                        <MenuItem value={1}>Admin</MenuItem>
-                        <MenuItem value={2}>Staff</MenuItem>
+                        {role.map((item) => (
+                          <MenuItem key={item.RoleID} value={item.RoleID}>
+                            {item.RoleName}
+                          </MenuItem>
+                        ))}
                       </Select>
                     </FormControl>
                     <FormControl fullWidth>
@@ -180,12 +224,16 @@ export default function AccountMoreMenu(Account) {
                       <Select
                         labelId="demo-simple-select-label"
                         id="demo-simple-select"
-                        value={state}
+                        value={states}
+                        {...getFieldProps('StateID')}
                         label="State"
                         onChange={handleChangeState}
                       >
-                        <MenuItem value={1}>Approved</MenuItem>
-                        <MenuItem value={2}>NotApproved</MenuItem>
+                        {state.map((item) => (
+                          <MenuItem key={item.StateID} value={item.StateID}>
+                            {item.StateName}
+                          </MenuItem>
+                        ))}
                       </Select>
                     </FormControl>
                   </Stack>

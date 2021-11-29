@@ -99,7 +99,6 @@ export default function User() {
   const [filterName, setFilterName] = useState('');
   const [laudatory, setLaudatory] = useState([]);
   const [employee, setEmployee] = useState([]);
-  const [employees, setEmployees] = useState([]);
   const [rowsPerPage, setRowsPerPage] = useState(5);
   const [open, setOpen] = useState(false);
   const handleOpen = () => setOpen(true);
@@ -209,7 +208,6 @@ export default function User() {
 
   const handleChange = (event) => {
     formik.setFieldValue('EmployeeID', event.target.value);
-    setEmployees(event.target.value);
   };
 
   const emptyRows = page > 0 ? Math.max(0, (1 + page) * rowsPerPage - laudatory.length) : 0;
@@ -251,7 +249,6 @@ export default function User() {
                       <Select
                         labelId="select-label"
                         label="Employee"
-                        value={employees}
                         {...getFieldProps('EmployeeID')}
                         variant="outlined"
                         onChange={handleChange}
