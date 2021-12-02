@@ -1,6 +1,7 @@
 import { Icon } from '@iconify/react';
 import pieChart2Fill from '@iconify/icons-eva/pie-chart-2-fill';
 import peopleFill from '@iconify/icons-eva/people-fill';
+import peopleOutline from '@iconify/icons-eva/people-outline';
 import lockFill from '@iconify/icons-eva/lock-fill';
 import roundAttachMoney from '@iconify/icons-ic/round-attach-money';
 import briefcaseFill from '@iconify/icons-eva/briefcase-fill';
@@ -14,6 +15,15 @@ const sidebarConfig = [
     title: 'dashboard',
     path: '/dashboard/app',
     icon: getIcon(pieChart2Fill)
+  },
+  {
+    title: 'Employee',
+    path: '/employee',
+    icon: getIcon(peopleOutline),
+    children: [
+      { title: 'Employee List', path: '/employee/employeelist' },
+      { title: 'Recruitments', path: '/employee/recruitments' }
+    ]
   },
   {
     title: 'Organization',

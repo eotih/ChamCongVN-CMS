@@ -10,6 +10,8 @@ import Products from './pages/Products';
 import Blog from './pages/Blog';
 import User from './pages/User';
 import NotFound from './pages/Page404';
+// Employee
+import Recruitment from './pages/employee/Recruitment';
 // Organization
 import Account from './pages/organization/Account';
 import Profile from './pages/Profile';
@@ -44,6 +46,14 @@ export default function Router() {
         { path: 'profile', element: <Profile /> },
         { path: 'products', element: <Products /> },
         { path: 'blog', element: <Blog /> }
+      ]
+    },
+    {
+      path: '/employee',
+      element: <DashboardLayout />,
+      children: [
+        // { path: 'employeelist', element: <Profile /> },
+        { path: 'Recruitments', element: <Recruitment /> }
       ]
     },
     {
