@@ -107,7 +107,13 @@ export default function Recruitment() {
     setOrder(isAsc ? 'desc' : 'asc');
     setOrderBy(property);
   };
-
+  const convertDateTime = (date) => {
+    const newDate = new Date(date);
+    const day = newDate.getDate();
+    const month = newDate.getMonth() + 1;
+    const year = newDate.getFullYear();
+    return `${day}/${month}/${year}`;
+  };
   const handleSelectAllClick = (event) => {
     if (event.target.checked) {
       const newSelecteds = Recruitment.map((n) => n.name);
@@ -205,7 +211,6 @@ export default function Recruitment() {
                 <Typography id="modal-modal-title" variant="h6" component="h2">
                   Add Recruitment
                 </Typography>
-                <UploadFile />
               </Stack>
             </Box>
           </Form>
@@ -216,7 +221,7 @@ export default function Recruitment() {
           <Typography variant="h4" gutterBottom>
             Recruitment
           </Typography>
-          <Button
+          {/* <Button
             onClick={handleOpen}
             variant="contained"
             component={RouterLink}
@@ -224,7 +229,8 @@ export default function Recruitment() {
             startIcon={<Icon icon={plusFill} />}
           >
             New Recruitment
-          </Button>
+          </Button> */}
+          <UploadFile />
         </Stack>
 
         <Card>
@@ -283,7 +289,7 @@ export default function Recruitment() {
                           <TableCell align="left">{FullName}</TableCell>
                           <TableCell align="left">{Email}</TableCell>
                           <TableCell align="left">{Gender}</TableCell>
-                          <TableCell align="left">{DateOfBirth}</TableCell>
+                          <TableCell align="left">{convertDateTime(DateOfBirth)}</TableCell>
                           <TableCell align="left">{Address}</TableCell>
                           <TableCell align="left">{TemporaryAddress}</TableCell>
                           <TableCell align="left">{Phone}</TableCell>
