@@ -1,3 +1,4 @@
+/* eslint-disable import/no-unresolved */
 import { useFormik } from 'formik';
 import { useState } from 'react';
 // material
@@ -52,7 +53,6 @@ export default function EcommerceShop() {
         <Typography variant="h4" sx={{ mb: 5 }}>
           Products
         </Typography>
-
         <Stack
           direction="row"
           flexWrap="wrap-reverse"
