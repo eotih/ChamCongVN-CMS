@@ -22,16 +22,11 @@ import {
   TableContainer,
   TablePagination,
   Modal,
-  TextField,
-  Box,
-  FormControl,
-  InputLabel,
-  Select,
-  MenuItem
+  Box
 } from '@mui/material';
 
-import { LoadingButton } from '@mui/lab';
 import axios from '../../functions/Axios';
+import UploadFile from '../UploadFile';
 // components
 import Page from '../../components/Page';
 import Scrollbar from '../../components/Scrollbar';
@@ -41,7 +36,7 @@ import {
   RecruitmentListToolbar,
   RecruitmentMoreMenu
 } from '../../components/_dashboard/recruitment';
-import { getAllEmployees } from '../../functions/Employee';
+import { getAllRecruitments } from '../../functions/Employee';
 //
 
 // ----------------------------------------------------------------------
@@ -49,12 +44,12 @@ import { getAllEmployees } from '../../functions/Employee';
 const TABLE_HEAD = [
   { id: 'RecruitmentID', label: 'RecruitmentID', alignRight: false },
   { id: 'Fullname', label: 'Fullname', alignRight: false },
+  { id: 'Email', label: 'Email', alignRight: false },
   { id: 'Gender', label: 'Gender', alignRight: false },
-  { id: 'DateOfBirth', label: 'Date Of Birth', alignRight: false },
+  { id: 'DateOfBirth', label: 'DOB', alignRight: false },
   { id: 'Address', label: 'Address', alignRight: false },
   { id: 'TemporaryAddress', label: 'Temporary Address', alignRight: false },
   { id: 'Phone', label: 'Phone', alignRight: false },
-  { id: 'Email', label: 'Email', alignRight: false },
   { id: 'ApplyFor', label: 'Apply For', alignRight: false },
   { id: 'LinkCV', label: 'Link CV', alignRight: false },
   { id: '' }
@@ -97,18 +92,28 @@ export default function Recruitment() {
   const [selected, setSelected] = useState([]);
   const [orderBy, setOrderBy] = useState('name');
   const [filterName, setFilterName] = useState('');
-  const [Recruitment, setRecruitment] = useState([]);
+  const [recruitment, setRecruitment] = useState([]);
   const [rowsPerPage, setRowsPerPage] = useState(5);
   const [open, setOpen] = useState(false);
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
-
+  useEffect(() => {
+    getAllRecruitments().then((res) => {
+      setRecruitment(res);
+    });
+  }, []);
   const handleRequestSort = (event, property) => {
     const isAsc = orderBy === property && order === 'asc';
     setOrder(isAsc ? 'desc' : 'asc');
     setOrderBy(property);
   };
-
+  const convertDateTime = (date) => {
+    const newDate = new Date(date);
+    const day = newDate.getDate();
+    const month = newDate.getMonth() + 1;
+    const year = newDate.getFullYear();
+    return `${day}/${month}/${year}`;
+  };
   const handleSelectAllClick = (event) => {
     if (event.target.checked) {
       const newSelecteds = Recruitment.map((n) => n.name);
@@ -179,35 +184,53 @@ export default function Recruitment() {
         });
     }
   });
-  const { handleSubmit, getFieldProps } = formik;
 
-  const handleChangeRole = (event) => {
-    formik.setFieldValue('RoleID', event.target.value);
-  };
-  const handleChangeEmployee = (event) => {
-    formik.setFieldValue('EmployeeID', event.target.value);
-  };
-  const emptyRows = page > 0 ? Math.max(0, (1 + page) * rowsPerPage - Recruitment.length) : 0;
+  const emptyRows = page > 0 ? Math.max(0, (1 + page) * rowsPerPage - recruitment.length) : 0;
 
-  const filteredUsers = applySortFilter(Recruitment, getComparator(order, orderBy), filterName);
+  const filteredUsers = applySortFilter(recruitment, getComparator(order, orderBy), filterName);
 
   const isUserNotFound = filteredUsers.length === 0;
 
   return (
     <Page title="Recruitment | Minimal-UI">
+      <Modal
+        open={open}
+        sx={{
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center'
+        }}
+        onClose={handleClose}
+        aria-labelledby="modal-modal-title"
+        aria-describedby="modal-modal-description"
+      >
+        <FormikProvider value={formik}>
+          <Form autoComplete="off" noValidate>
+            <Box sx={style}>
+              <Stack spacing={1}>
+                <Typography id="modal-modal-title" variant="h6" component="h2">
+                  Add Recruitment
+                </Typography>
+              </Stack>
+            </Box>
+          </Form>
+        </FormikProvider>
+      </Modal>
       <Container>
         <Stack direction="row" alignItems="center" justifyContent="space-between" mb={5}>
           <Typography variant="h4" gutterBottom>
             Recruitment
           </Typography>
-          <Button
+          {/* <Button
+            onClick={handleOpen}
             variant="contained"
             component={RouterLink}
             to="#"
             startIcon={<Icon icon={plusFill} />}
           >
             New Recruitment
-          </Button>
+          </Button> */}
+          <UploadFile />
         </Stack>
 
         <Card>
@@ -224,17 +247,27 @@ export default function Recruitment() {
                   order={order}
                   orderBy={orderBy}
                   headLabel={TABLE_HEAD}
-                  rowCount={Recruitment.length}
+                  rowCount={recruitment.length}
                   numSelected={selected.length}
                   onRequestSort={handleRequestSort}
                   onSelectAllClick={handleSelectAllClick}
                 />
                 <TableBody>
-                  {Recruitment.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map(
-                    (row) => {
-                      const { RecruitmentID, Email } = row.Recruitment;
-                      const { FullName, Image } = row.Employee;
-                      const { RoleName, StateName } = row;
+                  {recruitment
+                    .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+                    .map((row) => {
+                      const {
+                        RecruitmentID,
+                        FullName,
+                        Gender,
+                        DateOfBirth,
+                        Address,
+                        TemporaryAddress,
+                        Phone,
+                        Email,
+                        ApplyFor,
+                        LinkCV
+                      } = row;
                       const isItemSelected = selected.indexOf(FullName) !== -1;
 
                       return (
@@ -253,24 +286,21 @@ export default function Recruitment() {
                             />
                           </TableCell>
                           <TableCell align="left">{RecruitmentID}</TableCell>
-                          <TableCell component="th" scope="row" padding="none">
-                            <Stack direction="row" alignItems="center" spacing={2}>
-                              <Avatar alt={FullName} src={Image} />
-                              <Typography variant="subtitle2" noWrap>
-                                {FullName}
-                              </Typography>
-                            </Stack>
-                          </TableCell>
-                          <TableCell align="left">{RoleName}</TableCell>
+                          <TableCell align="left">{FullName}</TableCell>
                           <TableCell align="left">{Email}</TableCell>
-                          <TableCell align="left">{StateName}</TableCell>
+                          <TableCell align="left">{Gender}</TableCell>
+                          <TableCell align="left">{convertDateTime(DateOfBirth)}</TableCell>
+                          <TableCell align="left">{Address}</TableCell>
+                          <TableCell align="left">{TemporaryAddress}</TableCell>
+                          <TableCell align="left">{Phone}</TableCell>
+                          <TableCell align="left">{ApplyFor}</TableCell>
+                          <TableCell align="left">{LinkCV}</TableCell>
                           <TableCell align="right">
                             <RecruitmentMoreMenu dulieu={row} />
                           </TableCell>
                         </TableRow>
                       );
-                    }
-                  )}
+                    })}
                   {emptyRows > 0 && (
                     <TableRow style={{ height: 53 * emptyRows }}>
                       <TableCell colSpan={6} />
@@ -293,7 +323,7 @@ export default function Recruitment() {
           <TablePagination
             rowsPerPageOptions={[5, 10, 25]}
             component="div"
-            count={Recruitment.length}
+            count={recruitment.length}
             rowsPerPage={rowsPerPage}
             page={page}
             onPageChange={handleChangePage}

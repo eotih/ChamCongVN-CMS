@@ -16,6 +16,7 @@ import {
   FormControlLabel
 } from '@mui/material';
 import { LoadingButton } from '@mui/lab';
+import axios from '../../../functions/Axios';
 
 // ----------------------------------------------------------------------
 
@@ -36,7 +37,20 @@ export default function LoginForm() {
     },
     validationSchema: LoginSchema,
     onSubmit: () => {
-      navigate('/dashboard', { replace: true });
+      axios
+        .post(`Organization/Login`, formik.values)
+        .then((res) => {
+          if (res.data.Status === 'Success') {
+            alert('Đăng nhập thành công');
+            localStorage.setItem('token', res.data.Message);
+            navigate('/dashboard');
+          } else {
+            alert('Đăng nhập thất bại, vui lòng thử lại sau');
+          }
+        })
+        .catch((err) => {
+          console.log(err);
+        });
     }
   });
 
