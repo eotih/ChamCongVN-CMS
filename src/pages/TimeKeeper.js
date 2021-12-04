@@ -1,24 +1,34 @@
 /* eslint-disable import/no-unresolved */
 import { useFormik } from 'formik';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 // material
 import { Container, Stack, Typography } from '@mui/material';
+import CircularProgress from '@mui/material/CircularProgress';
+import Box from '@mui/material/Box';
 // components
 import Page from '../components/Page';
 import {
-  ProductSort,
-  ProductList,
-  ProductCartWidget,
-  ProductFilterSidebar
-} from '../components/_dashboard/products';
+  TimeKeeperSort,
+  TimeKeeperList,
+  TimeKeeperWidget,
+  TimeKeeperFilterSidebar
+} from '../components/_dashboard/timekeeper';
 //
-import PRODUCTS from '../_mocks_/products';
+import { GetAllTimeKeeping } from '../functions/TimeKeeper';
 
 // ----------------------------------------------------------------------
 
 export default function EcommerceShop() {
+  const [error, setError] = useState(null);
+  const [isLoaded, setIsLoaded] = useState(false);
   const [openFilter, setOpenFilter] = useState(false);
-
+  const [timeKeeper, setTimeKeeper] = useState([]);
+  useEffect(() => {
+    GetAllTimeKeeping().then((res) => {
+      setTimeKeeper(res);
+      setIsLoaded(true);
+    });
+  }, []);
   const formik = useFormik({
     initialValues: {
       gender: '',
@@ -47,11 +57,21 @@ export default function EcommerceShop() {
     resetForm();
   };
 
+  if (error) {
+    return <div>Error: {error.message}</div>;
+  }
+  if (!isLoaded) {
+    return (
+      <Box sx={{ display: 'flex' }}>
+        <CircularProgress />
+      </Box>
+    );
+  }
   return (
-    <Page title="Dashboard: Products | Minimal-UI">
+    <Page title="Dashboard: TimeKeeper | ChamCongVN">
       <Container>
         <Typography variant="h4" sx={{ mb: 5 }}>
-          Products
+          TimeKeeper
         </Typography>
         <Stack
           direction="row"
@@ -61,19 +81,19 @@ export default function EcommerceShop() {
           sx={{ mb: 5 }}
         >
           <Stack direction="row" spacing={1} flexShrink={0} sx={{ my: 1 }}>
-            <ProductFilterSidebar
+            <TimeKeeperFilterSidebar
               formik={formik}
               isOpenFilter={openFilter}
               onResetFilter={handleResetFilter}
               onOpenFilter={handleOpenFilter}
               onCloseFilter={handleCloseFilter}
             />
-            <ProductSort />
+            <TimeKeeperSort />
           </Stack>
         </Stack>
 
-        <ProductList products={PRODUCTS} />
-        <ProductCartWidget />
+        <TimeKeeperList time={timeKeeper} />
+        <TimeKeeperWidget />
       </Container>
     </Page>
   );

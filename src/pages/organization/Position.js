@@ -176,7 +176,7 @@ export default function Position() {
   const isUserNotFound = filteredUsers.length === 0;
 
   return (
-    <Page title="Position | Minimal-UI">
+    <Page title="Position | ChamCongVN">
       <Modal
         open={open}
         sx={{

@@ -171,7 +171,7 @@ export default function Role() {
   const isUserNotFound = filteredUsers.length === 0;
 
   return (
-    <Page title="Role | Minimal-UI">
+    <Page title="Role | ChamCongVN">
       <Modal
         open={open}
         sx={{

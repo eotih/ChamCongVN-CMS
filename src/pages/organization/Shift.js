@@ -193,7 +193,7 @@ export default function Shift() {
   const isUserNotFound = filteredUsers.length === 0;
 
   return (
-    <Page title="Shift | Minimal-UI">
+    <Page title="Shift | ChamCongVN">
       <Modal
         open={open}
         sx={{

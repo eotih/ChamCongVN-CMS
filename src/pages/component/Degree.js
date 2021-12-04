@@ -177,7 +177,7 @@ export default function Degree() {
   const isUserNotFound = filteredUsers.length === 0;
 
   return (
-    <Page title="Degree | Minimal-UI">
+    <Page title="Degree | ChamCongVN">
       <Modal
         open={open}
         sx={{
