@@ -208,7 +208,7 @@ export default function User() {
   const isSalaryNotFound = filteredSalarys.length === 0;
 
   return (
-    <Page title="Salary | Minimal-UI">
+    <Page title="Salary | ChamCongVN">
       <Container>
         <Stack direction="row" alignItems="center" justifyContent="space-between" mb={5}>
           <Typography variant="h4" gutterBottom>

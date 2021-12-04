@@ -192,7 +192,7 @@ export default function Recruitment() {
   const isUserNotFound = filteredUsers.length === 0;
 
   return (
-    <Page title="Recruitment | Minimal-UI">
+    <Page title="Recruitment | ChamCongVN">
       <Modal
         open={open}
         sx={{

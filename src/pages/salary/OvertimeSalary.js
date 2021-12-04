@@ -212,7 +212,7 @@ export default function User() {
   const isOvertimeNotFound = filteredOvertimes.length === 0;
 
   return (
-    <Page title="Overtime | Minimal-UI">
+    <Page title="Overtime | ChamCongVN">
       <Container>
         <Modal
           open={open}

@@ -203,7 +203,7 @@ export default function Account() {
   const isUserNotFound = filteredUsers.length === 0;
 
   return (
-    <Page title="Account | Minimal-UI">
+    <Page title="Account | ChamCongVN">
       <Modal
         open={open}
         sx={{

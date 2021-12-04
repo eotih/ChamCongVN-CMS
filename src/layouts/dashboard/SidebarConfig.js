@@ -90,7 +90,7 @@ const sidebarConfig = [
   },
   {
     title: 'TimeKeeper',
-    path: '/timekeeper',
+    path: '/dashboard/timekeeper',
     icon: getIcon(lockFill)
   }
 ];

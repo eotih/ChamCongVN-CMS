@@ -179,7 +179,7 @@ export default function Department() {
   const isUserNotFound = filteredUsers.length === 0;
 
   return (
-    <Page title="Department | Minimal-UI">
+    <Page title="Department | ChamCongVN">
       <Modal
         open={open}
         sx={{
