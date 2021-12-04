@@ -47,7 +47,7 @@ export default function RecruitmentMoreMenu(Recruitment) {
     }
   });
   const handleOpen = () => {
-    const { RecruitmentID, Email, StateID, EmployeeID, RoleID } = Recruitment.dulieu.Recruitment;
+    const { RecruitmentID, Email, StateID, EmployeeID, RoleID } = Recruitment.dulieu;
     const { FullName } = Recruitment.dulieu.Employee;
     formik.setFieldValue('RecruitmentID', RecruitmentID);
     formik.setFieldValue('FullName', FullName);
@@ -75,14 +75,16 @@ export default function RecruitmentMoreMenu(Recruitment) {
         <MenuItem
           onClick={() => {
             if (confirm('Are you sure you want to delete this Recruitment?')) {
-              axios.delete(``).then((res) => {
-                if (res.data.Status === 'Delete') {
-                  alert('Recruitment Deleted');
-                  window.location.reload();
-                } else {
-                  alert('Recruitment Not Deleted');
-                }
-              });
+              axios
+                .delete(`Employee/DeleteRecruitment?ID=${Recruitment.dulieu.RecruitmentID}`)
+                .then((res) => {
+                  if (res.data.Status === 'Delete') {
+                    alert('Recruitment Deleted');
+                    window.location.reload();
+                  } else {
+                    alert('Recruitment Not Deleted');
+                  }
+                });
             }
           }}
           sx={{ color: 'text.secondary' }}
