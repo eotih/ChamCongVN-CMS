@@ -171,7 +171,7 @@ export default function State() {
   const isUserNotFound = filteredUsers.length === 0;
 
   return (
-    <Page title="State | Minimal-UI">
+    <Page title="State | ChamCongVN">
       <Modal
         open={open}
         sx={{

@@ -208,7 +208,7 @@ export default function User() {
   const isUserNotFound = filteredUsers.length === 0;
 
   return (
-    <Page title="Salary Table | Minimal-UI">
+    <Page title="Salary Table | ChamCongVN">
       <Modal
         open={open}
         sx={{

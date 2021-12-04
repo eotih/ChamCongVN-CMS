@@ -173,7 +173,7 @@ export default function Work() {
   const isUserNotFound = filteredUsers.length === 0;
 
   return (
-    <Page title="Work | Minimal-UI">
+    <Page title="Work | ChamCongVN">
       <Modal
         open={open}
         sx={{

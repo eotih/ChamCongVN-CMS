@@ -217,7 +217,7 @@ export default function User() {
   const isUserNotFound = filteredUsers.length === 0;
 
   return (
-    <Page title="Deduct | Minimal-UI">
+    <Page title="Deduct | ChamCongVN">
       <Modal
         open={open}
         sx={{

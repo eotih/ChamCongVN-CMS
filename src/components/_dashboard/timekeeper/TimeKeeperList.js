@@ -1,20 +1,20 @@
 import PropTypes from 'prop-types';
 // material
 import { Grid } from '@mui/material';
-import ShopProductCard from './ProductCard';
+import TimeKeeperCard from './TimeKeeperCard';
 
 // ----------------------------------------------------------------------
 
-ProductList.propTypes = {
+TimeKeeperList.propTypes = {
   products: PropTypes.array.isRequired
 };
 
-export default function ProductList({ time, ...other }) {
+export default function TimeKeeperList({ time, ...other }) {
   return (
     <Grid container spacing={3} {...other}>
-      {time.map((product) => (
-        <Grid key={product.id} item xs={12} sm={6} md={3}>
-          <ShopProductCard product={product} />
+      {time.map((time) => (
+        <Grid key={time.$id} item xs={12} sm={6} md={3}>
+          <TimeKeeperCard time={time} />
         </Grid>
       ))}
     </Grid>

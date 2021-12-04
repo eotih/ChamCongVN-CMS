@@ -217,7 +217,7 @@ export default function User() {
   const isLaudatoryNotFound = filteredLaudatorys.length === 0;
 
   return (
-    <Page title="Laudatory | Minimal-UI">
+    <Page title="Laudatory | ChamCongVN">
       <Container>
         <Modal
           open={open}

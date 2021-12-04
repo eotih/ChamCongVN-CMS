@@ -178,7 +178,7 @@ export default function Specialty() {
   const isUserNotFound = filteredUsers.length === 0;
 
   return (
-    <Page title="Specialty | Minimal-UI">
+    <Page title="Specialty | ChamCongVN">
       <Modal
         open={open}
         sx={{

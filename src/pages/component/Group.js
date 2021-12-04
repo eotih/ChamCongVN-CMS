@@ -174,7 +174,7 @@ export default function Group() {
   const isUserNotFound = filteredUsers.length === 0;
 
   return (
-    <Page title="Group | Minimal-UI">
+    <Page title="Group | ChamCongVN">
       <Modal
         open={open}
         sx={{
