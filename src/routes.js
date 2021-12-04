@@ -32,6 +32,7 @@ import SalaryTable from './pages/salary/SalaryTable';
 import SalaryDeduct from './pages/salary/SalaryDeduct';
 import Laudatory from './pages/salary/Laudatory';
 import Overtime from './pages/salary/OvertimeSalary';
+import TimeKeeper from './pages/TimeKeeper';
 
 // ----------------------------------------------------------------------
 
@@ -46,6 +47,7 @@ export default function Router() {
         { path: 'user', element: <User /> },
         { path: 'profile', element: <Profile /> },
         { path: 'products', element: <Products /> },
+        { path: 'timekeeper', element: <TimeKeeper /> },
         { path: 'blog', element: <Blog /> }
       ]
     },
