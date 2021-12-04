@@ -5,6 +5,7 @@ import React, { useState } from 'react';
 import Page from '../../components/Page';
 import BasicInfor from './BasicInfor';
 import PersonalInfor from './PersonalInfor';
+import Utilities from './Utilities';
 
 const steps = ['Basic Information', 'Personal Information', 'Utilities'];
 export default function AddRecruit() {
@@ -18,6 +19,7 @@ export default function AddRecruit() {
       case 1:
         return <PersonalInfor />;
       case 2:
+        return <Utilities />;
       default:
         return 'unknown step';
     }
