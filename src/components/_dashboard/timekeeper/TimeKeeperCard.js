@@ -3,11 +3,6 @@ import { Link as RouterLink } from 'react-router-dom';
 // material
 import { Box, Card, Link, Typography, Stack } from '@mui/material';
 import { styled } from '@mui/material/styles';
-// utils
-import { fCurrency } from '../../../utils/formatNumber';
-//
-import Label from '../../Label';
-import ColorPreview from '../../ColorPreview';
 
 // ----------------------------------------------------------------------
 
@@ -21,8 +16,8 @@ const TimeKeeperCard = styled('img')({
 
 // ----------------------------------------------------------------------
 
-ShopProductCard.propTypes = {
-  product: PropTypes.object
+TimeKeeperCard.propTypes = {
+  time: PropTypes.object
 };
 
 export default function ShopProductCard({ time }) {
@@ -37,6 +32,9 @@ export default function ShopProductCard({ time }) {
         <Link to="#" color="inherit" underline="hover" component={RouterLink}>
           <Typography variant="subtitle2" noWrap>
             {EmployeeName}
+          </Typography>
+          <Typography variant="subtitle2" noWrap>
+            {Department}
           </Typography>
         </Link>
       </Stack>

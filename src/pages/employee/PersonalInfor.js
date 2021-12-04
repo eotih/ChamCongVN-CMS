@@ -24,12 +24,24 @@ import axios from '../../functions/Axios';
 export default function PersonalInfor({ onHandleNext }) {
   const [images, setImages] = useState([]);
   const [Health, setHealth] = React.useState('');
+  const [SocialInsurance, setSocialInsurance] = React.useState('');
+  const [HealthInsurance, setHealthInsurance] = React.useState('');
+  const [UnemploymentInsurance, setUnemploymentInsurance] = React.useState('');
   const [value, setValue] = React.useState(new Date());
   const handleEditorChange = (content) => {
     formik.setFieldValue('Details', content);
   };
   const handleChange = (event) => {
     setHealth(event.target.value);
+  };
+  const handleChangeSI = (event) => {
+    setSocialInsurance(event.target.value);
+  };
+  const handleChangeHI = (event) => {
+    setHealthInsurance(event.target.value);
+  };
+  const handleChangeUI = (event) => {
+    setUnemploymentInsurance(event.target.value);
   };
 
   const formik = useFormik({
@@ -110,44 +122,44 @@ export default function PersonalInfor({ onHandleNext }) {
                       </Select>
                     </FormControl>
                     <FormControl fullWidth>
-                      <InputLabel id="demo-simple-select-label">Health</InputLabel>
+                      <InputLabel id="demo-simple-select-label">Social Insurance</InputLabel>
                       <Select
                         labelId="demo-simple-select-label"
                         id="demo-simple-select"
-                        value={Health}
-                        label="Health"
-                        onChange={handleChange}
+                        value={SocialInsurance}
+                        label="Social Insurance"
+                        onChange={handleChangeSI}
                       >
-                        <MenuItem value={1}>Well</MenuItem>
-                        <MenuItem value={2}>Not Well</MenuItem>
+                        <MenuItem value={1}>Yes</MenuItem>
+                        <MenuItem value={2}>No</MenuItem>
                       </Select>
                     </FormControl>
                   </Stack>
                   <Stack direction={{ xs: 'column', sm: 'row' }} spacing={2}>
                     <FormControl fullWidth>
-                      <InputLabel id="demo-simple-select-label">Health</InputLabel>
+                      <InputLabel id="demo-simple-select-label">Health Insurance</InputLabel>
                       <Select
                         labelId="demo-simple-select-label"
                         id="demo-simple-select"
-                        value={Health}
-                        label="Health"
-                        onChange={handleChange}
+                        value={HealthInsurance}
+                        label="Health Insurance"
+                        onChange={handleChangeHI}
                       >
-                        <MenuItem value={1}>Well</MenuItem>
-                        <MenuItem value={2}>Not Well</MenuItem>
+                        <MenuItem value={1}>Yes</MenuItem>
+                        <MenuItem value={2}>No</MenuItem>
                       </Select>
                     </FormControl>
                     <FormControl fullWidth>
-                      <InputLabel id="demo-simple-select-label">Health</InputLabel>
+                      <InputLabel id="demo-simple-select-label">Unemployment Insurance</InputLabel>
                       <Select
                         labelId="demo-simple-select-label"
                         id="demo-simple-select"
-                        value={Health}
-                        label="Health"
-                        onChange={handleChange}
+                        value={UnemploymentInsurance}
+                        label="Unemployment Insurance"
+                        onChange={handleChangeUI}
                       >
-                        <MenuItem value={1}>Well</MenuItem>
-                        <MenuItem value={2}>Not Well</MenuItem>
+                        <MenuItem value={1}>Yes</MenuItem>
+                        <MenuItem value={2}>No</MenuItem>
                       </Select>
                     </FormControl>
                   </Stack>
