@@ -7,7 +7,7 @@ import BasicInfor from './BasicInfor';
 import PersonalInfor from './PersonalInfor';
 
 const steps = ['Basic Information', 'Personal Information', 'Utilities'];
-export default function AddRecruit() {
+export default function AddRecruit(Recruitment) {
   const [activeStep, setActiveStep] = useState(0);
   const [skipped, setSkipped] = useState(new Set());
 
@@ -22,7 +22,7 @@ export default function AddRecruit() {
         return 'unknown step';
     }
   }
-
+  console.log(Recruitment.dulieu);
   const isStepOptional = (step) => step === null;
 
   const isStepSkipped = (step) => skipped.has(step);

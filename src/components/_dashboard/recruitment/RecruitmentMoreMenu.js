@@ -97,7 +97,7 @@ export default function RecruitmentMoreMenu(Recruitment) {
 
         <MenuItem
           component={RouterLink}
-          to="../../../../pages/employee/AddRecruit"
+          to="../recruitments/addrecruit"
           sx={{ color: 'text.secondary' }}
         >
           <ListItemIcon>

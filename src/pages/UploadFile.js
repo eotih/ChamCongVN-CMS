@@ -36,7 +36,7 @@ class UploadFile extends React.Component {
 
   render() {
     return (
-      <div className="container-fluid">
+      <div className="container">
         <form onSubmit={(e) => this.submit(e)}>
           <input type="file" onChange={(e) => this.setFile(e)} />
           <button className="btn btn-primary" type="submit">
