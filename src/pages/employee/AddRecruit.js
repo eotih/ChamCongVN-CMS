@@ -1,39 +1,50 @@
 /* eslint-disable array-callback-return */
 /* eslint-disable jsx-a11y/label-has-associated-control */
 import { Container, Typography, Box, Button, Stepper, Step, StepLabel, Stack } from '@mui/material';
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import { useParams } from 'react-router-dom';
 import Page from '../../components/Page';
 import BasicInfor from './BasicInfor';
 import PersonalInfor from './PersonalInfor';
+import Utilities from './Utilities';
+import { getRecruitmentByID } from '../../functions/Employee';
 
 const steps = ['Basic Information', 'Personal Information', 'Utilities'];
-export default function AddRecruit(Recruitment) {
+export default function AddRecruit() {
+  const { id } = useParams();
   const [activeStep, setActiveStep] = useState(0);
+  const [isLoaded, setIsLoaded] = useState(false);
   const [skipped, setSkipped] = useState(new Set());
-
+  const [recruitment, setRecruitment] = useState([]);
+  useEffect(() => {
+    getRecruitmentByID(id).then((res) => {
+      setIsLoaded(true);
+      setRecruitment(res);
+    });
+  }, []);
   function getStepContent(step) {
     switch (step) {
       case 0:
-        return <BasicInfor />;
+        return <BasicInfor data={recruitment} onHandleNext={handleNext} />;
       case 1:
         return <PersonalInfor />;
       case 2:
+        return <Utilities />;
       default:
         return 'unknown step';
     }
   }
-  console.log(Recruitment.dulieu);
   const isStepOptional = (step) => step === null;
 
   const isStepSkipped = (step) => skipped.has(step);
 
-  const handleNext = () => {
+  const handleNext = (dulieu) => {
     let newSkipped = skipped;
     if (isStepSkipped(activeStep)) {
       newSkipped = new Set(newSkipped.values());
       newSkipped.delete(activeStep);
     }
-
+    console.log(dulieu);
     setActiveStep((prevActiveStep) => prevActiveStep + 1);
     setSkipped(newSkipped);
   };

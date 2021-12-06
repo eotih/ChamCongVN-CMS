@@ -1,3 +1,4 @@
+/* eslint-disable react/prop-types */
 /* eslint-disable array-callback-return */
 /* eslint-disable jsx-a11y/label-has-associated-control */
 import {
@@ -21,23 +22,52 @@ import LocalizationProvider from '@mui/lab/LocalizationProvider';
 import DatePicker from '@mui/lab/DatePicker';
 import axios from '../../functions/Axios';
 //----------------------------------
-export default function BasicInfor({ onHandleNext }) {
+function BasicInfor({ data, onHandleNext }) {
   const [images, setImages] = useState([]);
-  const [Gender, setGender] = React.useState('');
   const [value, setValue] = React.useState(new Date());
-  const handleEditorChange = (content) => {
-    formik.setFieldValue('Details', content);
-  };
+  useEffect(() => {
+    formik.setFieldValue('FullName', data.FullName);
+    formik.setFieldValue('Email', data.Email);
+    formik.setFieldValue('Gender', data.Gender);
+    formik.setFieldValue('Phone', data.Phone);
+    formik.setFieldValue('TemporaryAddress', data.TemporaryAddress);
+    formik.setFieldValue('Address', data.Address);
+    formik.setFieldValue('DateOfBirth', data.DateOfBirth);
+  }, [data]);
   const Input = styled('input')({
     display: 'none'
   });
-  const handleChange = (event) => {
-    setGender(event.target.value);
-  };
 
   const formik = useFormik({
-    initialValues: {},
-    onSubmit: () => {}
+    initialValues: {
+      FullName: '',
+      NickName: '',
+      Gender: '',
+      Image: '',
+      PlaceOfBirth: '',
+      Address: '',
+      TemporaryAddress: '',
+      Email: '',
+      Phone: '',
+      IdentityCard: '',
+      DateRange: '',
+      IssuedBy: '',
+      StartDate: '',
+      Health: '',
+      SocialInsurance: '',
+      HealthInsurance: '',
+      UnemploymentInsurance: '',
+      CreatedBy: ''
+    },
+    onSubmit: () => {
+      axios.post(`Employee/AddOrEditEmployee`, formik.values).then((res) => {
+        if (res.data.Status === 'Success') {
+          onHandleNext(formik.values);
+        } else {
+          alert('Add Failed');
+        }
+      });
+    }
   });
   const { handleSubmit, getFieldProps } = formik;
   return (
@@ -92,17 +122,13 @@ export default function BasicInfor({ onHandleNext }) {
                   </Stack>
                   <Stack direction={{ xs: 'column', sm: 'row' }} spacing={2}>
                     <FormControl fullWidth>
-                      <InputLabel id="demo-simple-select-label">Gender</InputLabel>
-                      <Select
-                        labelId="demo-simple-select-label"
-                        id="demo-simple-select"
-                        value={Gender}
-                        label="Gender"
-                        onChange={handleChange}
-                      >
-                        <MenuItem value={1}>Nam</MenuItem>
-                        <MenuItem value={2}>Nữ</MenuItem>
-                      </Select>
+                      <TextField
+                        fullWidth
+                        label="Giới Tính"
+                        {...getFieldProps('Gender')}
+                        sx={{ bgcolor: '#ffffff', borderRadius: 1 }}
+                        variant="outlined"
+                      />
                     </FormControl>
                     <TextField
                       fullWidth
@@ -171,3 +197,4 @@ export default function BasicInfor({ onHandleNext }) {
     </>
   );
 }
+export default memo(BasicInfor);

@@ -56,8 +56,8 @@ export default function Router() {
       element: <DashboardLayout />,
       children: [
         // { path: 'employeelist', element: <Profile /> },
-        { path: 'Recruitments', element: <Recruitment /> },
-        { path: 'Recruitments/AddRecruit', element: <AddRecruit /> }
+        { path: 'recruitments', element: <Recruitment /> },
+        { path: 'recruitments/add_recruit/:id', element: <AddRecruit /> }
       ]
     },
     {
