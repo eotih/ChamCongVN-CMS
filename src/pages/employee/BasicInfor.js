@@ -24,7 +24,7 @@ import axios from '../../functions/Axios';
 //----------------------------------
 function BasicInfor({ data, onHandleNext }) {
   const [images, setImages] = useState([]);
-  const [value, setValue] = React.useState(new Date());
+  const [value, setValue] = useState(new Date());
   useEffect(() => {
     formik.setFieldValue('FullName', data.FullName);
     formik.setFieldValue('Email', data.Email);

@@ -23,14 +23,11 @@ import axios from '../../functions/Axios';
 //----------------------------------
 export default function PersonalInfor({ onHandleNext }) {
   const [images, setImages] = useState([]);
-  const [Health, setHealth] = React.useState('');
-  const [SocialInsurance, setSocialInsurance] = React.useState('');
-  const [HealthInsurance, setHealthInsurance] = React.useState('');
-  const [UnemploymentInsurance, setUnemploymentInsurance] = React.useState('');
-  const [value, setValue] = React.useState(new Date());
-  const handleEditorChange = (content) => {
-    formik.setFieldValue('Details', content);
-  };
+  const [Health, setHealth] = useState([]);
+  const [SocialInsurance, setSocialInsurance] = useState([]);
+  const [HealthInsurance, setHealthInsurance] = useState([]);
+  const [UnemploymentInsurance, setUnemploymentInsurance] = useState([]);
+  const [value, setValue] = useState(new Date());
   const handleChange = (event) => {
     setHealth(event.target.value);
   };

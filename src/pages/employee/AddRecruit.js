@@ -38,13 +38,12 @@ export default function AddRecruit() {
 
   const isStepSkipped = (step) => skipped.has(step);
 
-  const handleNext = (dulieu) => {
+  const handleNext = () => {
     let newSkipped = skipped;
     if (isStepSkipped(activeStep)) {
       newSkipped = new Set(newSkipped.values());
       newSkipped.delete(activeStep);
     }
-    console.log(dulieu);
     setActiveStep((prevActiveStep) => prevActiveStep + 1);
     setSkipped(newSkipped);
   };
