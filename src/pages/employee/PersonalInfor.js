@@ -21,25 +21,8 @@ import LocalizationProvider from '@mui/lab/LocalizationProvider';
 import DatePicker from '@mui/lab/DatePicker';
 import axios from '../../functions/Axios';
 //----------------------------------
-export default function PersonalInfor({ onHandleNext }) {
-  const [images, setImages] = useState([]);
-  const [Health, setHealth] = useState([]);
-  const [SocialInsurance, setSocialInsurance] = useState([]);
-  const [HealthInsurance, setHealthInsurance] = useState([]);
-  const [UnemploymentInsurance, setUnemploymentInsurance] = useState([]);
+export default function PersonalInfor({ values, handleChange, onHandleNext }) {
   const [value, setValue] = useState(new Date());
-  const handleChange = (event) => {
-    setHealth(event.target.value);
-  };
-  const handleChangeSI = (event) => {
-    setSocialInsurance(event.target.value);
-  };
-  const handleChangeHI = (event) => {
-    setHealthInsurance(event.target.value);
-  };
-  const handleChangeUI = (event) => {
-    setUnemploymentInsurance(event.target.value);
-  };
 
   const formik = useFormik({
     initialValues: {},
@@ -58,7 +41,8 @@ export default function PersonalInfor({ onHandleNext }) {
                     <TextField
                       fullWidth
                       label="Identity Card"
-                      {...getFieldProps('IdentityCard')}
+                      onChange={handleChange('IdentityCard')}
+                      value={values.IdentityCard}
                       sx={{ bgcolor: '#ffffff', borderRadius: 1 }}
                       variant="outlined"
                     />
@@ -68,9 +52,9 @@ export default function PersonalInfor({ onHandleNext }) {
                         views={['day', 'month', 'year']}
                         label="Date Range"
                         value={value}
-                        {...getFieldProps('DateRange')}
-                        onChange={(newValue) => {
-                          setValue(newValue);
+                        onChange={(date) => {
+                          setValue(date);
+                          handleChange('DateRange', date);
                         }}
                         renderInput={(params) => <TextField {...params} />}
                       />
@@ -80,7 +64,8 @@ export default function PersonalInfor({ onHandleNext }) {
                     <TextField
                       fullWidth
                       label="Issued By"
-                      {...getFieldProps('IssuedBy')}
+                      onChange={handleChange('IssuedBy')}
+                      value={values.IssuedBy}
                       sx={{ bgcolor: '#ffffff', borderRadius: 1 }}
                       variant="outlined"
                     />
@@ -90,9 +75,9 @@ export default function PersonalInfor({ onHandleNext }) {
                         views={['day', 'month', 'year']}
                         label="First date of work"
                         value={value}
-                        {...getFieldProps('StartDate')}
-                        onChange={(newValue) => {
-                          setValue(newValue);
+                        onChange={(date) => {
+                          setValue(date);
+                          handleChange('StartDate', date);
                         }}
                         renderInput={(params) => <TextField {...params} />}
                       />
@@ -110,9 +95,9 @@ export default function PersonalInfor({ onHandleNext }) {
                       <Select
                         labelId="demo-simple-select-label"
                         id="demo-simple-select"
-                        value={Health}
+                        onChange={handleChange('IssuedBy')}
+                        value={values.IssuedBy}
                         label="Health"
-                        onChange={handleChange}
                       >
                         <MenuItem value={1}>Well</MenuItem>
                         <MenuItem value={2}>Not Well</MenuItem>
@@ -123,9 +108,9 @@ export default function PersonalInfor({ onHandleNext }) {
                       <Select
                         labelId="demo-simple-select-label"
                         id="demo-simple-select"
-                        value={SocialInsurance}
                         label="Social Insurance"
-                        onChange={handleChangeSI}
+                        onChange={handleChange('SocialInsurance')}
+                        value={values.SocialInsurance}
                       >
                         <MenuItem value={1}>Yes</MenuItem>
                         <MenuItem value={2}>No</MenuItem>
@@ -138,9 +123,9 @@ export default function PersonalInfor({ onHandleNext }) {
                       <Select
                         labelId="demo-simple-select-label"
                         id="demo-simple-select"
-                        value={HealthInsurance}
                         label="Health Insurance"
-                        onChange={handleChangeHI}
+                        onChange={handleChange('HealthInsurance')}
+                        value={values.HealthInsurance}
                       >
                         <MenuItem value={1}>Yes</MenuItem>
                         <MenuItem value={2}>No</MenuItem>
@@ -151,9 +136,9 @@ export default function PersonalInfor({ onHandleNext }) {
                       <Select
                         labelId="demo-simple-select-label"
                         id="demo-simple-select"
-                        value={UnemploymentInsurance}
                         label="Unemployment Insurance"
-                        onChange={handleChangeUI}
+                        onChange={handleChange('UnemploymentInsurance')}
+                        value={values.UnemploymentInsurance}
                       >
                         <MenuItem value={1}>Yes</MenuItem>
                         <MenuItem value={2}>No</MenuItem>
