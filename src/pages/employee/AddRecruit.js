@@ -3,11 +3,13 @@
 import { Container, Typography, Box, Button, Stepper, Step, StepLabel, Stack } from '@mui/material';
 import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
+import { useFormik, Form, FormikProvider } from 'formik';
 import Page from '../../components/Page';
 import BasicInfor from './BasicInfor';
 import PersonalInfor from './PersonalInfor';
 import Utilities from './Utilities';
 import { getRecruitmentByID } from '../../functions/Employee';
+import axios from '../../functions/Axios';
 
 const steps = ['Basic Information', 'Personal Information', 'Utilities'];
 export default function AddRecruit() {
@@ -15,19 +17,107 @@ export default function AddRecruit() {
   const [activeStep, setActiveStep] = useState(0);
   const [isLoaded, setIsLoaded] = useState(false);
   const [skipped, setSkipped] = useState(new Set());
-  const [recruitment, setRecruitment] = useState([]);
   useEffect(() => {
     getRecruitmentByID(id).then((res) => {
       setIsLoaded(true);
-      setRecruitment(res);
+      // set all res to formik
+      formik.setFieldValue('FullName', res.FullName);
+      formik.setFieldValue('Birthday', res.Birthday);
+      formik.setFieldValue('Gender', res.Gender);
+      formik.setFieldValue('Image', res.Image);
+      formik.setFieldValue('PlaceOfBirth', res.PlaceOfBirth);
+      formik.setFieldValue('Address', res.Address);
+      formik.setFieldValue('TemporaryAddress', res.TemporaryAddress);
+      formik.setFieldValue('Email', res.Email);
+      formik.setFieldValue('Phone', res.Phone);
+      formik.setFieldValue('IdentityCard', res.IdentityCard);
+      formik.setFieldValue('DateRange', res.DateRange);
+      formik.setFieldValue('IssuedBy', res.IssuedBy);
+      formik.setFieldValue('StartDate', res.StartDate);
+      formik.setFieldValue('Health', res.Health);
+      formik.setFieldValue('SocialInsurance', res.SocialInsurance);
+      formik.setFieldValue('HealthInsurance', res.HealthInsurance);
+      formik.setFieldValue('UnemploymentInsurance', res.UnemploymentInsurance);
+      formik.setFieldValue('CreatedBy', res.CreatedBy);
     });
   }, []);
+  const formik = useFormik({
+    initialValues: {
+      step: 0,
+      FullName: '',
+      NickName: '',
+      Gender: '',
+      Image: '',
+      PlaceOfBirth: '',
+      Address: '',
+      TemporaryAddress: '',
+      Email: '',
+      Phone: '',
+      IdentityCard: '',
+      DateRange: '',
+      IssuedBy: '',
+      StartDate: '',
+      Health: '',
+      SocialInsurance: '',
+      HealthInsurance: '',
+      UnemploymentInsurance: '',
+      CreatedBy: ''
+    },
+    onSubmit: () => {
+      console.log(formik.values);
+    }
+  });
+  const handleChange = (input) => (e) => {
+    formik.setFieldValue({ [input]: e.target.value });
+  };
+  const {
+    FullName,
+    NickName,
+    Gender,
+    Image,
+    PlaceOfBirth,
+    Address,
+    TemporaryAddress,
+    Email,
+    Phone,
+    IdentityCard,
+    DateRange,
+    IssuedBy,
+    StartDate,
+    Health,
+    SocialInsurance,
+    HealthInsurance,
+    UnemploymentInsurance,
+    CreatedBy
+  } = formik.values;
+  const values = {
+    FullName,
+    NickName,
+    Gender,
+    Image,
+    PlaceOfBirth,
+    Address,
+    TemporaryAddress,
+    Email,
+    Phone,
+    IdentityCard,
+    DateRange,
+    IssuedBy,
+    StartDate,
+    Health,
+    SocialInsurance,
+    HealthInsurance,
+    UnemploymentInsurance,
+    CreatedBy
+  };
   function getStepContent(step) {
     switch (step) {
       case 0:
-        return <BasicInfor data={recruitment} onHandleNext={handleNext} />;
+        return <BasicInfor handleChange={handleChange} values={values} onHandleNext={handleNext} />;
       case 1:
-        return <PersonalInfor />;
+        return (
+          <PersonalInfor handleChange={handleChange} values={values} onHandleNext={handleNext} />
+        );
       case 2:
         return <Utilities />;
       default:
@@ -69,64 +159,53 @@ export default function AddRecruit() {
     setActiveStep(0);
   };
   return (
-    <Page title="Recruitment: Recruit Employee  ">
-      <Container maxWidth="xl">
-        <Stack direction="row" alignItems="center" justifyContent="space-between" mb={5}>
-          <Typography variant="h3">Recruit Employee</Typography>
-        </Stack>
-        <Box sx={{ width: '100%' }}>
-          <Stepper activeStep={activeStep}>
-            {steps.map((label, index) => {
-              const stepProps = {};
-              const labelProps = {};
-              if (isStepOptional(index)) {
-                labelProps.optional = <Typography variant="caption">Optional</Typography>;
-              }
-              if (isStepSkipped(index)) {
-                stepProps.completed = false;
-              }
-              return (
-                <Step key={label} {...stepProps}>
-                  <StepLabel {...labelProps}>{label}</StepLabel>
-                </Step>
-              );
-            })}
-          </Stepper>
-          {activeStep === steps.length ? (
-            <>
-              <Typography sx={{ mt: 2, mb: 1 }}>
-                All steps completed - you&apos;re finished
-              </Typography>
-              <Box sx={{ display: 'flex', flexDirection: 'row', pt: 2 }}>
-                <Box sx={{ flex: '1 1 auto' }} />
-                <Button onClick={handleReset}>Reset</Button>
+    <Page title="Add Recruit">
+      <Container maxWidth="md">
+        <Box mt={2}>
+          <Typography variant="h4" gutterBottom>
+            Add Recruit
+          </Typography>
+        </Box>
+        <Box mt={2}>
+          <FormikProvider value={formik}>
+            <Form>
+              <Stepper activeStep={activeStep}>
+                {steps.map((label, index) => {
+                  const stepProps = {};
+                  const labelProps = {};
+                  if (isStepOptional(index)) {
+                    labelProps.optional = <Typography variant="caption">Optional</Typography>;
+                  }
+                  if (isStepSkipped(index)) {
+                    stepProps.completed = false;
+                  }
+                  return (
+                    <Step key={label} {...stepProps}>
+                      <StepLabel {...labelProps}>{label}</StepLabel>
+                    </Step>
+                  );
+                })}
+              </Stepper>
+              <Box mt={2}>
+                <Box>
+                  {getStepContent(activeStep)}
+                  <Box mt={2}>
+                    <Button disabled={activeStep === 0} onClick={handleBack}>
+                      Back
+                    </Button>
+                    {isStepOptional(activeStep) && (
+                      <Button variant="contained" color="primary" onClick={handleSkip}>
+                        Skip
+                      </Button>
+                    )}
+                    <Button variant="contained" color="primary" onClick={handleNext}>
+                      {activeStep === steps.length - 1 ? 'Finish' : 'Next'}
+                    </Button>
+                  </Box>
+                </Box>
               </Box>
-            </>
-          ) : (
-            <>
-              <Typography sx={{ mt: 2, mb: 1 }}>Step {activeStep + 1}</Typography>
-              {getStepContent(activeStep)}
-              <Box sx={{ display: 'flex', flexDirection: 'row', pt: 2 }}>
-                <Button
-                  color="inherit"
-                  disabled={activeStep === 0}
-                  onClick={handleBack}
-                  sx={{ mr: 1 }}
-                >
-                  Back
-                </Button>
-                <Box sx={{ flex: '1 1 auto' }} />
-                {isStepOptional(activeStep) && (
-                  <Button color="inherit" onClick={handleSkip} sx={{ mr: 1 }}>
-                    Skip
-                  </Button>
-                )}
-                <Button onClick={handleNext}>
-                  {activeStep === steps.length - 1 ? 'Finish' : 'Next'}
-                </Button>
-              </Box>
-            </>
-          )}
+            </Form>
+          </FormikProvider>
         </Box>
       </Container>
     </Page>
