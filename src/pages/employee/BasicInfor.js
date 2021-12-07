@@ -24,6 +24,7 @@ import axios from '../../functions/Axios';
 //----------------------------------
 function BasicInfor({ data, onHandleNext }) {
   const [images, setImages] = useState([]);
+  const [data1, setData1] = useState([]);
   const [value, setValue] = useState(new Date());
   useEffect(() => {
     formik.setFieldValue('FullName', data.FullName);
@@ -62,6 +63,7 @@ function BasicInfor({ data, onHandleNext }) {
     onSubmit: () => {
       axios.post(`Employee/AddOrEditEmployee`, formik.values).then((res) => {
         if (res.data.Status === 'Success') {
+          setData1(formik.values);
           onHandleNext(formik.values);
         } else {
           alert('Add Failed');
