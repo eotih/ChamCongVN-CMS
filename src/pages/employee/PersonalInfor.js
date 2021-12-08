@@ -21,8 +21,9 @@ import LocalizationProvider from '@mui/lab/LocalizationProvider';
 import DatePicker from '@mui/lab/DatePicker';
 import axios from '../../functions/Axios';
 //----------------------------------
-export default function PersonalInfor({ values, handleChange, onHandleNext }) {
+export default function PersonalInfor({ values, handleChange }) {
   const [value, setValue] = useState(new Date());
+  const [value1, setValue1] = useState(new Date());
 
   const formik = useFormik({
     initialValues: {},
@@ -51,10 +52,10 @@ export default function PersonalInfor({ values, handleChange, onHandleNext }) {
                         fullWidth
                         views={['day', 'month', 'year']}
                         label="Date Range"
-                        value={value}
+                        value={value1}
                         onChange={(date) => {
-                          setValue(date);
-                          handleChange('DateRange', date);
+                          setValue1(date);
+                          formik.setFieldValue('DateRange', date);
                         }}
                         renderInput={(params) => <TextField {...params} />}
                       />
@@ -77,7 +78,7 @@ export default function PersonalInfor({ values, handleChange, onHandleNext }) {
                         value={value}
                         onChange={(date) => {
                           setValue(date);
-                          handleChange('StartDate', date);
+                          formik.setFieldValue('StartDate', date);
                         }}
                         renderInput={(params) => <TextField {...params} />}
                       />
@@ -112,8 +113,8 @@ export default function PersonalInfor({ values, handleChange, onHandleNext }) {
                         onChange={handleChange('SocialInsurance')}
                         value={values.SocialInsurance}
                       >
-                        <MenuItem value={1}>Yes</MenuItem>
-                        <MenuItem value={2}>No</MenuItem>
+                        <MenuItem value="Có">Yes</MenuItem>
+                        <MenuItem value="Không">No</MenuItem>
                       </Select>
                     </FormControl>
                   </Stack>

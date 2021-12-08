@@ -44,46 +44,43 @@ const MenuProps = {
     }
   }
 };
-export default function PersonalInfor({ onHandleNext }) {
+export default function Utilities({ values, handleChange }) {
   const [images, setImages] = useState([]);
   const [SalaryTable, setSalaryTable] = React.useState('');
   const [Group, setGroup] = React.useState('');
   const [Position, setPosition] = React.useState('');
   const [Department, setDepartment] = React.useState('');
   const [Work, setWork] = React.useState('');
-  const [personName, setPersonName] = React.useState([]);
-  const [personNames, setPersonNames] = React.useState([]);
-  const [value, setValue] = React.useState(new Date());
   const handleEditorChange = (content) => {
     formik.setFieldValue('Details', content);
   };
-  const handleChange = (event) => {
-    setGroup(event.target.value);
-  };
-  const handleChangeST = (event) => {
-    setSalaryTable(event.target.value);
-  };
-  const handleChangeSI = (event) => {
-    setPosition(event.target.value);
-  };
-  const handleChangeHI = (event) => {
-    setDepartment(event.target.value);
-  };
-  const handleChangeUI = (event) => {
-    setWork(event.target.value);
-  };
-  const handleChangeDegree = (event) => {
-    const {
-      target: { value }
-    } = event;
-    setPersonName(typeof value === 'string' ? value.split(',') : value);
-  };
-  const handleChangeSpecialities = (event) => {
-    const {
-      target: { value }
-    } = event;
-    setPersonNames(typeof value === 'string' ? value.split(',') : value);
-  };
+  // const handleChange = (event) => {
+  //   setGroup(event.target.value);
+  // };
+  // const handleChangeST = (event) => {
+  //   setSalaryTable(event.target.value);
+  // };
+  // const handleChangeSI = (event) => {
+  //   setPosition(event.target.value);
+  // };
+  // const handleChangeHI = (event) => {
+  //   setDepartment(event.target.value);
+  // };
+  // const handleChangeUI = (event) => {
+  //   setWork(event.target.value);
+  // };
+  // const handleChangeDegree = (event) => {
+  //   const {
+  //     target: { value }
+  //   } = event;
+  //   setPersonName(typeof value === 'string' ? value.split(',') : value);
+  // };
+  // const handleChangeSpecialities = (event) => {
+  //   const {
+  //     target: { value }
+  //   } = event;
+  //   setPersonNames(typeof value === 'string' ? value.split(',') : value);
+  // };
   const formik = useFormik({
     initialValues: {},
     onSubmit: () => {}
@@ -102,9 +99,9 @@ export default function PersonalInfor({ onHandleNext }) {
                     <Select
                       labelId="demo-simple-select-label"
                       id="demo-simple-select"
-                      value={SalaryTable}
+                      value={values.SalaryTable}
                       label="Salary Table"
-                      onChange={handleChangeST}
+                      onChange={handleChange('SalaryTable')}
                     >
                       <MenuItem value={1}>Well</MenuItem>
                       <MenuItem value={2}>Not Well</MenuItem>
@@ -116,9 +113,9 @@ export default function PersonalInfor({ onHandleNext }) {
                       <Select
                         labelId="demo-simple-select-label"
                         id="demo-simple-select"
-                        value={Group}
+                        value={values.GroupID}
                         label="Group"
-                        onChange={handleChange}
+                        onChange={handleChange('GroupID')}
                       >
                         <MenuItem value={1}>Well</MenuItem>
                         <MenuItem value={2}>Not Well</MenuItem>
@@ -129,9 +126,9 @@ export default function PersonalInfor({ onHandleNext }) {
                       <Select
                         labelId="demo-simple-select-label"
                         id="demo-simple-select"
-                        value={Position}
+                        value={values.PositionID}
                         label="Position"
-                        onChange={handleChangeSI}
+                        onChange={handleChange('PositionID')}
                       >
                         <MenuItem value={1}>Yes</MenuItem>
                         <MenuItem value={2}>No</MenuItem>
@@ -144,9 +141,9 @@ export default function PersonalInfor({ onHandleNext }) {
                       <Select
                         labelId="demo-simple-select-label"
                         id="demo-simple-select"
-                        value={Department}
+                        value={values.DepartmentID}
                         label="Department"
-                        onChange={handleChangeHI}
+                        onChange={handleChange('DepartmentID')}
                       >
                         <MenuItem value={1}>Yes</MenuItem>
                         <MenuItem value={2}>No</MenuItem>
@@ -157,70 +154,9 @@ export default function PersonalInfor({ onHandleNext }) {
                       <Select
                         labelId="demo-simple-select-label"
                         id="demo-simple-select"
-                        value={Work}
+                        value={values.WorkID}
                         label="Work"
-                        onChange={handleChangeUI}
-                      >
-                        <MenuItem value={1}>Yes</MenuItem>
-                        <MenuItem value={2}>No</MenuItem>
-                      </Select>
-                    </FormControl>
-                  </Stack>
-                </Stack>
-              </Card>
-            </Grid>
-            <Grid item xs={12} md={8}>
-              <Card sx={{ p: 3 }}>
-                <Stack direction={{ xs: 'column' }} spacing={1}>
-                  <Stack direction={{ xs: 'column' }} spacing={2}>
-                    <FormControl fullWidth>
-                      <InputLabel id="demo-multiple-checkbox-label">Degree</InputLabel>
-                      <Select
-                        labelId="demo-multiple-checkbox-label"
-                        id="demo-multiple-checkbox"
-                        multiple
-                        value={personName}
-                        onChange={handleChangeDegree}
-                        input={<OutlinedInput label="Degree" />}
-                        renderValue={(selected) => selected.join(', ')}
-                        MenuProps={MenuProps}
-                      >
-                        {names.map((name) => (
-                          <MenuItem key={name} value={name}>
-                            <Checkbox checked={personName.indexOf(name) > -1} />
-                            <ListItemText primary={name} />
-                          </MenuItem>
-                        ))}
-                      </Select>
-                    </FormControl>
-                    <FormControl fullWidth>
-                      <InputLabel id="demo-multiple-checkbox-label">Speciality</InputLabel>
-                      <Select
-                        labelId="demo-multiple-checkbox-label"
-                        id="demo-multiple-checkbox"
-                        multiple
-                        value={personNames}
-                        onChange={handleChangeSpecialities}
-                        input={<OutlinedInput label="Speciality" />}
-                        renderValue={(selected) => selected.join(', ')}
-                        MenuProps={MenuProps}
-                      >
-                        {names.map((name) => (
-                          <MenuItem key={name} value={name}>
-                            <Checkbox checked={personNames.indexOf(name) > -1} />
-                            <ListItemText primary={name} />
-                          </MenuItem>
-                        ))}
-                      </Select>
-                    </FormControl>
-                    <FormControl fullWidth>
-                      <InputLabel id="demo-simple-select-label">Employee</InputLabel>
-                      <Select
-                        labelId="demo-simple-select-label"
-                        id="demo-simple-select"
-                        value={Work}
-                        label="Work"
-                        onChange={handleChangeUI}
+                        onChange={handleChange('WorkID')}
                       >
                         <MenuItem value={1}>Yes</MenuItem>
                         <MenuItem value={2}>No</MenuItem>

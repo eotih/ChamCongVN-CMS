@@ -25,25 +25,30 @@ export default function AddRecruit() {
       formik.setFieldValue('Birthday', res.Birthday);
       formik.setFieldValue('Gender', res.Gender);
       formik.setFieldValue('Image', res.Image);
+      formik.setFieldValue('NickName', res.NickName);
       formik.setFieldValue('PlaceOfBirth', res.PlaceOfBirth);
       formik.setFieldValue('Address', res.Address);
       formik.setFieldValue('TemporaryAddress', res.TemporaryAddress);
       formik.setFieldValue('Email', res.Email);
       formik.setFieldValue('Phone', res.Phone);
       formik.setFieldValue('IdentityCard', res.IdentityCard);
-      formik.setFieldValue('DateRange', res.DateRange);
+      formik.setFieldValue('DateRange', new Date());
       formik.setFieldValue('IssuedBy', res.IssuedBy);
-      formik.setFieldValue('StartDate', res.StartDate);
+      formik.setFieldValue('StartDate', new Date());
       formik.setFieldValue('Health', res.Health);
       formik.setFieldValue('SocialInsurance', res.SocialInsurance);
       formik.setFieldValue('HealthInsurance', res.HealthInsurance);
       formik.setFieldValue('UnemploymentInsurance', res.UnemploymentInsurance);
       formik.setFieldValue('CreatedBy', res.CreatedBy);
+      formik.setFieldValue('Health', res.WorkID);
+      formik.setFieldValue('SocialInsurance', res.GroupID);
+      formik.setFieldValue('HealthInsurance', res.PositionID);
+      formik.setFieldValue('UnemploymentInsurance', res.DepartmentID);
+      formik.setFieldValue('CreatedBy', res.SalaryTableID);
     });
   }, []);
   const formik = useFormik({
     initialValues: {
-      step: 0,
       FullName: '',
       NickName: '',
       Gender: '',
@@ -59,6 +64,11 @@ export default function AddRecruit() {
       StartDate: '',
       Health: '',
       SocialInsurance: '',
+      SalaryTableID: '',
+      DepartmentID: '',
+      PositionID: '',
+      WorkID: '',
+      GroupID: '',
       HealthInsurance: '',
       UnemploymentInsurance: '',
       CreatedBy: ''
@@ -68,7 +78,7 @@ export default function AddRecruit() {
     }
   });
   const handleChange = (input) => (e) => {
-    formik.setFieldValue({ [input]: e.target.value });
+    formik.setFieldValue(`${input}`, e.target.value);
   };
   const {
     FullName,
@@ -85,6 +95,11 @@ export default function AddRecruit() {
     IssuedBy,
     StartDate,
     Health,
+    SalaryTableID,
+    DepartmentID,
+    PositionID,
+    WorkID,
+    GroupID,
     SocialInsurance,
     HealthInsurance,
     UnemploymentInsurance,
@@ -92,9 +107,9 @@ export default function AddRecruit() {
   } = formik.values;
   const values = {
     FullName,
-    NickName,
     Gender,
     Image,
+    NickName,
     PlaceOfBirth,
     Address,
     TemporaryAddress,
@@ -105,6 +120,11 @@ export default function AddRecruit() {
     IssuedBy,
     StartDate,
     Health,
+    SalaryTableID,
+    DepartmentID,
+    PositionID,
+    WorkID,
+    GroupID,
     SocialInsurance,
     HealthInsurance,
     UnemploymentInsurance,
@@ -119,7 +139,7 @@ export default function AddRecruit() {
           <PersonalInfor handleChange={handleChange} values={values} onHandleNext={handleNext} />
         );
       case 2:
-        return <Utilities />;
+        return <Utilities handleChange={handleChange} values={values} onHandleNext={handleNext} />;
       default:
         return 'unknown step';
     }
@@ -130,7 +150,7 @@ export default function AddRecruit() {
 
   const handleNext = () => {
     let newSkipped = skipped;
-    if (isStepSkipped(activeStep)) {
+    if (activeStep === steps.length - 1) {
       newSkipped = new Set(newSkipped.values());
       newSkipped.delete(activeStep);
     }
@@ -154,7 +174,7 @@ export default function AddRecruit() {
       return newSkipped;
     });
   };
-
+  const { handleSubmit, getFieldProps } = formik;
   const handleReset = () => {
     setActiveStep(0);
   };
@@ -168,7 +188,7 @@ export default function AddRecruit() {
         </Box>
         <Box mt={2}>
           <FormikProvider value={formik}>
-            <Form>
+            <Form onSubmit={handleSubmit}>
               <Stepper activeStep={activeStep}>
                 {steps.map((label, index) => {
                   const stepProps = {};
@@ -199,7 +219,7 @@ export default function AddRecruit() {
                       </Button>
                     )}
                     <Button variant="contained" color="primary" onClick={handleNext}>
-                      {activeStep === steps.length - 1 ? 'Finish' : 'Next'}
+                      {activeStep === steps.length - 1 ? 'Submit' : 'Next'}
                     </Button>
                   </Box>
                 </Box>

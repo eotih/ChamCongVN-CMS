@@ -21,55 +21,13 @@ import AdapterDateFns from '@mui/lab/AdapterDateFns';
 import LocalizationProvider from '@mui/lab/LocalizationProvider';
 import DatePicker from '@mui/lab/DatePicker';
 //----------------------------------
-<<<<<<< HEAD
-function BasicInfor({ data, onHandleNext }) {
-  const [images, setImages] = useState([]);
-  const [data1, setData1] = useState([]);
-=======
-function BasicInfor({ values, handleChange, onHandleNext }) {
->>>>>>> 9bf16102f05f0a25d037f22ce67bd4c0221b222f
+function BasicInfor({ values, handleChange }) {
   const [value, setValue] = useState(new Date());
 
   const Input = styled('input')({
     display: 'none'
   });
 
-<<<<<<< HEAD
-  const formik = useFormik({
-    initialValues: {
-      FullName: '',
-      NickName: '',
-      Gender: '',
-      Image: '',
-      PlaceOfBirth: '',
-      Address: '',
-      TemporaryAddress: '',
-      Email: '',
-      Phone: '',
-      IdentityCard: '',
-      DateRange: '',
-      IssuedBy: '',
-      StartDate: '',
-      Health: '',
-      SocialInsurance: '',
-      HealthInsurance: '',
-      UnemploymentInsurance: '',
-      CreatedBy: ''
-    },
-    onSubmit: () => {
-      axios.post(`Employee/AddOrEditEmployee`, formik.values).then((res) => {
-        if (res.data.Status === 'Success') {
-          setData1(formik.values);
-          onHandleNext(formik.values);
-        } else {
-          alert('Add Failed');
-        }
-      });
-    }
-  });
-  const { handleSubmit, getFieldProps } = formik;
-=======
->>>>>>> 9bf16102f05f0a25d037f22ce67bd4c0221b222f
   return (
     <>
       <Form autoComplete="off" noValidate>
@@ -95,7 +53,6 @@ function BasicInfor({ values, handleChange, onHandleNext }) {
                         reader.readAsDataURL(files[0]);
                         reader.onload = (e) => {
                           handleChange('Image', e.target.result);
-                          console.log(values);
                         };
                       }}
                     />
@@ -117,7 +74,7 @@ function BasicInfor({ values, handleChange, onHandleNext }) {
                     fullWidth
                     label="Nick Name"
                     onChange={handleChange('NickName')}
-                    value={values.NickName}
+                    defaultValue={values.NickName}
                     sx={{ bgcolor: '#ffffff', borderRadius: 1 }}
                     variant="outlined"
                   />
