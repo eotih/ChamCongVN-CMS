@@ -46,41 +46,31 @@ const MenuProps = {
 };
 export default function Utilities({ values, handleChange, handleSubmit }) {
   const [images, setImages] = useState([]);
-  const [SalaryTable, setSalaryTable] = React.useState('');
-  const [Group, setGroup] = React.useState('');
-  const [Position, setPosition] = React.useState('');
-  const [Department, setDepartment] = React.useState('');
-  const [Work, setWork] = React.useState('');
+  const [salarytable, setSalaryTable] = useState([]);
+  const [group, setGroup] = useState([]);
+  const [position, setPosition] = useState([]);
+  const [department, setDepartment] = useState([]);
+  const [work, setWork] = useState([]);
   const handleEditorChange = (content) => {
     formik.setFieldValue('Details', content);
   };
-  // const handleChange = (event) => {
-  //   setGroup(event.target.value);
-  // };
-  // const handleChangeST = (event) => {
-  //   setSalaryTable(event.target.value);
-  // };
-  // const handleChangeSI = (event) => {
-  //   setPosition(event.target.value);
-  // };
-  // const handleChangeHI = (event) => {
-  //   setDepartment(event.target.value);
-  // };
-  // const handleChangeUI = (event) => {
-  //   setWork(event.target.value);
-  // };
-  // const handleChangeDegree = (event) => {
-  //   const {
-  //     target: { value }
-  //   } = event;
-  //   setPersonName(typeof value === 'string' ? value.split(',') : value);
-  // };
-  // const handleChangeSpecialities = (event) => {
-  //   const {
-  //     target: { value }
-  //   } = event;
-  //   setPersonNames(typeof value === 'string' ? value.split(',') : value);
-  // };
+  useEffect(() => {
+    getAllWorks().then((res) => {
+      setWork(res);
+    });
+    getAllGroups().then((res) => {
+      setGroup(res);
+    });
+    getAllDepartments().then((res) => {
+      setDepartment(res);
+    });
+    getAllSalaryTables().then((res) => {
+      setSalaryTable(res);
+    });
+    getAllPosition().then((res) => {
+      setPosition(res);
+    });
+  }, []);
   const formik = useFormik({
     initialValues: {},
     onSubmit: () => {
@@ -92,7 +82,7 @@ export default function Utilities({ values, handleChange, handleSubmit }) {
       <FormikProvider value={formik}>
         <Form autoComplete="off" noValidate onSubmit={handleSubmit}>
           <Grid container spacing={3}>
-            <Grid item xs={12} md={4}>
+            <Grid item xs={12} md={6}>
               <Card sx={{ p: 3 }}>
                 <Stack direction={{ xs: 'column' }} spacing={2}>
                   <FormControl fullWidth>
@@ -104,8 +94,11 @@ export default function Utilities({ values, handleChange, handleSubmit }) {
                       label="Salary Table"
                       onChange={handleChange('SalaryTableID')}
                     >
-                      <MenuItem value={1}>Well</MenuItem>
-                      <MenuItem value={2}>Not Well</MenuItem>
+                      {salarytable.map((item) => (
+                        <MenuItem key={item.SalaryTableID} value={item.SalaryTableID}>
+                          {item.SalaryTableName}
+                        </MenuItem>
+                      ))}
                     </Select>
                   </FormControl>
                   <Stack direction={{ xs: 'column', sm: 'row' }} spacing={2}>
@@ -118,8 +111,11 @@ export default function Utilities({ values, handleChange, handleSubmit }) {
                         label="Group"
                         onChange={handleChange('GroupID')}
                       >
-                        <MenuItem value={1}>Well</MenuItem>
-                        <MenuItem value={2}>Not Well</MenuItem>
+                        {group.map((item) => (
+                          <MenuItem key={item.GroupID} value={item.GroupID}>
+                            {item.GroupName}
+                          </MenuItem>
+                        ))}
                       </Select>
                     </FormControl>
                     <FormControl fullWidth>
@@ -131,8 +127,11 @@ export default function Utilities({ values, handleChange, handleSubmit }) {
                         label="Position"
                         onChange={handleChange('PositionID')}
                       >
-                        <MenuItem value={1}>Yes</MenuItem>
-                        <MenuItem value={2}>No</MenuItem>
+                        {position.map((item) => (
+                          <MenuItem key={item.PositionID} value={item.PositionID}>
+                            {item.PositionName}
+                          </MenuItem>
+                        ))}
                       </Select>
                     </FormControl>
                   </Stack>
@@ -146,8 +145,11 @@ export default function Utilities({ values, handleChange, handleSubmit }) {
                         label="Department"
                         onChange={handleChange('DepartmentID')}
                       >
-                        <MenuItem value={1}>Yes</MenuItem>
-                        <MenuItem value={2}>No</MenuItem>
+                        {department.map((item) => (
+                          <MenuItem key={item.DepartmentID} value={item.DepartmentID}>
+                            {item.DepartmentName}
+                          </MenuItem>
+                        ))}
                       </Select>
                     </FormControl>
                     <FormControl fullWidth>
@@ -159,8 +161,11 @@ export default function Utilities({ values, handleChange, handleSubmit }) {
                         label="Work"
                         onChange={handleChange('WorkID')}
                       >
-                        <MenuItem value={1}>Yes</MenuItem>
-                        <MenuItem value={2}>No</MenuItem>
+                        {work.map((item) => (
+                          <MenuItem key={item.WorkID} value={item.WorkID}>
+                            {item.WorkName}
+                          </MenuItem>
+                        ))}
                       </Select>
                     </FormControl>
                   </Stack>

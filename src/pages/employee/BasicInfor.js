@@ -27,12 +27,11 @@ function BasicInfor({ values, handleChange }) {
   const Input = styled('input')({
     display: 'none'
   });
-
   return (
     <>
       <Form autoComplete="off" noValidate>
         <Grid container spacing={3}>
-          <Grid item xs={12} md={6}>
+          <Grid item xs={12} md={5}>
             <Card sx={{ p: 3 }}>
               <Stack direction={{ xs: 'column' }} spacing={2}>
                 <Stack
@@ -102,7 +101,7 @@ function BasicInfor({ values, handleChange }) {
               </Stack>
             </Card>
           </Grid>
-          <Grid item xs={12} md={6}>
+          <Grid item xs={12} md={7}>
             <Card sx={{ p: 3 }}>
               <Stack direction={{ xs: 'column' }} spacing={1}>
                 <TextField
@@ -118,10 +117,10 @@ function BasicInfor({ values, handleChange }) {
                     <DatePicker
                       views={['day', 'month', 'year']}
                       label="Date Of Birth"
-                      value={value}
+                      value={values.DateOfBirth}
                       onChange={(date) => {
                         setValue(date);
-                        handleChange('DateOfBirth', date);
+                        handleChange('DateOfBirth', value);
                       }}
                       renderInput={(params) => <TextField {...params} />}
                     />

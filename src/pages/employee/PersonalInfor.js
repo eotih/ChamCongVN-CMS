@@ -35,7 +35,7 @@ export default function PersonalInfor({ values, handleChange }) {
       <FormikProvider value={formik}>
         <Form autoComplete="off" noValidate onSubmit={handleSubmit}>
           <Grid container spacing={3}>
-            <Grid item xs={12} md={6}>
+            <Grid item xs={12} md={7}>
               <Card sx={{ p: 3 }}>
                 <Stack direction={{ xs: 'column' }} spacing={2}>
                   <Stack direction={{ xs: 'column', sm: 'row' }} spacing={2}>
@@ -75,10 +75,10 @@ export default function PersonalInfor({ values, handleChange }) {
                         fullWidth
                         views={['day', 'month', 'year']}
                         label="First date of work"
-                        value={value}
+                        value={values.StartDate}
                         onChange={(date) => {
                           setValue(date);
-                          formik.setFieldValue('StartDate', date);
+                          handleChange('StartDate');
                         }}
                         renderInput={(params) => <TextField {...params} />}
                       />
@@ -87,12 +87,12 @@ export default function PersonalInfor({ values, handleChange }) {
                 </Stack>
               </Card>
             </Grid>
-            <Grid item xs={12} md={6}>
+            <Grid item xs={12} md={5}>
               <Card sx={{ p: 3 }}>
                 <Stack direction={{ xs: 'column' }} spacing={1}>
                   <Stack direction={{ xs: 'column', sm: 'row' }} spacing={2}>
                     <FormControl fullWidth>
-                      <InputLabel id="demo-simple-select-label">Health</InputLabel>
+                      <InputLabel id="demo-simple-select-label1">Health</InputLabel>
                       <Select
                         onChange={handleChange('Health')}
                         value={values.Health}
