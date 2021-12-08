@@ -18,10 +18,10 @@ import {
 import { useFormik, Form, FormikProvider } from 'formik';
 import React, { useState, useEffect, memo, useContext } from 'react';
 import { styled } from '@mui/material/styles';
-import AdapterDateFns from '@mui/lab/AdapterDateFns';
-import LocalizationProvider from '@mui/lab/LocalizationProvider';
-import DatePicker from '@mui/lab/DatePicker';
-import axios from '../../functions/Axios';
+import { LoadingButton } from '@mui/lab';
+import { getAllWorks, getAllGroups, getAllDepartments } from '../../functions/Component';
+import { getAllSalaryTables } from '../../functions/Salary';
+import { getAllPosition } from '../../functions/Organization';
 //----------------------------------
 const names = [
   'Oliver Hansen',
@@ -44,7 +44,7 @@ const MenuProps = {
     }
   }
 };
-export default function Utilities({ values, handleChange }) {
+export default function Utilities({ values, handleChange, handleSubmit }) {
   const [images, setImages] = useState([]);
   const [SalaryTable, setSalaryTable] = React.useState('');
   const [Group, setGroup] = React.useState('');
@@ -83,9 +83,10 @@ export default function Utilities({ values, handleChange }) {
   // };
   const formik = useFormik({
     initialValues: {},
-    onSubmit: () => {}
+    onSubmit: () => {
+      console.log(values);
+    }
   });
-  const { handleSubmit, getFieldProps } = formik;
   return (
     <>
       <FormikProvider value={formik}>
@@ -99,9 +100,9 @@ export default function Utilities({ values, handleChange }) {
                     <Select
                       labelId="demo-simple-select-label"
                       id="demo-simple-select"
-                      value={values.SalaryTable}
+                      value={values.SalaryTableID}
                       label="Salary Table"
-                      onChange={handleChange('SalaryTable')}
+                      onChange={handleChange('SalaryTableID')}
                     >
                       <MenuItem value={1}>Well</MenuItem>
                       <MenuItem value={2}>Not Well</MenuItem>
@@ -166,6 +167,9 @@ export default function Utilities({ values, handleChange }) {
                 </Stack>
               </Card>
             </Grid>
+            <LoadingButton fullWidth size="large" onClick={handleSubmit} variant="contained">
+              Add Organization
+            </LoadingButton>
           </Grid>
         </Form>
       </FormikProvider>

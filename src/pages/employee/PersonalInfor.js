@@ -94,21 +94,17 @@ export default function PersonalInfor({ values, handleChange }) {
                     <FormControl fullWidth>
                       <InputLabel id="demo-simple-select-label">Health</InputLabel>
                       <Select
-                        labelId="demo-simple-select-label"
-                        id="demo-simple-select"
-                        onChange={handleChange('IssuedBy')}
-                        value={values.IssuedBy}
+                        onChange={handleChange('Health')}
+                        value={values.Health}
                         label="Health"
                       >
-                        <MenuItem value={1}>Well</MenuItem>
-                        <MenuItem value={2}>Not Well</MenuItem>
+                        <MenuItem value="Tốt">Well</MenuItem>
+                        <MenuItem value="Không Tốt">Not Well</MenuItem>
                       </Select>
                     </FormControl>
                     <FormControl fullWidth>
                       <InputLabel id="demo-simple-select-label">Social Insurance</InputLabel>
                       <Select
-                        labelId="demo-simple-select-label"
-                        id="demo-simple-select"
                         label="Social Insurance"
                         onChange={handleChange('SocialInsurance')}
                         value={values.SocialInsurance}
@@ -122,27 +118,25 @@ export default function PersonalInfor({ values, handleChange }) {
                     <FormControl fullWidth>
                       <InputLabel id="demo-simple-select-label">Health Insurance</InputLabel>
                       <Select
-                        labelId="demo-simple-select-label"
                         id="demo-simple-select"
                         label="Health Insurance"
                         onChange={handleChange('HealthInsurance')}
                         value={values.HealthInsurance}
                       >
-                        <MenuItem value={1}>Yes</MenuItem>
-                        <MenuItem value={2}>No</MenuItem>
+                        <MenuItem value="Có">Yes</MenuItem>
+                        <MenuItem value="Không">No</MenuItem>
                       </Select>
                     </FormControl>
                     <FormControl fullWidth>
                       <InputLabel id="demo-simple-select-label">Unemployment Insurance</InputLabel>
                       <Select
-                        labelId="demo-simple-select-label"
                         id="demo-simple-select"
                         label="Unemployment Insurance"
                         onChange={handleChange('UnemploymentInsurance')}
                         value={values.UnemploymentInsurance}
                       >
-                        <MenuItem value={1}>Yes</MenuItem>
-                        <MenuItem value={2}>No</MenuItem>
+                        <MenuItem value="Có">Yes</MenuItem>
+                        <MenuItem value="Không">No</MenuItem>
                       </Select>
                     </FormControl>
                   </Stack>

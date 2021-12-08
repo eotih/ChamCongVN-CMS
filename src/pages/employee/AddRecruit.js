@@ -22,7 +22,7 @@ export default function AddRecruit() {
       setIsLoaded(true);
       // set all res to formik
       formik.setFieldValue('FullName', res.FullName);
-      formik.setFieldValue('Birthday', res.Birthday);
+      formik.setFieldValue('DateOfBirth', res.DateOfBirth);
       formik.setFieldValue('Gender', res.Gender);
       formik.setFieldValue('Image', res.Image);
       formik.setFieldValue('NickName', res.NickName);
@@ -53,6 +53,7 @@ export default function AddRecruit() {
       NickName: '',
       Gender: '',
       Image: '',
+      DateOfBirth: '',
       PlaceOfBirth: '',
       Address: '',
       TemporaryAddress: '',
@@ -74,7 +75,25 @@ export default function AddRecruit() {
       CreatedBy: ''
     },
     onSubmit: () => {
-      console.log(formik.values);
+      axios
+        .post(`Employee/AddOrEditEmployee`, formik.values)
+        .then((res) => {
+          if (res.data.Status === 'Success') {
+            axios.delete(`Employee/DeleteRecruitment?ID=${id}`).then((res) => {
+              if (res.data.Status === 'Delete') {
+                alert('Thêm thành công');
+                window.location.href = 'http://localhost:3000/employee/recruitments';
+              } else {
+                alert('Recruitment Not Deleted');
+              }
+            });
+          } else {
+            alert('Thêm thất bại');
+          }
+        })
+        .catch((err) => {
+          console.log(err);
+        });
     }
   });
   const handleChange = (input) => (e) => {
@@ -85,6 +104,8 @@ export default function AddRecruit() {
     NickName,
     Gender,
     Image,
+    RecruitmentByID,
+    DateOfBirth,
     PlaceOfBirth,
     Address,
     TemporaryAddress,
@@ -139,7 +160,9 @@ export default function AddRecruit() {
           <PersonalInfor handleChange={handleChange} values={values} onHandleNext={handleNext} />
         );
       case 2:
-        return <Utilities handleChange={handleChange} values={values} onHandleNext={handleNext} />;
+        return (
+          <Utilities handleChange={handleChange} values={values} handleSubmit={handleSubmit} />
+        );
       default:
         return 'unknown step';
     }
@@ -175,9 +198,6 @@ export default function AddRecruit() {
     });
   };
   const { handleSubmit, getFieldProps } = formik;
-  const handleReset = () => {
-    setActiveStep(0);
-  };
   return (
     <Page title="Add Recruit">
       <Container maxWidth="md">
