@@ -99,6 +99,12 @@ export default function AddRecruit() {
   const handleChange = (input) => (e) => {
     formik.setFieldValue(`${input}`, e.target.value);
   };
+  const onChangeDate = (textName, date) => {
+    formik.setFieldValue(`${textName}`, date);
+  };
+  const onChangeImg = (textName, img) => {
+    formik.setFieldValue(`${textName}`, img);
+  };
   const {
     FullName,
     NickName,
@@ -154,17 +160,22 @@ export default function AddRecruit() {
   function getStepContent(step) {
     switch (step) {
       case 0:
-        return <BasicInfor handleChange={handleChange} values={values} onHandleNext={handleNext} />;
+        return <BasicInfor handleChange={handleChange} values={values} onChangeImg={onChangeImg} />;
       case 1:
         return (
-          <PersonalInfor handleChange={handleChange} values={values} onHandleNext={handleNext} />
+          <PersonalInfor handleChange={handleChange} values={values} onChangeDate={onChangeDate} />
         );
       case 2:
         return (
-          <Utilities handleChange={handleChange} values={values} handleSubmit={handleSubmit} />
+          <Utilities
+            handleChange={handleChange}
+            values={values}
+            onChangeDate={onChangeDate}
+            handleSubmit={handleSubmit}
+          />
         );
       default:
-        return 'unknown step';
+        return '';
     }
   }
   const isStepOptional = (step) => step === null;
@@ -174,6 +185,7 @@ export default function AddRecruit() {
   const handleNext = () => {
     let newSkipped = skipped;
     if (activeStep === steps.length - 1) {
+      handleSubmit();
       newSkipped = new Set(newSkipped.values());
       newSkipped.delete(activeStep);
     }

@@ -21,7 +21,7 @@ import AdapterDateFns from '@mui/lab/AdapterDateFns';
 import LocalizationProvider from '@mui/lab/LocalizationProvider';
 import DatePicker from '@mui/lab/DatePicker';
 //----------------------------------
-function BasicInfor({ values, handleChange }) {
+function BasicInfor({ values, handleChange, onChangeImg }) {
   const [value, setValue] = useState(new Date());
 
   const Input = styled('input')({
@@ -51,7 +51,7 @@ function BasicInfor({ values, handleChange }) {
                         const reader = new FileReader();
                         reader.readAsDataURL(files[0]);
                         reader.onload = (e) => {
-                          handleChange('Image', e.target.result);
+                          onChangeImg('Image', e.target.result);
                         };
                       }}
                     />
