@@ -18,7 +18,17 @@ TimeKeeperCard.propTypes = {
   time: PropTypes.object
 };
 export default function TimeKeeperCards({ time }) {
-  const { EmployeeName, Department, checkin, checkout } = time;
+  const {
+    EmployeeName,
+    Department,
+    CheckInImage,
+    CheckOutImage,
+    CheckInCreatedAt,
+    CheckOutCreatedAt,
+    CheckInStatus,
+    EmployeeID,
+    CheckOutStatus
+  } = time;
   const convertCIStatus = (status) => {
     if (status === 'Đúng giờ') {
       return (
@@ -35,7 +45,7 @@ export default function TimeKeeperCards({ time }) {
               Đúng giờ
             </Typography>
             <Typography variant="subtitle1" sx={{ color: 'white', p: 2, pt: 1 }}>
-              {convertDateTime(checkin.CreatedAt)}
+              {convertDateTime(CheckInCreatedAt)}
             </Typography>
           </Grid>
         </>
@@ -56,7 +66,7 @@ export default function TimeKeeperCards({ time }) {
               Đi Muộn
             </Typography>
             <Typography variant="subtitle1" sx={{ color: 'white', p: 2, pt: 1 }}>
-              {convertDateTime(checkin.CreatedAt)}
+              {convertDateTime(CheckInCreatedAt)}
             </Typography>
           </Grid>
         </>
@@ -79,7 +89,7 @@ export default function TimeKeeperCards({ time }) {
               Đúng giờ
             </Typography>
             <Typography variant="subtitle1" sx={{ color: 'white', p: 2, pt: 1 }}>
-              {convertDateTime(checkout.CreatedAt)}
+              {convertDateTime(CheckOutCreatedAt)}
             </Typography>
           </Grid>
         </>
@@ -100,24 +110,13 @@ export default function TimeKeeperCards({ time }) {
               Về sớm
             </Typography>
             <Typography variant="subtitle1" sx={{ color: 'white', p: 2, pt: 1 }}>
-              {convertDateTime(checkout.CreatedAt)}
+              {convertDateTime(CheckOutCreatedAt)}
             </Typography>
           </Grid>
         </>
       );
     }
   };
-  const {
-    EmployeeName,
-    Department,
-    CheckInImage,
-    CheckOutImage,
-    CheckInCreatedAt,
-    CheckOutCreatedAt,
-    CheckInStatus,
-    EmployeeID,
-    CheckOutStatus
-  } = time;
   const convertDateTime = (date) => {
     const dateTime = new Date(date);
     const options = {
@@ -146,8 +145,8 @@ export default function TimeKeeperCards({ time }) {
 
         <Stack spacing={2} sx={{ p: 3 }}>
           <Stack direction={{ xs: 'column', md: 'row' }} spacing={1}>
-            {convertCIStatus(checkin.Status)}
-            {convertCOStatus(checkout.Status)}
+            {convertCIStatus(CheckInStatus)}
+            {convertCOStatus(CheckOutStatus)}
           </Stack>
           <Link to="#" color="inherit" underline="hover" component={RouterLink}>
             <Typography variant="h4" noWrap>
