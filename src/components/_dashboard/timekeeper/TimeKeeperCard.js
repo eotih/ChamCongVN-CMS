@@ -19,7 +19,17 @@ TimeKeeperCard.propTypes = {
 };
 
 export default function TimeKeeperCards({ time }) {
-  const { EmployeeName, Department, checkin, checkout } = time;
+  const {
+    EmployeeName,
+    Department,
+    CheckInImage,
+    CheckOutImage,
+    CheckInCreatedAt,
+    CheckOutCreatedAt,
+    CheckInStatus,
+    EmployeeID,
+    CheckOutStatus
+  } = time;
   const convertDateTime = (date) => {
     const dateTime = new Date(date);
     const options = {
@@ -31,19 +41,18 @@ export default function TimeKeeperCards({ time }) {
     };
     return dateTime.toLocaleString('vi-VN', options);
   };
-  console.log(time);
   return (
     <Stack spacing={2}>
       <Grid container justifyContent="center" sx={{ backgroundColor: '#ffcb5c', borderRadius: 1 }}>
         <Typography variant="h4" sx={{ color: '#9e6f00' }}>
-          Employee ID: {checkin.EmployeeID}
+          Employee ID: {EmployeeID}
         </Typography>
       </Grid>
       <Card>
         <Box sx={{ position: 'relative' }}>
           <Stack direction="row" spacing={1}>
-            <TimeKeeperCard alt={EmployeeName} src={checkin.Image} />
-            <TimeKeeperCard alt={EmployeeName} src={checkout.Image} />
+            <TimeKeeperCard alt={EmployeeName} src={`data:image/jpeg;base64,${CheckInImage}`} />
+            <TimeKeeperCard alt={EmployeeName} src={`data:image/jpeg;base64,${CheckOutImage}`} />
           </Stack>
         </Box>
 
@@ -58,10 +67,10 @@ export default function TimeKeeperCards({ time }) {
                 Check in:
               </Typography>
               <Typography variant="h6" sx={{ color: 'white', p: 2, pb: 0 }}>
-                {checkin.Status}
+                {CheckInStatus}
               </Typography>
               <Typography variant="subtitle1" sx={{ color: 'white', p: 2, pt: 1 }}>
-                {convertDateTime(checkin.CreatedAt)}
+                {convertDateTime(CheckInCreatedAt)}
               </Typography>
             </Grid>
             <Grid
@@ -73,10 +82,10 @@ export default function TimeKeeperCards({ time }) {
                 Check out:
               </Typography>
               <Typography variant="h6" sx={{ color: 'white', p: 2, pb: 0 }}>
-                {checkout.Status}
+                {CheckOutStatus}
               </Typography>
               <Typography variant="subtitle1" sx={{ color: 'white', p: 2, pt: 1 }}>
-                {convertDateTime(checkout.CreatedAt)}
+                {convertDateTime(CheckOutCreatedAt)}
               </Typography>
             </Grid>
           </Stack>
