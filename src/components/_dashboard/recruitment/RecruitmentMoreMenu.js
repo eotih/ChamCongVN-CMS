@@ -2,14 +2,13 @@
 import * as React from 'react';
 import { Icon } from '@iconify/react';
 import { useRef, useState, useEffect } from 'react';
-import { useFormik, Form, FormikProvider } from 'formik';
+import { useFormik } from 'formik';
 import editFill from '@iconify/icons-eva/edit-fill';
 import { Link as RouterLink } from 'react-router-dom';
 import trash2Outline from '@iconify/icons-eva/trash-2-outline';
 import moreVerticalFill from '@iconify/icons-eva/more-vertical-fill';
 // material
 import { Menu, MenuItem, IconButton, ListItemIcon, ListItemText } from '@mui/material';
-import { LoadingButton } from '@mui/lab';
 import axios from '../../../functions/Axios';
 // ----------------------------------------------------------------------
 
@@ -46,16 +45,7 @@ export default function RecruitmentMoreMenu(Recruitment) {
         });
     }
   });
-  const handleOpen = () => {
-    const { RecruitmentID, Email, StateID, EmployeeID, RoleID } = Recruitment.dulieu.Recruitment;
-    const { FullName } = Recruitment.dulieu.Employee;
-    formik.setFieldValue('RecruitmentID', RecruitmentID);
-    formik.setFieldValue('FullName', FullName);
-    formik.setFieldValue('Email', Email);
-    formik.setFieldValue('EmployeeID', EmployeeID);
-    formik.setFieldValue('StateID', StateID);
-    formik.setFieldValue('RoleID', RoleID);
-  };
+  const { RecruitmentID } = Recruitment.dulieu;
   return (
     <>
       <IconButton ref={ref} onClick={() => setIsOpen(true)}>
@@ -75,14 +65,16 @@ export default function RecruitmentMoreMenu(Recruitment) {
         <MenuItem
           onClick={() => {
             if (confirm('Are you sure you want to delete this Recruitment?')) {
-              axios.delete(``).then((res) => {
-                if (res.data.Status === 'Delete') {
-                  alert('Recruitment Deleted');
-                  window.location.reload();
-                } else {
-                  alert('Recruitment Not Deleted');
-                }
-              });
+              axios
+                .delete(`Employee/DeleteRecruitment?ID=${Recruitment.dulieu.RecruitmentID}`)
+                .then((res) => {
+                  if (res.data.Status === 'Delete') {
+                    alert('Recruitment Deleted');
+                    window.location.reload();
+                  } else {
+                    alert('Recruitment Not Deleted');
+                  }
+                });
             }
           }}
           sx={{ color: 'text.secondary' }}
@@ -95,7 +87,7 @@ export default function RecruitmentMoreMenu(Recruitment) {
 
         <MenuItem
           component={RouterLink}
-          to="../recruitments/AddRecruit"
+          to={`/employee/recruitments/add_recruit/${RecruitmentID}`}
           sx={{ color: 'text.secondary' }}
         >
           <ListItemIcon>

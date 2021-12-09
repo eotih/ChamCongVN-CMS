@@ -18,10 +18,10 @@ import {
 import { useFormik, Form, FormikProvider } from 'formik';
 import React, { useState, useEffect, memo, useContext } from 'react';
 import { styled } from '@mui/material/styles';
-import AdapterDateFns from '@mui/lab/AdapterDateFns';
-import LocalizationProvider from '@mui/lab/LocalizationProvider';
-import DatePicker from '@mui/lab/DatePicker';
-import axios from '../../functions/Axios';
+import { LoadingButton } from '@mui/lab';
+import { getAllWorks, getAllGroups, getAllDepartments } from '../../functions/Component';
+import { getAllSalaryTables } from '../../functions/Salary';
+import { getAllPosition } from '../../functions/Organization';
 //----------------------------------
 const names = [
   'Oliver Hansen',
@@ -44,57 +44,45 @@ const MenuProps = {
     }
   }
 };
-export default function PersonalInfor({ onHandleNext }) {
+export default function Utilities({ values, handleChange, handleSubmit }) {
   const [images, setImages] = useState([]);
-  const [SalaryTable, setSalaryTable] = React.useState('');
-  const [Group, setGroup] = React.useState('');
-  const [Position, setPosition] = React.useState('');
-  const [Department, setDepartment] = React.useState('');
-  const [Work, setWork] = React.useState('');
-  const [personName, setPersonName] = React.useState([]);
-  const [personNames, setPersonNames] = React.useState([]);
-  const [value, setValue] = React.useState(new Date());
+  const [salarytable, setSalaryTable] = useState([]);
+  const [group, setGroup] = useState([]);
+  const [position, setPosition] = useState([]);
+  const [department, setDepartment] = useState([]);
+  const [work, setWork] = useState([]);
   const handleEditorChange = (content) => {
     formik.setFieldValue('Details', content);
   };
-  const handleChange = (event) => {
-    setGroup(event.target.value);
-  };
-  const handleChangeST = (event) => {
-    setSalaryTable(event.target.value);
-  };
-  const handleChangeSI = (event) => {
-    setPosition(event.target.value);
-  };
-  const handleChangeHI = (event) => {
-    setDepartment(event.target.value);
-  };
-  const handleChangeUI = (event) => {
-    setWork(event.target.value);
-  };
-  const handleChangeDegree = (event) => {
-    const {
-      target: { value }
-    } = event;
-    setPersonName(typeof value === 'string' ? value.split(',') : value);
-  };
-  const handleChangeSpecialities = (event) => {
-    const {
-      target: { value }
-    } = event;
-    setPersonNames(typeof value === 'string' ? value.split(',') : value);
-  };
+  useEffect(() => {
+    getAllWorks().then((res) => {
+      setWork(res);
+    });
+    getAllGroups().then((res) => {
+      setGroup(res);
+    });
+    getAllDepartments().then((res) => {
+      setDepartment(res);
+    });
+    getAllSalaryTables().then((res) => {
+      setSalaryTable(res);
+    });
+    getAllPosition().then((res) => {
+      setPosition(res);
+    });
+  }, []);
   const formik = useFormik({
     initialValues: {},
-    onSubmit: () => {}
+    onSubmit: () => {
+      console.log(values);
+    }
   });
-  const { handleSubmit, getFieldProps } = formik;
   return (
     <>
       <FormikProvider value={formik}>
         <Form autoComplete="off" noValidate onSubmit={handleSubmit}>
           <Grid container spacing={3}>
-            <Grid item xs={12} md={4}>
+            <Grid item xs={12} md={6}>
               <Card sx={{ p: 3 }}>
                 <Stack direction={{ xs: 'column' }} spacing={2}>
                   <FormControl fullWidth>
@@ -102,12 +90,15 @@ export default function PersonalInfor({ onHandleNext }) {
                     <Select
                       labelId="demo-simple-select-label"
                       id="demo-simple-select"
-                      value={SalaryTable}
+                      value={values.SalaryTableID}
                       label="Salary Table"
-                      onChange={handleChangeST}
+                      onChange={handleChange('SalaryTableID')}
                     >
-                      <MenuItem value={1}>Well</MenuItem>
-                      <MenuItem value={2}>Not Well</MenuItem>
+                      {salarytable.map((item) => (
+                        <MenuItem key={item.SalaryTableID} value={item.SalaryTableID}>
+                          {item.SalaryTableName}
+                        </MenuItem>
+                      ))}
                     </Select>
                   </FormControl>
                   <Stack direction={{ xs: 'column', sm: 'row' }} spacing={2}>
@@ -116,12 +107,15 @@ export default function PersonalInfor({ onHandleNext }) {
                       <Select
                         labelId="demo-simple-select-label"
                         id="demo-simple-select"
-                        value={Group}
+                        value={values.GroupID}
                         label="Group"
-                        onChange={handleChange}
+                        onChange={handleChange('GroupID')}
                       >
-                        <MenuItem value={1}>Well</MenuItem>
-                        <MenuItem value={2}>Not Well</MenuItem>
+                        {group.map((item) => (
+                          <MenuItem key={item.GroupID} value={item.GroupID}>
+                            {item.GroupName}
+                          </MenuItem>
+                        ))}
                       </Select>
                     </FormControl>
                     <FormControl fullWidth>
@@ -129,12 +123,15 @@ export default function PersonalInfor({ onHandleNext }) {
                       <Select
                         labelId="demo-simple-select-label"
                         id="demo-simple-select"
-                        value={Position}
+                        value={values.PositionID}
                         label="Position"
-                        onChange={handleChangeSI}
+                        onChange={handleChange('PositionID')}
                       >
-                        <MenuItem value={1}>Yes</MenuItem>
-                        <MenuItem value={2}>No</MenuItem>
+                        {position.map((item) => (
+                          <MenuItem key={item.PositionID} value={item.PositionID}>
+                            {item.PositionName}
+                          </MenuItem>
+                        ))}
                       </Select>
                     </FormControl>
                   </Stack>
@@ -144,12 +141,15 @@ export default function PersonalInfor({ onHandleNext }) {
                       <Select
                         labelId="demo-simple-select-label"
                         id="demo-simple-select"
-                        value={Department}
+                        value={values.DepartmentID}
                         label="Department"
-                        onChange={handleChangeHI}
+                        onChange={handleChange('DepartmentID')}
                       >
-                        <MenuItem value={1}>Yes</MenuItem>
-                        <MenuItem value={2}>No</MenuItem>
+                        {department.map((item) => (
+                          <MenuItem key={item.DepartmentID} value={item.DepartmentID}>
+                            {item.DepartmentName}
+                          </MenuItem>
+                        ))}
                       </Select>
                     </FormControl>
                     <FormControl fullWidth>
@@ -157,58 +157,13 @@ export default function PersonalInfor({ onHandleNext }) {
                       <Select
                         labelId="demo-simple-select-label"
                         id="demo-simple-select"
-                        value={Work}
+                        value={values.WorkID}
                         label="Work"
-                        onChange={handleChangeUI}
+                        onChange={handleChange('WorkID')}
                       >
-                        <MenuItem value={1}>Yes</MenuItem>
-                        <MenuItem value={2}>No</MenuItem>
-                      </Select>
-                    </FormControl>
-                  </Stack>
-                </Stack>
-              </Card>
-            </Grid>
-            <Grid item xs={12} md={8}>
-              <Card sx={{ p: 3 }}>
-                <Stack direction={{ xs: 'column' }} spacing={1}>
-                  <Stack direction={{ xs: 'column' }} spacing={2}>
-                    <FormControl fullWidth>
-                      <InputLabel id="demo-multiple-checkbox-label">Degree</InputLabel>
-                      <Select
-                        labelId="demo-multiple-checkbox-label"
-                        id="demo-multiple-checkbox"
-                        multiple
-                        value={personName}
-                        onChange={handleChangeDegree}
-                        input={<OutlinedInput label="Degree" />}
-                        renderValue={(selected) => selected.join(', ')}
-                        MenuProps={MenuProps}
-                      >
-                        {names.map((name) => (
-                          <MenuItem key={name} value={name}>
-                            <Checkbox checked={personName.indexOf(name) > -1} />
-                            <ListItemText primary={name} />
-                          </MenuItem>
-                        ))}
-                      </Select>
-                    </FormControl>
-                    <FormControl fullWidth>
-                      <InputLabel id="demo-multiple-checkbox-label">Speciality</InputLabel>
-                      <Select
-                        labelId="demo-multiple-checkbox-label"
-                        id="demo-multiple-checkbox"
-                        multiple
-                        value={personNames}
-                        onChange={handleChangeSpecialities}
-                        input={<OutlinedInput label="Speciality" />}
-                        renderValue={(selected) => selected.join(', ')}
-                        MenuProps={MenuProps}
-                      >
-                        {names.map((name) => (
-                          <MenuItem key={name} value={name}>
-                            <Checkbox checked={personNames.indexOf(name) > -1} />
-                            <ListItemText primary={name} />
+                        {work.map((item) => (
+                          <MenuItem key={item.WorkID} value={item.WorkID}>
+                            {item.WorkName}
                           </MenuItem>
                         ))}
                       </Select>
@@ -217,6 +172,9 @@ export default function PersonalInfor({ onHandleNext }) {
                 </Stack>
               </Card>
             </Grid>
+            {/* <LoadingButton fullWidth size="large" onClick={handleSubmit} variant="contained">
+              Add Organization
+            </LoadingButton> */}
           </Grid>
         </Form>
       </FormikProvider>

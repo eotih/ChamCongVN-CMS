@@ -24,9 +24,9 @@ import {
   Modal,
   Box
 } from '@mui/material';
-
 import axios from '../../functions/Axios';
 import UploadFile from '../UploadFile';
+import BasicInfor from './BasicInfor';
 // components
 import Page from '../../components/Page';
 import Scrollbar from '../../components/Scrollbar';
@@ -116,7 +116,7 @@ export default function Recruitment() {
   };
   const handleSelectAllClick = (event) => {
     if (event.target.checked) {
-      const newSelecteds = Recruitment.map((n) => n.name);
+      const newSelecteds = recruitment.map((n) => n.name);
       setSelected(newSelecteds);
       return;
     }
@@ -275,7 +275,7 @@ export default function Recruitment() {
                           hover
                           key={RecruitmentID}
                           tabIndex={-1}
-                          Recruitment="checkbox"
+                          recruitment="checkbox"
                           selected={isItemSelected}
                           aria-checked={isItemSelected}
                         >

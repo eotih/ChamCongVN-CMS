@@ -19,6 +19,7 @@ import Profile from './pages/Profile';
 import Shift from './pages/organization/Shift';
 import Role from './pages/organization/Role';
 import Position from './pages/organization/Position';
+import Organization from './pages/organization/Organization';
 // Component
 import State from './pages/component/State';
 import Work from './pages/component/Work';
@@ -56,14 +57,15 @@ export default function Router() {
       element: <DashboardLayout />,
       children: [
         // { path: 'employeelist', element: <Profile /> },
-        { path: 'Recruitments', element: <Recruitment /> },
-        { path: 'Recruitments/AddRecruit', element: <AddRecruit /> }
+        { path: 'recruitments', element: <Recruitment /> },
+        { path: 'recruitments/add_recruit/:id', element: <AddRecruit /> }
       ]
     },
     {
       path: '/organization',
       element: <DashboardLayout />,
       children: [
+        { path: 'organization', element: <Organization /> },
         { path: 'account', element: <Account /> },
         { path: 'profile', element: <Profile /> },
         { path: 'shift', element: <Shift /> },

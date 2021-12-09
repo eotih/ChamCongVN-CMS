@@ -21,29 +21,7 @@ import LocalizationProvider from '@mui/lab/LocalizationProvider';
 import DatePicker from '@mui/lab/DatePicker';
 import axios from '../../functions/Axios';
 //----------------------------------
-export default function PersonalInfor({ onHandleNext }) {
-  const [images, setImages] = useState([]);
-  const [Health, setHealth] = React.useState('');
-  const [SocialInsurance, setSocialInsurance] = React.useState('');
-  const [HealthInsurance, setHealthInsurance] = React.useState('');
-  const [UnemploymentInsurance, setUnemploymentInsurance] = React.useState('');
-  const [value, setValue] = React.useState(new Date());
-  const handleEditorChange = (content) => {
-    formik.setFieldValue('Details', content);
-  };
-  const handleChange = (event) => {
-    setHealth(event.target.value);
-  };
-  const handleChangeSI = (event) => {
-    setSocialInsurance(event.target.value);
-  };
-  const handleChangeHI = (event) => {
-    setHealthInsurance(event.target.value);
-  };
-  const handleChangeUI = (event) => {
-    setUnemploymentInsurance(event.target.value);
-  };
-
+export default function PersonalInfor({ values, handleChange, onChangeDate }) {
   const formik = useFormik({
     initialValues: {},
     onSubmit: () => {}
@@ -54,14 +32,15 @@ export default function PersonalInfor({ onHandleNext }) {
       <FormikProvider value={formik}>
         <Form autoComplete="off" noValidate onSubmit={handleSubmit}>
           <Grid container spacing={3}>
-            <Grid item xs={12} md={6}>
+            <Grid item xs={12} md={7}>
               <Card sx={{ p: 3 }}>
                 <Stack direction={{ xs: 'column' }} spacing={2}>
                   <Stack direction={{ xs: 'column', sm: 'row' }} spacing={2}>
                     <TextField
                       fullWidth
                       label="Identity Card"
-                      {...getFieldProps('IdentityCard')}
+                      onChange={handleChange('IdentityCard')}
+                      value={values.IdentityCard}
                       sx={{ bgcolor: '#ffffff', borderRadius: 1 }}
                       variant="outlined"
                     />
@@ -70,10 +49,9 @@ export default function PersonalInfor({ onHandleNext }) {
                         fullWidth
                         views={['day', 'month', 'year']}
                         label="Date Range"
-                        value={value}
-                        {...getFieldProps('DateRange')}
-                        onChange={(newValue) => {
-                          setValue(newValue);
+                        value={values.DateRange}
+                        onChange={(date) => {
+                          onChangeDate('DateRange', date);
                         }}
                         renderInput={(params) => <TextField {...params} />}
                       />
@@ -83,7 +61,8 @@ export default function PersonalInfor({ onHandleNext }) {
                     <TextField
                       fullWidth
                       label="Issued By"
-                      {...getFieldProps('IssuedBy')}
+                      onChange={handleChange('IssuedBy')}
+                      value={values.IssuedBy}
                       sx={{ bgcolor: '#ffffff', borderRadius: 1 }}
                       variant="outlined"
                     />
@@ -92,10 +71,9 @@ export default function PersonalInfor({ onHandleNext }) {
                         fullWidth
                         views={['day', 'month', 'year']}
                         label="First date of work"
-                        value={value}
-                        {...getFieldProps('StartDate')}
-                        onChange={(newValue) => {
-                          setValue(newValue);
+                        value={values.StartDate}
+                        onChange={(date) => {
+                          onChangeDate('StartDate', date);
                         }}
                         renderInput={(params) => <TextField {...params} />}
                       />
@@ -104,34 +82,30 @@ export default function PersonalInfor({ onHandleNext }) {
                 </Stack>
               </Card>
             </Grid>
-            <Grid item xs={12} md={6}>
+            <Grid item xs={12} md={5}>
               <Card sx={{ p: 3 }}>
                 <Stack direction={{ xs: 'column' }} spacing={1}>
                   <Stack direction={{ xs: 'column', sm: 'row' }} spacing={2}>
                     <FormControl fullWidth>
-                      <InputLabel id="demo-simple-select-label">Health</InputLabel>
+                      <InputLabel id="demo-simple-select-label1">Health</InputLabel>
                       <Select
-                        labelId="demo-simple-select-label"
-                        id="demo-simple-select"
-                        value={Health}
+                        onChange={handleChange('Health')}
+                        defaultValue={values.Health}
                         label="Health"
-                        onChange={handleChange}
                       >
-                        <MenuItem value={1}>Well</MenuItem>
-                        <MenuItem value={2}>Not Well</MenuItem>
+                        <MenuItem value="Tốt">Well</MenuItem>
+                        <MenuItem value="Không Tốt">Not Well</MenuItem>
                       </Select>
                     </FormControl>
                     <FormControl fullWidth>
                       <InputLabel id="demo-simple-select-label">Social Insurance</InputLabel>
                       <Select
-                        labelId="demo-simple-select-label"
-                        id="demo-simple-select"
-                        value={SocialInsurance}
                         label="Social Insurance"
-                        onChange={handleChangeSI}
+                        onChange={handleChange('SocialInsurance')}
+                        defaultValue={values.SocialInsurance}
                       >
-                        <MenuItem value={1}>Yes</MenuItem>
-                        <MenuItem value={2}>No</MenuItem>
+                        <MenuItem value="Có">Yes</MenuItem>
+                        <MenuItem value="Không">No</MenuItem>
                       </Select>
                     </FormControl>
                   </Stack>
@@ -139,27 +113,25 @@ export default function PersonalInfor({ onHandleNext }) {
                     <FormControl fullWidth>
                       <InputLabel id="demo-simple-select-label">Health Insurance</InputLabel>
                       <Select
-                        labelId="demo-simple-select-label"
                         id="demo-simple-select"
-                        value={HealthInsurance}
                         label="Health Insurance"
-                        onChange={handleChangeHI}
+                        onChange={handleChange('HealthInsurance')}
+                        defaultValue={values.HealthInsurance}
                       >
-                        <MenuItem value={1}>Yes</MenuItem>
-                        <MenuItem value={2}>No</MenuItem>
+                        <MenuItem value="Có">Yes</MenuItem>
+                        <MenuItem value="Không">No</MenuItem>
                       </Select>
                     </FormControl>
                     <FormControl fullWidth>
                       <InputLabel id="demo-simple-select-label">Unemployment Insurance</InputLabel>
                       <Select
-                        labelId="demo-simple-select-label"
                         id="demo-simple-select"
-                        value={UnemploymentInsurance}
                         label="Unemployment Insurance"
-                        onChange={handleChangeUI}
+                        onChange={handleChange('UnemploymentInsurance')}
+                        defaultValue={values.UnemploymentInsurance}
                       >
-                        <MenuItem value={1}>Yes</MenuItem>
-                        <MenuItem value={2}>No</MenuItem>
+                        <MenuItem value="Có">Yes</MenuItem>
+                        <MenuItem value="Không">No</MenuItem>
                       </Select>
                     </FormControl>
                   </Stack>

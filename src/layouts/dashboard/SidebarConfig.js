@@ -31,6 +31,10 @@ const sidebarConfig = [
     icon: getIcon(peopleFill),
     children: [
       {
+        title: 'Organization',
+        path: '/organization/organization'
+      },
+      {
         title: 'Shift',
         path: '/organization/shift'
       },

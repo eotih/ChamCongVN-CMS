@@ -8,4 +8,8 @@ async function getAllRecruitments() {
   const res = await Axios.get('Employee/GetAllRecruitment');
   return res.data;
 }
-export { getAllEmployees, getAllRecruitments };
+async function getRecruitmentByID(id) {
+  const res = await Axios.get(`Employee/GetRecruitmentByID?ID=${id}`);
+  return res.data;
+}
+export { getAllEmployees, getAllRecruitments, getRecruitmentByID };

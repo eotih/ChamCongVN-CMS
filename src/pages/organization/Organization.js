@@ -1,3 +1,4 @@
+/* eslint-disable jsx-a11y/label-has-associated-control */
 import * as React from 'react';
 import { filter } from 'lodash';
 import { Icon } from '@iconify/react';
@@ -21,16 +22,11 @@ import {
   TableContainer,
   TablePagination,
   Modal,
-  Box,
   TextField,
-  FormControl,
-  InputLabel,
-  Select,
-  MenuItem
+  Box,
+  Input,
+  FormControl
 } from '@mui/material';
-import DatePicker from '@mui/lab/DatePicker';
-import AdapterDateFns from '@mui/lab/AdapterDateFns';
-import LocalizationProvider from '@mui/lab/LocalizationProvider';
 
 import { LoadingButton } from '@mui/lab';
 import axios from '../../functions/Axios';
@@ -39,23 +35,24 @@ import Page from '../../components/Page';
 import Scrollbar from '../../components/Scrollbar';
 import SearchNotFound from '../../components/SearchNotFound';
 import {
-  LaudatoryListHead,
-  LaudatoryListToolbar,
-  LaudatoryMoreMenu
-} from '../../components/_dashboard/laudatory';
-import { getAllLaudatorys } from '../../functions/Salary';
-import { getAllEmployees } from '../../functions/Employee';
+  OrganizationListHead,
+  OrganizationListToolbar,
+  OrganizationMoreMenu
+} from '../../components/_dashboard/organization';
+import { getAllOrganization } from '../../functions/Organization';
 //
 
 // ----------------------------------------------------------------------
 
 const TABLE_HEAD = [
-  { id: 'LaudatoryEmployeeID', label: 'LaudatoryEmployeeID', alignRight: false },
-  { id: 'Employee', label: 'Employee', alignRight: false },
-  { id: 'LaudatoryName', label: 'Laudatory Name', alignRight: false },
-  { id: 'LaudatoryDate', label: 'Laudatory Date', alignRight: false },
-  { id: 'Reason', label: 'Reason', alignRight: false },
-  { id: 'Amount', label: 'Amount', alignRight: false },
+  { id: 'OrganizationID', label: 'OrganizationID', alignRight: false },
+  { id: 'Name', label: 'Name', alignRight: false },
+  { id: 'Email', label: 'Email', alignRight: false },
+  { id: 'Latitude', label: 'Latitude', alignRight: false },
+  { id: 'Longitude', label: 'Longitude', alignRight: false },
+  { id: 'Website', label: 'Website', alignRight: false },
+  { id: 'PublicIP', label: 'PublicIP', alignRight: false },
+  { id: 'PythonIP', label: 'PythonIP', alignRight: false },
   { id: '' }
 ];
 
@@ -90,26 +87,21 @@ function applySortFilter(array, comparator, query) {
   return stabilizedThis.map((el) => el[0]);
 }
 
-export default function User() {
+export default function Organization() {
   const [page, setPage] = useState(0);
-  const [laudate, setLauDate] = React.useState(new Date());
   const [order, setOrder] = useState('asc');
   const [selected, setSelected] = useState([]);
   const [orderBy, setOrderBy] = useState('name');
   const [filterName, setFilterName] = useState('');
-  const [laudatory, setLaudatory] = useState([]);
-  const [employee, setEmployee] = useState([]);
+  const [organization, setOrganization] = useState([]);
   const [rowsPerPage, setRowsPerPage] = useState(5);
   const [open, setOpen] = useState(false);
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
 
   useEffect(() => {
-    getAllLaudatorys().then((res) => {
-      setLaudatory(res);
-    });
-    getAllEmployees().then((res) => {
-      setEmployee(res);
+    getAllOrganization().then((res) => {
+      setOrganization(res);
     });
   }, []);
   const handleRequestSort = (event, property) => {
@@ -120,7 +112,7 @@ export default function User() {
 
   const handleSelectAllClick = (event) => {
     if (event.target.checked) {
-      const newSelecteds = laudatory.map((n) => n.name);
+      const newSelecteds = organization.map((n) => n.name);
       setSelected(newSelecteds);
       return;
     }
@@ -157,13 +149,6 @@ export default function User() {
   const handleFilterByName = (event) => {
     setFilterName(event.target.value);
   };
-  const convertDateTime = (date) => {
-    const newDate = new Date(date);
-    const day = newDate.getDate();
-    const month = newDate.getMonth() + 1;
-    const year = newDate.getFullYear();
-    return `${day}/${month}/${year}`;
-  };
   const style = {
     position: 'relative',
     bgcolor: 'background.paper',
@@ -172,25 +157,19 @@ export default function User() {
   };
   const formik = useFormik({
     initialValues: {
-      EmployeeID: '',
-      LaudatoryName: '',
-      LaudatoryDate: laudate,
-      Reason: '',
-      Amount: '',
-      CreatedBy: '',
+      Name: '',
+      Logo: '',
+      Email: '',
+      Latitude: '',
+      Longitude: '',
+      Website: '',
+      PublicIP: '',
+      PythonIP: '',
       remember: true
     },
     onSubmit: () => {
-      console.log(formik.values);
       axios
-        .post(`Salary/AddOrEditLaudatoryEmployee`, {
-          EmployeeID: formik.values.EmployeeID,
-          LaudatoryName: formik.values.LaudatoryName,
-          Reason: formik.values.Reason,
-          Amount: formik.values.Amount,
-          CreatedBy: formik.values.CreatedBy,
-          LaudatoryDate: laudate
-        })
+        .post(`Organization/AddOrEditOrganization`, formik.values)
         .then((res) => {
           if (res.data.Status === 'Success') {
             alert('Thêm thành công');
@@ -205,102 +184,83 @@ export default function User() {
     }
   });
   const { handleSubmit, getFieldProps } = formik;
+  const emptyRows = page > 0 ? Math.max(0, (1 + page) * rowsPerPage - organization.length) : 0;
 
-  const handleChange = (event) => {
-    formik.setFieldValue('EmployeeID', event.target.value);
-  };
-  console.log(laudate);
-  const emptyRows = page > 0 ? Math.max(0, (1 + page) * rowsPerPage - laudatory.length) : 0;
+  const filteredUsers = applySortFilter(organization, getComparator(order, orderBy), filterName);
 
-  const filteredLaudatorys = applySortFilter(laudatory, getComparator(order, orderBy), filterName);
-
-  const isLaudatoryNotFound = filteredLaudatorys.length === 0;
+  const isUserNotFound = filteredUsers.length === 0;
 
   return (
-    <Page title="Laudatory | ChamCongVN">
-      <Container>
-        <Modal
-          open={open}
-          sx={{
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center'
-          }}
-          onClose={handleClose}
-          aria-labelledby="modal-modal-title"
-          aria-describedby="modal-modal-description"
-        >
-          <FormikProvider value={formik}>
-            <Form autoComplete="off" noValidate onSubmit={handleSubmit}>
-              <Box sx={style}>
-                <Stack spacing={1}>
-                  <Typography id="modal-modal-title" variant="h6" component="h2">
-                    Add Laudatory
-                  </Typography>
-                  <Stack direction={{ xs: 'column', sm: 'row' }} spacing={2}>
-                    <TextField
-                      fullWidth
-                      label="Laudatory Name"
-                      {...getFieldProps('LaudatoryName')}
-                      variant="outlined"
-                    />
-                    <FormControl fullWidth>
-                      <InputLabel id="demo-simple-select-label">Employee Name</InputLabel>
-                      <Select
-                        labelId="select-label"
-                        label="Employee"
-                        {...getFieldProps('EmployeeID')}
-                        variant="outlined"
-                        onChange={handleChange}
-                      >
-                        {employee.map((item) => (
-                          <MenuItem key={item.emp.EmployeeID} value={item.emp.EmployeeID}>
-                            {item.emp.FullName}
-                          </MenuItem>
-                        ))}
-                      </Select>
-                    </FormControl>
-                  </Stack>
-                  <Stack direction={{ xs: 'column', sm: 'row' }} spacing={2}>
-                    <LocalizationProvider dateAdapter={AdapterDateFns}>
-                      <DatePicker
-                        label="Laudatory Date"
-                        views={['day', 'month', 'year']}
-                        value={laudate}
-                        onChange={(newValue) => {
-                          setLauDate(newValue);
-                        }}
-                        renderInput={(params) => <TextField {...params} />}
-                      />
-                    </LocalizationProvider>
-                    <TextField
-                      fullWidth
-                      label="Amount"
-                      {...getFieldProps('Amount')}
-                      variant="outlined"
-                    />
-                  </Stack>
-                  <Stack direction={{ xs: 'column', sm: 'row' }} spacing={2}>
-                    <TextField
-                      fullWidth
-                      multiline
-                      rows={4}
-                      label="Reason"
-                      {...getFieldProps('Reason')}
-                      variant="outlined"
-                    />
-                  </Stack>
-                  <LoadingButton fullWidth size="large" type="submit" variant="contained">
-                    Add Laudatory
-                  </LoadingButton>
+    <Page title="Organization | ChamCongVN">
+      <Modal
+        open={open}
+        sx={{
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center'
+        }}
+        onClose={handleClose}
+        aria-labelledby="modal-modal-title"
+        aria-describedby="modal-modal-description"
+      >
+        <FormikProvider value={formik}>
+          <Form autoComplete="off" noValidate onSubmit={handleSubmit}>
+            <Box sx={style}>
+              <Stack spacing={3}>
+                <Typography id="modal-modal-title" variant="h6" component="h2">
+                  Add Organization
+                </Typography>
+                <Stack direction={{ xs: 'column', sm: 'row' }} spacing={2}>
+                  <TextField label="Name" {...getFieldProps('Name')} variant="outlined" />
+                  <TextField label="Website" {...getFieldProps('Website')} variant="outlined" />
                 </Stack>
-              </Box>
-            </Form>
-          </FormikProvider>
-        </Modal>
+                <Stack direction={{ xs: 'column', sm: 'row' }} spacing={2}>
+                  <TextField label="PublicIP" {...getFieldProps('PublicIP')} variant="outlined" />
+                  <TextField label="PythonIP" {...getFieldProps('PythonIP')} variant="outlined" />
+                </Stack>
+                <Stack direction={{ xs: 'column', sm: 'row' }} spacing={2}>
+                  <TextField label="Latitude" {...getFieldProps('Latitude')} variant="outlined" />
+                  <TextField label="Longitude" {...getFieldProps('Longitude')} variant="outlined" />
+                </Stack>
+                <Stack direction={{ xs: 'column', sm: 'row' }} spacing={2}>
+                  <TextField label="Email" {...getFieldProps('Email')} variant="outlined" />
+                </Stack>
+                <Stack
+                  direction={{ xs: 'column', sm: 'row' }}
+                  spacing={2}
+                  justifyContent="flex-end"
+                >
+                  <Avatar src={formik.values.Logo} sx={{ width: 50, height: 50 }} />
+                  <label htmlFor="contained-button-file">
+                    <Input
+                      id="contained-button-file"
+                      type="file"
+                      onChange={(e) => {
+                        const { files } = e.target;
+                        const reader = new FileReader();
+                        reader.readAsDataURL(files[0]);
+                        reader.onload = (e) => {
+                          formik.setFieldValue('Logo', e.target.result);
+                        };
+                      }}
+                    />
+                    <Button variant="contained" component="span">
+                      Upload Logo
+                    </Button>
+                  </label>
+                </Stack>
+                <LoadingButton fullWidth size="large" type="submit" variant="contained">
+                  Add Organization
+                </LoadingButton>
+              </Stack>
+            </Box>
+          </Form>
+        </FormikProvider>
+      </Modal>
+      <Container>
         <Stack direction="row" alignItems="center" justifyContent="space-between" mb={5}>
           <Typography variant="h4" gutterBottom>
-            Laudatory
+            Organization
           </Typography>
           <Button
             onClick={handleOpen}
@@ -309,12 +269,12 @@ export default function User() {
             to="#"
             startIcon={<Icon icon={plusFill} />}
           >
-            New Laudatory
+            New Organization
           </Button>
         </Stack>
 
         <Card>
-          <LaudatoryListToolbar
+          <OrganizationListToolbar
             numSelected={selected.length}
             filterName={filterName}
             onFilterName={handleFilterByName}
@@ -323,54 +283,64 @@ export default function User() {
           <Scrollbar>
             <TableContainer sx={{ minWidth: 800 }}>
               <Table>
-                <LaudatoryListHead
+                <OrganizationListHead
                   order={order}
                   orderBy={orderBy}
                   headLabel={TABLE_HEAD}
-                  rowCount={laudatory.length}
+                  rowCount={organization.length}
                   numSelected={selected.length}
                   onRequestSort={handleRequestSort}
                   onSelectAllClick={handleSelectAllClick}
                 />
                 <TableBody>
-                  {laudatory
+                  {organization
                     .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                     .map((row) => {
-                      const { LaudatoryEmployeeID, LaudatoryName, LaudatoryDate, Reason, Amount } =
-                        row.LaudatoryEmployee;
-                      const { FullName, Image } = row;
-                      const isItemSelected = selected.indexOf(FullName) !== -1;
+                      const {
+                        OrganizationID,
+                        Name,
+                        Logo,
+                        Email,
+                        Latitude,
+                        Longitude,
+                        Website,
+                        PublicIP,
+                        PythonIP
+                      } = row;
+                      const isItemSelected = selected.indexOf(Name) !== -1;
 
                       return (
                         <TableRow
                           hover
-                          key={LaudatoryEmployeeID}
+                          key={OrganizationID}
                           tabIndex={-1}
-                          role="checkbox"
+                          organization="checkbox"
                           selected={isItemSelected}
                           aria-checked={isItemSelected}
                         >
                           <TableCell padding="checkbox">
                             <Checkbox
                               checked={isItemSelected}
-                              onChange={(event) => handleClick(event, FullName)}
+                              onChange={(event) => handleClick(event, Name)}
                             />
                           </TableCell>
-                          <TableCell align="left">{LaudatoryEmployeeID}</TableCell>
+                          <TableCell align="left">{OrganizationID}</TableCell>
                           <TableCell component="th" scope="row" padding="none">
                             <Stack direction="row" alignItems="center" spacing={2}>
-                              <Avatar alt={FullName} src={Image} />
+                              <Avatar alt={Name} src={Logo} />
                               <Typography variant="subtitle2" noWrap>
-                                {FullName}
+                                {Name}
                               </Typography>
                             </Stack>
                           </TableCell>
-                          <TableCell align="left">{LaudatoryName}</TableCell>
-                          <TableCell align="left">{convertDateTime(LaudatoryDate)}</TableCell>
-                          <TableCell align="left">{Reason}</TableCell>
-                          <TableCell align="left">{Amount}</TableCell>
+                          <TableCell align="left">{Email}</TableCell>
+                          <TableCell align="left">{Latitude}</TableCell>
+                          <TableCell align="left">{Longitude}</TableCell>
+                          <TableCell align="left">{Website}</TableCell>
+                          <TableCell align="left">{PublicIP}</TableCell>
+                          <TableCell align="left">{PythonIP}</TableCell>
                           <TableCell align="right">
-                            <LaudatoryMoreMenu dulieu={row} />
+                            <OrganizationMoreMenu dulieu={row} />
                           </TableCell>
                         </TableRow>
                       );
@@ -381,7 +351,7 @@ export default function User() {
                     </TableRow>
                   )}
                 </TableBody>
-                {isLaudatoryNotFound && (
+                {isUserNotFound && (
                   <TableBody>
                     <TableRow>
                       <TableCell align="center" colSpan={6} sx={{ py: 3 }}>
@@ -397,7 +367,7 @@ export default function User() {
           <TablePagination
             rowsPerPageOptions={[5, 10, 25]}
             component="div"
-            count={laudatory.length}
+            count={organization.length}
             rowsPerPage={rowsPerPage}
             page={page}
             onPageChange={handleChangePage}
