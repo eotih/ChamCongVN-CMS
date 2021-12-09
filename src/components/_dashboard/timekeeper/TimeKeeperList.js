@@ -11,9 +11,9 @@ TimeKeeperList.propTypes = {
 
 export default function TimeKeeperList({ time, ...other }) {
   return (
-    <Grid container spacing={3} {...other}>
+    <Grid container spacing={1} {...other}>
       {time.map((time) => (
-        <Grid key={time.$id} item xs={12} sm={6} md={3}>
+        <Grid key={time.$id} item xs={12} sm={6}>
           <TimeKeeperCard time={time} />
         </Grid>
       ))}
