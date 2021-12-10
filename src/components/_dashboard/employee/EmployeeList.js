@@ -12,8 +12,8 @@ EmployeeList.propTypes = {
 export default function EmployeeList({ Employees, ...other }) {
   return (
     <Grid container spacing={3} {...other}>
-      {Employees.map((Employee) => (
-        <Grid key={Employee.id} item xs={12} sm={6} md={3}>
+      {Employees.map((Employee, index) => (
+        <Grid key={index} item xs={12} sm={6} md={3}>
           <EmployeeCard Employee={Employee} />
         </Grid>
       ))}

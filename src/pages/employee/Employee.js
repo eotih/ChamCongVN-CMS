@@ -18,7 +18,7 @@ import { getAllEmployees } from '../../functions/Employee';
 
 // ----------------------------------------------------------------------
 
-export default function EcommerceShop() {
+export default function Employee() {
   const [error, setError] = useState(null);
   const [isLoaded, setIsLoaded] = useState(false);
   const [openFilter, setOpenFilter] = useState(false);
@@ -92,7 +92,7 @@ export default function EcommerceShop() {
           </Stack>
         </Stack>
 
-        <EmployeeList time={Employee} />
+        <EmployeeList Employees={Employee} />
         <EmployeeWidget />
       </Container>
     </Page>
