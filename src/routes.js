@@ -13,6 +13,7 @@ import NotFound from './pages/Page404';
 // Employee
 import Recruitment from './pages/employee/Recruitment';
 import AddRecruit from './pages/employee/AddRecruit';
+import Employee from './pages/employee/Employee';
 // Organization
 import Account from './pages/organization/Account';
 import Profile from './pages/Profile';
@@ -58,6 +59,7 @@ export default function Router() {
       children: [
         // { path: 'employeelist', element: <Profile /> },
         { path: 'recruitments', element: <Recruitment /> },
+        { path: 'employeelist', element: <Employee /> },
         { path: 'recruitments/add_recruit/:id', element: <AddRecruit /> }
       ]
     },
