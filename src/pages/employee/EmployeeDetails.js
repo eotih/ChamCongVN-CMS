@@ -7,6 +7,7 @@ import Box from '@mui/material/Box';
 import { Container, Stack, Typography, Link, Breadcrumbs } from '@mui/material';
 // components
 import Page from '../../components/Page';
+import { getEmployeeByID } from '../../functions/Employee';
 import {
   EmployeeDetailSort,
   EmployeeDetailList,
@@ -17,11 +18,17 @@ import {
 // ----------------------------------------------------------------------
 
 export default function EmployeeDetails() {
-  const { slug } = useParams();
+  const { id } = useParams();
   const [error, setError] = useState(null);
   const [openFilter, setOpenFilter] = useState(false);
   const [isLoaded, setIsLoaded] = useState(false);
-  const [Employee, setEmployee] = useState([]);
+  const [employee, setEmployee] = useState([]);
+  useEffect(() => {
+    getEmployeeByID(id).then((res) => {
+      setIsLoaded(true);
+      setEmployee(res);
+    });
+  }, []);
   const formik = useFormik({
     initialValues: {
       gender: '',
@@ -34,7 +41,10 @@ export default function EmployeeDetails() {
       setOpenFilter(false);
     }
   });
-
+  const { DepartmentName, GroupName, ListDegree, ListSpeciality, PositionName, WorkName, emp } =
+    employee;
+  const { EmployeeID, FullName, Image } = employee.Employee;
+  console.log(employee.Employee);
   const { resetForm, handleSubmit } = formik;
 
   const handleOpenFilter = () => {
@@ -71,7 +81,7 @@ export default function EmployeeDetails() {
             <Link underline="hover" color="inherit" href="../">
               Employees
             </Link>
-            <Typography color="text.primary">Detail / {slug}</Typography>
+            <Typography color="text.primary">Detail / {id}</Typography>
           </Breadcrumbs>
         </Typography>
 
@@ -93,8 +103,37 @@ export default function EmployeeDetails() {
             <EmployeeDetailSort />
           </Stack>
         </Stack>
-
-        <EmployeeDetailList Employees={Employee} />
+        <Stack direction="row" alignItems="center" justifyContent="space-between">
+          <Typography variant="h6" noWrap>
+            ID: {EmployeeID}
+          </Typography>
+        </Stack>
+        <Stack direction="row" alignItems="center" justifyContent="space-between">
+          <Typography variant="h6" noWrap>
+            Tên: {FullName}
+          </Typography>
+        </Stack>
+        <Stack direction="row" alignItems="center" justifyContent="space-between">
+          <Typography variant="h6" noWrap>
+            Phòng: {DepartmentName}
+          </Typography>
+        </Stack>
+        <Stack direction="row" alignItems="center" justifyContent="space-between">
+          <Typography variant="h6" noWrap>
+            Tổ: {GroupName}
+          </Typography>
+        </Stack>
+        <Stack direction="row" alignItems="center" justifyContent="space-between">
+          <Typography variant="h6" noWrap>
+            Chức vụ: {PositionName}
+          </Typography>
+        </Stack>
+        <Stack direction="row" alignItems="center" justifyContent="space-between">
+          <Typography variant="h6" noWrap>
+            Công việc: {WorkName}
+          </Typography>
+        </Stack>
+        {/* <EmployeeDetailList Employees={employee} /> */}
         <EmployeeDetailCartWidget />
       </Container>
     </Page>
