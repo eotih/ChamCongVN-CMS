@@ -28,7 +28,6 @@ EmployeeCard.propTypes = {
 export default function EmployeeCard({ Employee }) {
   const { DepartmentName, GroupName, ListDegree, ListSpeciality, PositionName, WorkName, emp } =
     Employee;
-  console.log(Employee);
   return (
     <Card>
       <Box sx={{ pt: '100%', position: 'relative' }}>

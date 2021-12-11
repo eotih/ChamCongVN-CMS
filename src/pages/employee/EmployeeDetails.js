@@ -41,10 +41,16 @@ export default function EmployeeDetails() {
       setOpenFilter(false);
     }
   });
-  const { DepartmentName, GroupName, ListDegree, ListSpeciality, PositionName, WorkName, emp } =
-    employee;
-  const { EmployeeID, FullName, Image } = employee.Employee;
-  console.log(employee.Employee);
+  const {
+    DepartmentName,
+    GroupName,
+    ListDegree,
+    ListSpeciality,
+    PositionName,
+    WorkName,
+    Employee
+  } = employee;
+  console.log(Employee);
   const { resetForm, handleSubmit } = formik;
 
   const handleOpenFilter = () => {
@@ -105,12 +111,7 @@ export default function EmployeeDetails() {
         </Stack>
         <Stack direction="row" alignItems="center" justifyContent="space-between">
           <Typography variant="h6" noWrap>
-            ID: {EmployeeID}
-          </Typography>
-        </Stack>
-        <Stack direction="row" alignItems="center" justifyContent="space-between">
-          <Typography variant="h6" noWrap>
-            Tên: {FullName}
+            Tên:
           </Typography>
         </Stack>
         <Stack direction="row" alignItems="center" justifyContent="space-between">
