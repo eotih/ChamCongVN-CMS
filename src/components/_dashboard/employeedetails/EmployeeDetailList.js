@@ -13,7 +13,7 @@ export default function EmployeeDetailList({ Employees, ...other }) {
   return (
     <Grid container spacing={3} {...other}>
       {Employees.map((Employee) => (
-        <Grid key={Employee.ImageID} item xs={12} sm={6} md={3}>
+        <Grid key={Employee.DepartmentName} item xs={12} sm={6} md={3}>
           <EmployeeCard Employee={Employee} />
         </Grid>
       ))}

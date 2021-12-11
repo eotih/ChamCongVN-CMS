@@ -28,7 +28,6 @@ EmployeeCard.propTypes = {
 export default function EmployeeCard({ Employee }) {
   const { DepartmentName, GroupName, ListDegree, ListSpeciality, PositionName, WorkName, emp } =
     Employee;
-  console.log(Employee);
   return (
     <Card>
       <Box sx={{ pt: '100%', position: 'relative' }}>
@@ -51,7 +50,12 @@ export default function EmployeeCard({ Employee }) {
       </Box>
 
       <Stack spacing={2} sx={{ p: 3 }}>
-        <Link to="./details" color="inherit" underline="hover" component={RouterLink}>
+        <Link
+          to={`./details/${emp.EmployeeID}`}
+          color="inherit"
+          underline="hover"
+          component={RouterLink}
+        >
           <Stack direction="row" alignItems="center" justifyContent="space-between">
             <Typography variant="h6" noWrap>
               Chức vụ:

@@ -62,7 +62,7 @@ export default function Router() {
         { path: 'recruitments', element: <Recruitment /> },
         { path: 'recruitments/add_recruit/:id', element: <AddRecruit /> },
         { path: 'employeelist', element: <Employee /> },
-        { path: 'employeelist/details', element: <EmployeeDetails /> }
+        { path: 'employeelist/details/:id', element: <EmployeeDetails /> }
       ]
     },
     {
