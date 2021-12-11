@@ -32,28 +32,51 @@ export default function EmployeeCard({ Employee }) {
   return (
     <Card>
       <Box sx={{ pt: '100%', position: 'relative' }}>
+        <Label
+          variant="filled"
+          color={(emp.FullName === 'sale' && 'error') || 'info'}
+          sx={{
+            zIndex: 9,
+            top: 16,
+            right: 16,
+            position: 'absolute',
+            fontSize: 18,
+            padding: 2,
+            textTransform: 'uppercase'
+          }}
+        >
+          {emp.FullName}
+        </Label>
         <EmployeeImgStyle alt={emp.FullName} src={emp.Image} />
       </Box>
 
       <Stack spacing={2} sx={{ p: 3 }}>
         <Link to="#" color="inherit" underline="hover" component={RouterLink}>
-          <Typography variant="h6" noWrap>
-            {emp.FullName}
-          </Typography>
           <Stack direction="row" alignItems="center" justifyContent="space-between">
             <Typography variant="h6" noWrap>
+              Chức vụ:
+            </Typography>
+            <Typography variant="h6" noWrap>
               {DepartmentName}
+            </Typography>
+          </Stack>
+          <Stack direction="row" alignItems="center" justifyContent="space-between">
+            <Typography variant="h6" noWrap>
+              Vị trí:
+            </Typography>
+            <Typography variant="h6" noWrap>
+              {PositionName}
+            </Typography>
+          </Stack>
+          <Stack direction="row" alignItems="center" justifyContent="space-between">
+            <Typography variant="h6" noWrap>
+              Phòng ban:
             </Typography>
             <Typography variant="h6" noWrap>
               {GroupName}
             </Typography>
           </Stack>
         </Link>
-
-        <Stack direction="row" alignItems="center" justifyContent="space-between">
-          <Typography variant="subtitle1">{PositionName}</Typography>
-          <Typography variant="subtitle1">{WorkName}</Typography>
-        </Stack>
       </Stack>
     </Card>
   );
