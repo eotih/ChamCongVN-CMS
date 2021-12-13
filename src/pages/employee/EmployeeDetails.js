@@ -47,6 +47,7 @@ export default function EmployeeDetails() {
     Employee
   } = employee;
   console.log(ListDegree);
+  console.log(ListSpeciality);
   const { resetForm, handleSubmit } = formik;
 
   const handleOpenFilter = () => {
@@ -109,6 +110,26 @@ export default function EmployeeDetails() {
                         <Typography variant="subtitle1">Chức vụ: {PositionName}</Typography>
                         <Typography variant="subtitle1">Công việc: {WorkName}</Typography>
                       </Stack>
+                      {ListDegree && ListDegree.length > 0 && (
+                        <>
+                          <Typography variant="subtitle1">Bằng cấp:</Typography>
+                          <ul>
+                            {ListDegree.map((item, index) => (
+                              <li key={index}>{item.DegreeName}</li>
+                            ))}
+                          </ul>
+                        </>
+                      )}
+                      {ListSpeciality && ListSpeciality.length > 0 && (
+                        <>
+                          <Typography variant="subtitle1">Chuyên môn:</Typography>
+                          <ul>
+                            {ListSpeciality.map((item, index) => (
+                              <li key={index}>{item.SpecialtyName}</li>
+                            ))}
+                          </ul>
+                        </>
+                      )}
                     </Stack>
                   </Stack>
                 </Card>
