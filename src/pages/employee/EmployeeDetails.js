@@ -89,29 +89,54 @@ export default function EmployeeDetails() {
             <Typography color="text.primary">Detail / {id}</Typography>
           </Breadcrumbs>
         </Typography>
-        <Stack
-          direction="row"
-          flexWrap="wrap-reverse"
-          alignItems="center"
-          justifyContent="flex-end"
-          sx={{ mb: 5 }}
-        >
-          <Stack direction="row" spacing={1} flexShrink={0} sx={{ my: 1 }}>
-            <EmployeeDetailFilterSidebar
-              formik={formik}
-              isOpenFilter={openFilter}
-              onResetFilter={handleResetFilter}
-              onOpenFilter={handleOpenFilter}
-              onCloseFilter={handleCloseFilter}
-            />
-            <EmployeeDetailSort />
-          </Stack>
-        </Stack>
-        <Stack direction="row" alignItems="center" justifyContent="space-between">
-          <Typography variant="h6" noWrap>
-            Name: {Employee.FullName}
-          </Typography>
-        </Stack>
+        {Employee && (
+          <>
+            <Stack
+              direction="row"
+              flexWrap="wrap-reverse"
+              alignItems="center"
+              justifyContent="flex-end"
+              sx={{ mb: 5 }}
+            >
+              <Stack direction="row" spacing={1} flexShrink={0} sx={{ my: 1 }}>
+                <EmployeeDetailFilterSidebar
+                  formik={formik}
+                  isOpenFilter={openFilter}
+                  onResetFilter={handleResetFilter}
+                  onOpenFilter={handleOpenFilter}
+                  onCloseFilter={handleCloseFilter}
+                />
+                <EmployeeDetailSort />
+              </Stack>
+            </Stack>
+            <Stack direction="row" alignItems="center" justifyContent="space-between">
+              <Typography variant="h6" noWrap>
+                Tên: {Employee.FullName}
+              </Typography>
+            </Stack>
+            <Stack direction="row" alignItems="center" justifyContent="space-between">
+              <Typography variant="h6" noWrap>
+                Phòng: {DepartmentName}
+              </Typography>
+            </Stack>
+            <Stack direction="row" alignItems="center" justifyContent="space-between">
+              <Typography variant="h6" noWrap>
+                Tổ: {GroupName}
+              </Typography>
+            </Stack>
+            <Stack direction="row" alignItems="center" justifyContent="space-between">
+              <Typography variant="h6" noWrap>
+                Chức vụ: {PositionName}
+              </Typography>
+            </Stack>
+            <Stack direction="row" alignItems="center" justifyContent="space-between">
+              <Typography variant="h6" noWrap>
+                Công việc: {WorkName}
+              </Typography>
+            </Stack>
+          </>
+        )}
+
         {/* <EmployeeDetailList Employees={employee} /> */}
         <EmployeeDetailCartWidget />
       </Container>

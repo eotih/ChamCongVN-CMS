@@ -4,11 +4,11 @@ import { Box, Grid, Container, Typography } from '@mui/material';
 import Page from '../components/Page';
 import {
   AppTasks,
-  AppNewUsers,
-  AppBugReports,
-  AppItemOrders,
+  CheckedIn,
+  HaventCheckedIn,
+  Late,
   AppNewsUpdate,
-  AppWeeklySales,
+  Employees,
   AppOrderTimeline,
   AppCurrentVisits,
   AppWebsiteVisits,
@@ -28,16 +28,16 @@ export default function DashboardApp() {
         </Box>
         <Grid container spacing={3}>
           <Grid item xs={12} sm={6} md={3}>
-            <AppWeeklySales />
+            <Employees />
           </Grid>
           <Grid item xs={12} sm={6} md={3}>
-            <AppNewUsers />
+            <CheckedIn />
           </Grid>
           <Grid item xs={12} sm={6} md={3}>
-            <AppItemOrders />
+            <Late />
           </Grid>
           <Grid item xs={12} sm={6} md={3}>
-            <AppBugReports />
+            <HaventCheckedIn />
           </Grid>
 
           <Grid item xs={12} md={6} lg={8}>

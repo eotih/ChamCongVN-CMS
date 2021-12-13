@@ -16,25 +16,12 @@ import {
   Checkbox
 } from '@mui/material';
 import { useFormik, Form, FormikProvider } from 'formik';
-import React, { useState, useEffect, memo, useContext } from 'react';
-import { styled } from '@mui/material/styles';
-import { LoadingButton } from '@mui/lab';
+import React, { useState, useEffect } from 'react';
 import { getAllWorks, getAllGroups, getAllDepartments } from '../../functions/Component';
 import { getAllSalaryTables } from '../../functions/Salary';
-import { getAllPosition } from '../../functions/Organization';
+import { getAllPosition, getAllLevels } from '../../functions/Organization';
 //----------------------------------
-const names = [
-  'Oliver Hansen',
-  'Van Henry',
-  'April Tucker',
-  'Ralph Hubbard',
-  'Omar Alexander',
-  'Carlos Abbott',
-  'Miriam Wagner',
-  'Bradley Wilkerson',
-  'Virginia Andrews',
-  'Kelly Snyder'
-];
+
 const ITEM_HEIGHT = 48;
 const ITEM_PADDING_TOP = 8;
 const MenuProps = {
@@ -45,7 +32,7 @@ const MenuProps = {
   }
 };
 export default function Utilities({ values, handleChange, handleSubmit }) {
-  const [images, setImages] = useState([]);
+  const [level, setLevel] = useState([]);
   const [salarytable, setSalaryTable] = useState([]);
   const [group, setGroup] = useState([]);
   const [position, setPosition] = useState([]);
@@ -69,6 +56,9 @@ export default function Utilities({ values, handleChange, handleSubmit }) {
     });
     getAllPosition().then((res) => {
       setPosition(res);
+    });
+    getAllLevels().then((res) => {
+      setLevel(res);
     });
   }, []);
   const formik = useFormik({
@@ -164,6 +154,22 @@ export default function Utilities({ values, handleChange, handleSubmit }) {
                         {work.map((item) => (
                           <MenuItem key={item.WorkID} value={item.WorkID}>
                             {item.WorkName}
+                          </MenuItem>
+                        ))}
+                      </Select>
+                    </FormControl>
+                    <FormControl fullWidth>
+                      <InputLabel id="demo-simple-select-label">Level</InputLabel>
+                      <Select
+                        labelId="demo-simple-select-label"
+                        id="demo-simple-select"
+                        value={values.LevelID}
+                        label="Level"
+                        onChange={handleChange('LevelID')}
+                      >
+                        {level.map((item) => (
+                          <MenuItem key={item.Level.LevelID} value={item.Level.LevelID}>
+                            {item.PositionName} - {item.Level.LevelName} - {item.Level.Coefficient}
                           </MenuItem>
                         ))}
                       </Select>

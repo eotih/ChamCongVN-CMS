@@ -20,4 +20,8 @@ async function getAllOrganization() {
   const res = await Axios.get('Organization/GetAllOrganization');
   return res.data;
 }
-export { getAllRole, getAllShift, getAllPosition, getAllAccount, getAllOrganization };
+async function getAllLevels() {
+  const res = await Axios.get('Organization/GetAllLevels');
+  return res.data;
+}
+export { getAllRole, getAllShift, getAllPosition, getAllAccount, getAllOrganization, getAllLevels };
