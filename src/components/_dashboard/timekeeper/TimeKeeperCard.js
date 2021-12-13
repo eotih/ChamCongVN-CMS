@@ -63,7 +63,7 @@ export default function TimeKeeperCards({ time }) {
               Check in:
             </Typography>
             <Typography variant="h6" sx={{ color: 'white', p: 2, pb: 0 }}>
-              Đi Muộn
+              Đi muộn
             </Typography>
             <Typography variant="subtitle1" sx={{ color: 'white', p: 2, pt: 1 }}>
               {convertDateTime(CheckInCreatedAt)}
