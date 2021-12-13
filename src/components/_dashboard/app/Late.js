@@ -1,10 +1,11 @@
 import { Icon } from '@iconify/react';
-import bugFilled from '@iconify/icons-ant-design/bug-filled';
+import windowsFilled from '@iconify/icons-ant-design/windows-filled';
+import { useState, useEffect } from 'react';
 // material
 import { alpha, styled } from '@mui/material/styles';
 import { Card, Typography } from '@mui/material';
 // utils
-import { fShortenNumber } from '../../../utils/formatNumber';
+import { GetCountLate } from '../../../functions/TimeKeeper';
 
 // ----------------------------------------------------------------------
 
@@ -12,8 +13,8 @@ const RootStyle = styled(Card)(({ theme }) => ({
   boxShadow: 'none',
   textAlign: 'center',
   padding: theme.spacing(5, 0),
-  color: theme.palette.error.darker,
-  backgroundColor: theme.palette.error.lighter
+  color: theme.palette.warning.darker,
+  backgroundColor: theme.palette.warning.lighter
 }));
 
 const IconWrapperStyle = styled('div')(({ theme }) => ({
@@ -25,26 +26,30 @@ const IconWrapperStyle = styled('div')(({ theme }) => ({
   height: theme.spacing(8),
   justifyContent: 'center',
   marginBottom: theme.spacing(3),
-  color: theme.palette.error.dark,
-  backgroundImage: `linear-gradient(135deg, ${alpha(theme.palette.error.dark, 0)} 0%, ${alpha(
-    theme.palette.error.dark,
+  color: theme.palette.warning.dark,
+  backgroundImage: `linear-gradient(135deg, ${alpha(theme.palette.warning.dark, 0)} 0%, ${alpha(
+    theme.palette.warning.dark,
     0.24
   )} 100%)`
 }));
 
 // ----------------------------------------------------------------------
 
-const TOTAL = 234;
-
-export default function AppBugReports() {
+export default function Late() {
+  const [data, setData] = useState(1);
+  useEffect(() => {
+    GetCountLate().then((res) => {
+      setData(res.length);
+    });
+  }, []);
   return (
     <RootStyle>
       <IconWrapperStyle>
-        <Icon icon={bugFilled} width={24} height={24} />
+        <Icon icon={windowsFilled} width={24} height={24} />
       </IconWrapperStyle>
-      <Typography variant="h3">{fShortenNumber(TOTAL)}</Typography>
+      <Typography variant="h3">{data}</Typography>
       <Typography variant="subtitle2" sx={{ opacity: 0.72 }}>
-        Bug Reports
+        Late check in
       </Typography>
     </RootStyle>
   );
