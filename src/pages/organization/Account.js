@@ -41,8 +41,7 @@ import {
   AccountListToolbar,
   AccountMoreMenu
 } from '../../components/_dashboard/account';
-import { getAllAccount, getAllRole } from '../../functions/Organization';
-import { getAllEmployees } from '../../functions/Employee';
+import { getAllAccount, getAllRole, GetEmployeeForAccount } from '../../functions/Organization';
 //
 
 // ----------------------------------------------------------------------
@@ -105,7 +104,7 @@ export default function Account() {
     getAllAccount().then((res) => {
       setAccount(res);
     });
-    getAllEmployees().then((res) => {
+    GetEmployeeForAccount().then((res) => {
       setEmployee(res);
     });
     getAllRole().then((res) => {
@@ -248,8 +247,8 @@ export default function Account() {
                       onChange={handleChangeEmployee}
                     >
                       {employee.map((item) => (
-                        <MenuItem key={item.emp.EmployeeID} value={item.emp.EmployeeID}>
-                          {item.emp.FullName}
+                        <MenuItem key={item.EmployeeID} value={item.EmployeeID}>
+                          {item.FullName}
                         </MenuItem>
                       ))}
                     </Select>

@@ -196,7 +196,7 @@ export default function OrganizationMoreMenu(Organization) {
                     </label>
                   </Stack>
                   <LoadingButton fullWidth size="large" type="submit" variant="contained">
-                    Add Organization
+                    Edit Organization
                   </LoadingButton>
                 </Stack>
               </Box>
