@@ -40,11 +40,12 @@ export default function AddRecruit() {
       formik.setFieldValue('HealthInsurance', res.HealthInsurance);
       formik.setFieldValue('UnemploymentInsurance', res.UnemploymentInsurance);
       formik.setFieldValue('CreatedBy', res.CreatedBy);
-      formik.setFieldValue('Health', res.WorkID);
-      formik.setFieldValue('SocialInsurance', res.GroupID);
-      formik.setFieldValue('HealthInsurance', res.PositionID);
-      formik.setFieldValue('UnemploymentInsurance', res.DepartmentID);
-      formik.setFieldValue('CreatedBy', res.SalaryTableID);
+      formik.setFieldValue('WorkID', res.WorkID);
+      formik.setFieldValue('GroupID', res.GroupID);
+      formik.setFieldValue('PositionID', res.PositionID);
+      formik.setFieldValue('LevelID', res.LevelID);
+      formik.setFieldValue('DepartmentID', res.DepartmentID);
+      formik.setFieldValue('SalaryTableID', res.SalaryTableID);
     });
   }, []);
   const formik = useFormik({
@@ -69,6 +70,7 @@ export default function AddRecruit() {
       DepartmentID: '',
       PositionID: '',
       WorkID: '',
+      LevelID: '',
       GroupID: '',
       HealthInsurance: '',
       UnemploymentInsurance: '',
@@ -110,6 +112,7 @@ export default function AddRecruit() {
     NickName,
     Gender,
     Image,
+    LevelID,
     DateOfBirth,
     PlaceOfBirth,
     Address,

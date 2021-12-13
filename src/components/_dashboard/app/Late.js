@@ -36,7 +36,7 @@ const IconWrapperStyle = styled('div')(({ theme }) => ({
 // ----------------------------------------------------------------------
 
 export default function Late() {
-  const [data, setData] = useState(1);
+  const [data, setData] = useState('');
   useEffect(() => {
     GetCountLate().then((res) => {
       setData(res.length);

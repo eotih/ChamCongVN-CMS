@@ -36,7 +36,7 @@ const IconWrapperStyle = styled('div')(({ theme }) => ({
 // ----------------------------------------------------------------------
 
 export default function CheckedIn() {
-  const [data, setData] = useState(1);
+  const [data, setData] = useState('');
   useEffect(() => {
     GetCountCheckedIn().then((res) => {
       setData(res.length);
