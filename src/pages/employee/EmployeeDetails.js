@@ -4,16 +4,12 @@ import { useParams } from 'react-router-dom';
 import CircularProgress from '@mui/material/CircularProgress';
 import Box from '@mui/material/Box';
 // material
-import { Container, Stack, Typography, Link, Breadcrumbs } from '@mui/material';
+import { Container, Stack, Typography, Link, Breadcrumbs, Grid, Card, Avatar } from '@mui/material';
 // components
 import Page from '../../components/Page';
+import Scrollbar from '../../components/Scrollbar';
 import { getEmployeeByID } from '../../functions/Employee';
-import {
-  EmployeeDetailSort,
-  EmployeeDetailList,
-  EmployeeDetailCartWidget,
-  EmployeeDetailFilterSidebar
-} from '../../components/_dashboard/employeedetails';
+import { EmployeeDetailCartWidget } from '../../components/_dashboard/employeedetails';
 
 // ----------------------------------------------------------------------
 
@@ -91,53 +87,34 @@ export default function EmployeeDetails() {
         </Typography>
         {Employee && (
           <>
-            <Stack
-              direction="row"
-              flexWrap="wrap-reverse"
-              alignItems="center"
-              justifyContent="flex-end"
-              sx={{ mb: 5 }}
-            >
-              <Stack direction="row" spacing={1} flexShrink={0} sx={{ my: 1 }}>
-                <EmployeeDetailFilterSidebar
-                  formik={formik}
-                  isOpenFilter={openFilter}
-                  onResetFilter={handleResetFilter}
-                  onOpenFilter={handleOpenFilter}
-                  onCloseFilter={handleCloseFilter}
-                />
-                <EmployeeDetailSort />
-              </Stack>
-            </Stack>
-            <Stack direction="row" alignItems="center" justifyContent="space-between">
-              <Typography variant="h6" noWrap>
-                Tên: {Employee.FullName}
-              </Typography>
-            </Stack>
-            <Stack direction="row" alignItems="center" justifyContent="space-between">
-              <Typography variant="h6" noWrap>
-                Phòng: {DepartmentName}
-              </Typography>
-            </Stack>
-            <Stack direction="row" alignItems="center" justifyContent="space-between">
-              <Typography variant="h6" noWrap>
-                Tổ: {GroupName}
-              </Typography>
-            </Stack>
-            <Stack direction="row" alignItems="center" justifyContent="space-between">
-              <Typography variant="h6" noWrap>
-                Chức vụ: {PositionName}
-              </Typography>
-            </Stack>
-            <Stack direction="row" alignItems="center" justifyContent="space-between">
-              <Typography variant="h6" noWrap>
-                Công việc: {WorkName}
-              </Typography>
-            </Stack>
+            <Grid container>
+              <Grid item xs={12}>
+                <Card sx={{ p: 2 }}>
+                  <Stack direction={{ xs: 'column', md: 'row' }} spacing={8}>
+                    <Grid item xs={12} md={6}>
+                      <Avatar
+                        src={Employee.Image}
+                        variant="rounded"
+                        sx={{ width: '100%', height: 'auto' }}
+                      />
+                    </Grid>
+                    <Stack direction={{ xs: 'column' }} spacing={2}>
+                      <Typography variant="h4" noWrap>
+                        Tên: {Employee.FullName}
+                      </Typography>
+                      <Stack direction={{ xs: 'column' }} spacing={2}>
+                        <Typography variant="subtitle1">Phòng: {DepartmentName}</Typography>
+                        <Typography variant="subtitle1">Tổ: {GroupName}</Typography>
+                        <Typography variant="subtitle1">Chức vụ: {PositionName}</Typography>
+                        <Typography variant="subtitle1">Công việc: {WorkName}</Typography>
+                      </Stack>
+                    </Stack>
+                  </Stack>
+                </Card>
+              </Grid>
+            </Grid>
           </>
         )}
-
-        {/* <EmployeeDetailList Employees={employee} /> */}
         <EmployeeDetailCartWidget />
       </Container>
     </Page>
