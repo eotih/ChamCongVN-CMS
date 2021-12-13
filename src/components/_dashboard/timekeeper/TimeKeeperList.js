@@ -6,14 +6,14 @@ import TimeKeeperCard from './TimeKeeperCard';
 // ----------------------------------------------------------------------
 
 TimeKeeperList.propTypes = {
-  products: PropTypes.array.isRequired
+  time: PropTypes.array.isRequired
 };
 
 export default function TimeKeeperList({ time, ...other }) {
   return (
     <Grid container spacing={1} {...other}>
-      {time.map((time) => (
-        <Grid key={time.$id} item xs={12} sm={6}>
+      {time.map((time, index) => (
+        <Grid key={index} item xs={12} sm={6}>
           <TimeKeeperCard time={time} />
         </Grid>
       ))}

@@ -1,7 +1,7 @@
 import PropTypes from 'prop-types';
 import { Link as RouterLink } from 'react-router-dom';
 // material
-import { Box, Card, Link, Typography, Stack } from '@mui/material';
+import { Box, Card, Link, Typography, Stack, Grid } from '@mui/material';
 import { styled } from '@mui/material/styles';
 // utils
 import { fCurrency } from '../../../utils/formatNumber';
@@ -28,6 +28,7 @@ EmployeeCard.propTypes = {
 export default function EmployeeCard({ Employee }) {
   const { DepartmentName, GroupName, ListDegree, ListSpeciality, PositionName, WorkName, emp } =
     Employee;
+  console.log(Employee);
   return (
     <Card>
       <Box sx={{ pt: '100%', position: 'relative' }}>
@@ -44,7 +45,7 @@ export default function EmployeeCard({ Employee }) {
             textTransform: 'uppercase'
           }}
         >
-          {emp.FullName}
+          {GroupName}
         </Label>
         <EmployeeImgStyle alt={emp.FullName} src={emp.Image} />
       </Box>
@@ -56,30 +57,21 @@ export default function EmployeeCard({ Employee }) {
           underline="hover"
           component={RouterLink}
         >
-          <Stack direction="row" alignItems="center" justifyContent="space-between">
+          <Grid container justifyContent="center">
             <Typography variant="h6" noWrap>
-              Chức vụ:
+              [{DepartmentName} / {PositionName}]
             </Typography>
-            <Typography variant="h6" noWrap>
-              {DepartmentName}
+          </Grid>
+          <Grid container justifyContent="center">
+            <Typography variant="h5" noWrap>
+              {emp.FullName}
             </Typography>
-          </Stack>
-          <Stack direction="row" alignItems="center" justifyContent="space-between">
-            <Typography variant="h6" noWrap>
-              Vị trí:
+          </Grid>
+          <Grid container justifyContent="center">
+            <Typography variant="subtitle1" noWrap>
+              {emp.NickName}
             </Typography>
-            <Typography variant="h6" noWrap>
-              {PositionName}
-            </Typography>
-          </Stack>
-          <Stack direction="row" alignItems="center" justifyContent="space-between">
-            <Typography variant="h6" noWrap>
-              Phòng ban:
-            </Typography>
-            <Typography variant="h6" noWrap>
-              {GroupName}
-            </Typography>
-          </Stack>
+          </Grid>
         </Link>
       </Stack>
     </Card>

@@ -79,7 +79,7 @@ export default function EmployeeCard({ Employee }) {
   return (
     <Card sx={{ height: '100%' }}>
       <Box sx={{ pt: '100%', position: 'relative' }}>
-        <EmployeeImgStyle alt={EmployeeName} src={Image1} />
+        <EmployeeImgStyle alt={EmployeeName} src={Employee.emp.Image} />
       </Box>
 
       <Stack spacing={2} sx={{ p: 3 }}>
