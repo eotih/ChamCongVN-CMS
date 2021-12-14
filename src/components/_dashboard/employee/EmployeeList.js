@@ -10,7 +10,6 @@ EmployeeList.propTypes = {
 };
 
 export default function EmployeeList({ Employees, ...other }) {
-  console.log(Employees);
   return (
     <Grid container spacing={3} {...other}>
       {Employees.map((Employee, index) => (

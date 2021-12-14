@@ -1,6 +1,6 @@
-import * as React from 'react';
+/* eslint-disable no-restricted-globals */
 import { Icon } from '@iconify/react';
-import { useRef, useState } from 'react';
+import { useRef, useState, useEffect } from 'react';
 import { useFormik, Form, FormikProvider } from 'formik';
 import editFill from '@iconify/icons-eva/edit-fill';
 import { Link as RouterLink } from 'react-router-dom';
@@ -16,38 +16,37 @@ import {
   Modal,
   Box,
   Stack,
-  Typography,
-  TextField,
   FormControl,
   InputLabel,
-  Select
+  Select,
+  Typography,
+  TextField
 } from '@mui/material';
-import TimePicker from '@mui/lab/TimePicker';
+import { LoadingButton } from '@mui/lab';
 import AdapterDateFns from '@mui/lab/AdapterDateFns';
 import LocalizationProvider from '@mui/lab/LocalizationProvider';
-
-import { LoadingButton } from '@mui/lab';
+import TimePicker from '@mui/lab/TimePicker';
+import DatePicker from '@mui/lab/DatePicker';
 import axios from '../../../functions/Axios';
+import { convertTime } from '../../../utils/formatDatetime';
+import { getAllDepartments } from '../../../functions/Component';
 // ----------------------------------------------------------------------
 
-export default function OvertimeMoreMenu() {
+export default function OvertimeMoreMenu(Overtime) {
   const ref = useRef(null);
-  const [value, setValue] = React.useState(new Date());
-  const [employee, setEmployee] = useState([]);
-  const [employees, setEmployees] = useState([]);
   const [isOpen, setIsOpen] = useState(false);
+  const [timeStart, setTimeStart] = useState([]);
+  const [timeEnd, setTimeEnd] = useState([]);
+  const [department, setDepartment] = useState([]);
+  const [departments, setDepartments] = useState([]);
+  const [date, setDate] = useState(new Date());
   const [open, setOpen] = useState(false);
-  const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
-
-  const convertDateTime = (date) => {
-    const newDate = new Date(date);
-    const hour = newDate.getHours();
-    const min = newDate.getMinutes();
-    const sec = newDate.getSeconds();
-    return `${hour}:${min}:${sec}`;
-  };
-
+  useEffect(() => {
+    getAllDepartments().then((res) => {
+      setDepartment(res);
+    });
+  }, []);
   const style = {
     position: 'relative',
     bgcolor: 'background.paper',
@@ -56,22 +55,34 @@ export default function OvertimeMoreMenu() {
   };
   const formik = useFormik({
     initialValues: {
-      EmployeeID: '',
-      OvertimeionName: '',
-      Reason: '',
-      Amount: '',
+      OverTimeID: '',
+      OvertimeName: '',
+      DepartmentID: '',
+      IsActive: '',
+      Quantity: '',
       CreatedBy: '',
-      remember: true
+      OverTimeDate: date,
+      StartTime: convertTime(timeStart),
+      EndTime: convertTime(timeEnd)
     },
     onSubmit: () => {
       axios
-        .post(`Salary/AddOrEditOvertimeionEmployee`, formik.values)
+        .post(`Organization/AddOrEditOvertime`, {
+          OverTimeID: formik.values.OverTimeID,
+          OvertimeName: formik.values.OvertimeName,
+          DepartmentID: formik.values.DepartmentID,
+          IsActive: formik.values.IsActive,
+          Quantity: formik.values.Quantity,
+          OverTimeDate: date,
+          StartTime: convertTime(timeStart),
+          EndTime: convertTime(timeEnd)
+        })
         .then((res) => {
-          if (res.data.Status === 'Success') {
-            alert('Thêm thành công');
+          if (res.data.Status === 'Updated') {
+            alert('Overtime Updated');
             window.location.reload();
           } else {
-            alert('Thêm thất bại');
+            alert('Overtime not Updated');
           }
         })
         .catch((err) => {
@@ -79,11 +90,36 @@ export default function OvertimeMoreMenu() {
         });
     }
   });
-  const { handleSubmit, getFieldProps } = formik;
-  const handleChange = (event) => {
-    formik.setFieldValue('EmployeeID', event.target.value);
-    setEmployees(event.target.value);
+  const handleChangeIsActive = (event) => {
+    formik.setFieldValue('IsActive', event.target.value);
   };
+  const handleChangeDepartment = (event) => {
+    setDepartments(event.target.value);
+  };
+  const {
+    OverTimeID,
+    OverTimeDate,
+    OverTimeName,
+    StartTime,
+    EndTime,
+    Quantity,
+    IsActive,
+    DepartmentID
+  } = Overtime.dulieu.Overtime;
+  const handleOpen = () => {
+    formik.setFieldValue('OverTimeID', OverTimeID);
+    formik.setFieldValue('OvertimeName', OverTimeName);
+    formik.setFieldValue('OverTimeDate', OverTimeDate);
+    formik.setFieldValue('StartTime', StartTime);
+    formik.setFieldValue('EndTime', EndTime);
+    formik.setFieldValue('Quantity', Quantity);
+    formik.setFieldValue('IsActive', IsActive);
+    formik.setFieldValue('DepartmentID', DepartmentID);
+    setTimeStart(new Date(`12/12/2000 ${StartTime}`));
+    setTimeEnd(new Date(`12/12/2000 ${EndTime}`));
+    setOpen(true);
+  };
+  const { handleSubmit, getFieldProps } = formik;
   return (
     <>
       <IconButton ref={ref} onClick={() => setIsOpen(true)}>
@@ -100,7 +136,21 @@ export default function OvertimeMoreMenu() {
         anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
         transformOrigin={{ vertical: 'top', horizontal: 'right' }}
       >
-        <MenuItem sx={{ color: 'text.secondary' }}>
+        <MenuItem
+          onClick={() => {
+            if (confirm('Are you sure you want to delete this Overtime?')) {
+              axios.delete(`Organization/DeleteOvertime?ID=${OverTimeID}`).then((res) => {
+                if (res.data.Status === 'Delete') {
+                  alert('Overtime Deleted');
+                  window.location.reload();
+                } else {
+                  alert('Overtime Not Deleted');
+                }
+              });
+            }
+          }}
+          sx={{ color: 'text.secondary' }}
+        >
           <ListItemIcon>
             <Icon icon={trash2Outline} width={24} height={24} />
           </ListItemIcon>
@@ -134,7 +184,7 @@ export default function OvertimeMoreMenu() {
               <Box sx={style}>
                 <Stack spacing={1}>
                   <Typography id="modal-modal-title" variant="h6" component="h2">
-                    Add Overtime
+                    Edit Overtime
                   </Typography>
                   <Stack direction={{ xs: 'column', sm: 'row' }} spacing={2}>
                     <TextField
@@ -143,41 +193,86 @@ export default function OvertimeMoreMenu() {
                       {...getFieldProps('OvertimeName')}
                       variant="outlined"
                     />
+                  </Stack>
+                  <Stack direction={{ xs: 'column', sm: 'row' }} spacing={2}>
                     <FormControl fullWidth>
-                      <InputLabel id="demo-simple-select-label">Employee Name</InputLabel>
+                      <InputLabel id="demo-simple-select-label">Department</InputLabel>
                       <Select
                         labelId="select-label"
                         label="Employee"
-                        value={employees}
-                        {...getFieldProps('EmployeeID')}
+                        values={departments}
+                        {...getFieldProps('DepartmentID')}
                         variant="outlined"
-                        onChange={handleChange}
+                        onChange={handleChangeDepartment}
                       >
-                        {employee.map((item) => (
-                          <MenuItem key={item.emp.EmployeeID} value={item.emp.EmployeeID}>
-                            {item.emp.FullName}
+                        {department.map((item) => (
+                          <MenuItem key={item.DepartmentID} value={item.DepartmentID}>
+                            {item.DepartmentName}
                           </MenuItem>
                         ))}
                       </Select>
                     </FormControl>
+                    <LocalizationProvider dateAdapter={AdapterDateFns}>
+                      <DatePicker
+                        label="OverTime Date"
+                        views={['day', 'month', 'year']}
+                        value={date}
+                        onChange={(newValue) => {
+                          setDate(newValue);
+                        }}
+                        renderInput={(params) => <TextField {...params} />}
+                      />
+                    </LocalizationProvider>
                   </Stack>
                   <Stack direction={{ xs: 'column', sm: 'row' }} spacing={2}>
                     <LocalizationProvider dateAdapter={AdapterDateFns}>
                       <TimePicker
-                        value={value}
-                        onChange={setValue}
+                        label="Time Start"
+                        views={['hours', 'minutes', 'seconds']}
+                        inputFormat="HH:mm:ss"
+                        value={timeStart}
+                        onChange={(newValue) => {
+                          setTimeStart(newValue);
+                        }}
                         renderInput={(params) => <TextField {...params} />}
                       />
                     </LocalizationProvider>
+                    <LocalizationProvider dateAdapter={AdapterDateFns}>
+                      <TimePicker
+                        label="Time End"
+                        value={timeEnd}
+                        views={['hours', 'minutes', 'seconds']}
+                        inputFormat="HH:mm:ss"
+                        onChange={(newValue) => {
+                          setTimeEnd(newValue);
+                        }}
+                        renderInput={(params) => <TextField {...params} />}
+                      />
+                    </LocalizationProvider>
+                  </Stack>
+                  <Stack direction={{ xs: 'column', sm: 'row' }} spacing={2}>
+                    <FormControl fullWidth>
+                      <InputLabel id="demo-simple-select-label">IsActive</InputLabel>
+                      <Select
+                        labelId="select-label"
+                        label="IsActive"
+                        {...getFieldProps('IsActive')}
+                        variant="outlined"
+                        onChange={handleChangeIsActive}
+                      >
+                        <MenuItem value={1}>Active</MenuItem>
+                        <MenuItem value={0}>No Active</MenuItem>
+                      </Select>
+                    </FormControl>
                     <TextField
                       fullWidth
-                      label="Overtime type"
-                      {...getFieldProps('OvertimeType')}
+                      label="Quantity"
+                      {...getFieldProps('Quantity')}
                       variant="outlined"
                     />
                   </Stack>
                   <LoadingButton fullWidth size="large" type="submit" variant="contained">
-                    Add Overtime
+                    Edit Overtime
                   </LoadingButton>
                 </Stack>
               </Box>

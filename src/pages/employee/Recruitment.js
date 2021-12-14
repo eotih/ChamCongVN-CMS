@@ -37,6 +37,7 @@ import {
   RecruitmentMoreMenu
 } from '../../components/_dashboard/recruitment';
 import { getAllRecruitments } from '../../functions/Employee';
+import { convertDate } from '../../utils/formatDatetime';
 //
 
 // ----------------------------------------------------------------------
@@ -106,13 +107,6 @@ export default function Recruitment() {
     const isAsc = orderBy === property && order === 'asc';
     setOrder(isAsc ? 'desc' : 'asc');
     setOrderBy(property);
-  };
-  const convertDateTime = (date) => {
-    const newDate = new Date(date);
-    const day = newDate.getDate();
-    const month = newDate.getMonth() + 1;
-    const year = newDate.getFullYear();
-    return `${day}/${month}/${year}`;
   };
   const handleSelectAllClick = (event) => {
     if (event.target.checked) {
@@ -289,7 +283,7 @@ export default function Recruitment() {
                           <TableCell align="left">{FullName}</TableCell>
                           <TableCell align="left">{Email}</TableCell>
                           <TableCell align="left">{Gender}</TableCell>
-                          <TableCell align="left">{convertDateTime(DateOfBirth)}</TableCell>
+                          <TableCell align="left">{convertDate(DateOfBirth)}</TableCell>
                           <TableCell align="left">{Address}</TableCell>
                           <TableCell align="left">{TemporaryAddress}</TableCell>
                           <TableCell align="left">{Phone}</TableCell>

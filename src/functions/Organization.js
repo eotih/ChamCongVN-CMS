@@ -16,6 +16,10 @@ async function getAllShift() {
   const res = await Axios.get('Organization/GetAllShift');
   return res.data;
 }
+async function getAllOvertimes() {
+  const res = await Axios.get('Organization/GetAllOverTime');
+  return res.data;
+}
 async function getAllRole() {
   const res = await Axios.get('Organization/GetAllRole');
   return res.data;
@@ -31,6 +35,7 @@ async function getAllLevels() {
 export {
   getAllRole,
   getAllShift,
+  getAllOvertimes,
   getAllPosition,
   getAllAccount,
   getAllOrganization,

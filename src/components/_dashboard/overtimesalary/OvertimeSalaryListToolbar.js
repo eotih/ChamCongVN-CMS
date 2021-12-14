@@ -39,12 +39,12 @@ const SearchStyle = styled(OutlinedInput)(({ theme }) => ({
 
 // ----------------------------------------------------------------------
 
-OvertimeShiftListToolbar.propTypes = {
+OvertimeListToolbar.propTypes = {
   numSelected: PropTypes.number,
   filterName: PropTypes.string,
   onFilterName: PropTypes.func
 };
-export default function OvertimeShiftListToolbar({ numSelected, filterName, onFilterName }) {
+export default function OvertimeListToolbar({ numSelected, filterName, onFilterName }) {
   return (
     <RootStyle
       sx={{
@@ -62,7 +62,7 @@ export default function OvertimeShiftListToolbar({ numSelected, filterName, onFi
         <SearchStyle
           value={filterName}
           onChange={onFilterName}
-          placeholder="Search shift..."
+          placeholder="Search Salary Overtime..."
           startAdornment={
             <InputAdornment position="start">
               <Box component={Icon} icon={searchFill} sx={{ color: 'text.disabled' }} />

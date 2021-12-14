@@ -1,6 +1,7 @@
 /* eslint-disable no-restricted-globals */
+/* eslint-disable import/no-unresolved */
 import { Icon } from '@iconify/react';
-import { useRef, useState } from 'react';
+import { useRef, useState, useEffect } from 'react';
 import { useFormik, Form, FormikProvider } from 'formik';
 import editFill from '@iconify/icons-eva/edit-fill';
 import { Link as RouterLink } from 'react-router-dom';
@@ -17,31 +18,28 @@ import {
   Box,
   Stack,
   Typography,
+  InputLabel,
+  FormControl,
+  Select,
   TextField
 } from '@mui/material';
 import { LoadingButton } from '@mui/lab';
-import AdapterDateFns from '@mui/lab/AdapterDateFns';
-import LocalizationProvider from '@mui/lab/LocalizationProvider';
-import TimePicker from '@mui/lab/TimePicker';
+import { getAllPosition } from '../../../functions/Organization';
 import axios from '../../../functions/Axios';
-import { convertTime } from '../../../utils/formatDatetime';
 // ----------------------------------------------------------------------
 
-export default function ShiftMoreMenu(Shift) {
+export default function LevelMoreMenu(Level) {
   const ref = useRef(null);
   const [isOpen, setIsOpen] = useState(false);
-  const [timeStart, setTimeStart] = useState([]);
-  const [timeEnd, setTimeEnd] = useState([]);
   const [open, setOpen] = useState(false);
+  const [position, setPosition] = useState([]);
+  const [positions, setPositions] = useState([]);
   const handleClose = () => setOpen(false);
-
-  const convertTime = (date) => {
-    const newDate = new Date(date);
-    const hour = newDate.getHours();
-    const min = newDate.getMinutes();
-    const sec = newDate.getSeconds();
-    return `${hour}:${min}:${sec}`;
-  };
+  useEffect(() => {
+    getAllPosition().then((res) => {
+      setPosition(res);
+    });
+  }, []);
   const style = {
     position: 'relative',
     bgcolor: 'background.paper',
@@ -50,25 +48,18 @@ export default function ShiftMoreMenu(Shift) {
   };
   const formik = useFormik({
     initialValues: {
-      ShiftID: '',
-      ShiftName: '',
-      StartShift: convertTime(timeStart),
-      EndShift: convertTime(timeEnd)
+      LevelName: '',
+      remember: true
     },
     onSubmit: () => {
       axios
-        .post(`Organization/AddOrEditShift`, {
-          ShiftID: formik.values.ShiftID,
-          ShiftName: formik.values.ShiftName,
-          StartShift: convertTime(timeStart),
-          EndShift: convertTime(timeEnd)
-        })
+        .post(`Organization/AddOrEditLevel`, formik.values)
         .then((res) => {
           if (res.data.Status === 'Updated') {
-            alert('Shift Updated');
+            alert('Level Updated');
             window.location.reload();
           } else {
-            alert('Shift not Updated');
+            alert('Level not Updated');
           }
         })
         .catch((err) => {
@@ -76,16 +67,20 @@ export default function ShiftMoreMenu(Shift) {
         });
     }
   });
+  const { LevelID, LevelName, Coefficient, PositionID } = Level.dulieu.Level;
   const handleOpen = () => {
-    formik.setFieldValue('ShiftID', Shift.dulieu.ShiftID);
-    formik.setFieldValue('ShiftName', Shift.dulieu.ShiftName);
-    formik.setFieldValue('StartShift', Shift.dulieu.StartShift);
-    formik.setFieldValue('EndShift', Shift.dulieu.EndShift);
-    setTimeStart(new Date(`12/12/2000 ${Shift.dulieu.StartShift}`));
-    setTimeEnd(new Date(`12/12/2000 ${Shift.dulieu.EndShift}`));
+    formik.setFieldValue('LevelID', LevelID);
+    formik.setFieldValue('PositionID', PositionID);
+    formik.setFieldValue('LevelName', LevelName);
+    formik.setFieldValue('Coefficient', Coefficient);
     setOpen(true);
   };
+  const handleChangePostion = (event) => {
+    formik.setFieldValue('PositionID', event.target.value);
+    setPositions(event.target.value);
+  };
   const { handleSubmit, getFieldProps } = formik;
+
   return (
     <>
       <IconButton ref={ref} onClick={() => setIsOpen(true)}>
@@ -104,13 +99,13 @@ export default function ShiftMoreMenu(Shift) {
       >
         <MenuItem
           onClick={() => {
-            if (confirm('Are you sure you want to delete this shift?')) {
-              axios.delete(`Organization/DeleteShift?ID=${Shift.dulieu.ShiftID}`).then((res) => {
+            if (confirm('Are you sure you want to delete this Level?')) {
+              axios.delete(`Organization/DeleteLevel?ID=${LevelID}`).then((res) => {
                 if (res.data.Status === 'Delete') {
-                  alert('Shift Deleted');
+                  alert('Level Deleted');
                   window.location.reload();
                 } else {
-                  alert('Shift Not Deleted');
+                  alert('Level Not Deleted');
                 }
               });
             }
@@ -150,44 +145,43 @@ export default function ShiftMoreMenu(Shift) {
               <Box sx={style}>
                 <Stack spacing={1}>
                   <Typography id="modal-modal-title" variant="h6" component="h2">
-                    Edit Shift
+                    Edit Level
                   </Typography>
+                  <FormControl fullWidth>
+                    <InputLabel id="demo-simple-select-label">Position</InputLabel>
+                    <Select
+                      labelId="demo-simple-select-label"
+                      id="demo-simple-select"
+                      value={positions}
+                      {...getFieldProps('PositionID')}
+                      label="Position"
+                      onChange={handleChangePostion}
+                    >
+                      {position.map((item) => (
+                        <MenuItem key={item.PositionID} value={item.PositionID}>
+                          {item.PositionName}
+                        </MenuItem>
+                      ))}
+                    </Select>
+                  </FormControl>
                   <Stack direction={{ xs: 'column', sm: 'row' }} spacing={2}>
                     <TextField
                       fullWidth
-                      label="Shift Name"
-                      {...getFieldProps('ShiftName')}
+                      label="Level Name"
+                      {...getFieldProps('LevelName')}
                       variant="outlined"
                     />
                   </Stack>
                   <Stack direction={{ xs: 'column', sm: 'row' }} spacing={2}>
-                    <LocalizationProvider dateAdapter={AdapterDateFns}>
-                      <TimePicker
-                        label="Time Start"
-                        views={['hours', 'minutes', 'seconds']}
-                        value={timeStart}
-                        inputFormat="HH:mm:ss"
-                        onChange={(newValue) => {
-                          setTimeStart(newValue);
-                        }}
-                        renderInput={(params) => <TextField {...params} />}
-                      />
-                    </LocalizationProvider>
-                    <LocalizationProvider dateAdapter={AdapterDateFns}>
-                      <TimePicker
-                        label="Time End"
-                        value={timeEnd}
-                        views={['hours', 'minutes', 'seconds']}
-                        inputFormat="HH:mm:ss"
-                        onChange={(newValue) => {
-                          setTimeEnd(newValue);
-                        }}
-                        renderInput={(params) => <TextField {...params} />}
-                      />
-                    </LocalizationProvider>
+                    <TextField
+                      fullWidth
+                      label="Coefficient"
+                      {...getFieldProps('Coefficient')}
+                      variant="outlined"
+                    />
                   </Stack>
                   <LoadingButton fullWidth size="large" type="submit" variant="contained">
-                    Edit Shift
+                    Edit Level
                   </LoadingButton>
                 </Stack>
               </Box>

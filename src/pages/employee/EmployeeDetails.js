@@ -46,8 +46,6 @@ export default function EmployeeDetails() {
     WorkName,
     Employee
   } = employee;
-  console.log(ListDegree);
-  console.log(ListSpeciality);
   const { resetForm, handleSubmit } = formik;
 
   const handleOpenFilter = () => {

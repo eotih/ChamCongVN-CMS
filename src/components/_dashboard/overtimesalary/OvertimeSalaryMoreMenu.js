@@ -1,4 +1,4 @@
-/* eslint-disable no-restricted-globals */
+import * as React from 'react';
 import { Icon } from '@iconify/react';
 import { useRef, useState } from 'react';
 import { useFormik, Form, FormikProvider } from 'formik';
@@ -17,30 +17,29 @@ import {
   Box,
   Stack,
   Typography,
-  TextField
+  TextField,
+  FormControl,
+  InputLabel,
+  Select
 } from '@mui/material';
-import { LoadingButton } from '@mui/lab';
+import TimePicker from '@mui/lab/TimePicker';
 import AdapterDateFns from '@mui/lab/AdapterDateFns';
 import LocalizationProvider from '@mui/lab/LocalizationProvider';
-import TimePicker from '@mui/lab/TimePicker';
+
+import { LoadingButton } from '@mui/lab';
 import axios from '../../../functions/Axios';
 // ----------------------------------------------------------------------
 
-export default function OvertimeShiftMoreMenu(Shift) {
+export default function OvertimeMoreMenu() {
   const ref = useRef(null);
+  const [value, setValue] = React.useState(new Date());
+  const [employee, setEmployee] = useState([]);
+  const [employees, setEmployees] = useState([]);
   const [isOpen, setIsOpen] = useState(false);
-  const [timeStart, setTimeStart] = useState([]);
-  const [timeEnd, setTimeEnd] = useState([]);
   const [open, setOpen] = useState(false);
+  const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
 
-  const convertDateTime = (date) => {
-    const newDate = new Date(date);
-    const hour = newDate.getHours();
-    const min = newDate.getMinutes();
-    const sec = newDate.getSeconds();
-    return `${hour}:${min}:${sec}`;
-  };
   const style = {
     position: 'relative',
     bgcolor: 'background.paper',
@@ -49,25 +48,22 @@ export default function OvertimeShiftMoreMenu(Shift) {
   };
   const formik = useFormik({
     initialValues: {
-      ShiftID: '',
-      ShiftName: '',
-      StartShift: convertDateTime(timeStart),
-      EndShift: convertDateTime(timeEnd)
+      EmployeeID: '',
+      OvertimeionName: '',
+      Reason: '',
+      Amount: '',
+      CreatedBy: '',
+      remember: true
     },
     onSubmit: () => {
       axios
-        .post(`Organization/AddOrEditShift`, {
-          ShiftID: formik.values.ShiftID,
-          ShiftName: formik.values.ShiftName,
-          StartShift: convertDateTime(timeStart),
-          EndShift: convertDateTime(timeEnd)
-        })
+        .post(`Salary/AddOrEditOvertimeionEmployee`, formik.values)
         .then((res) => {
-          if (res.data.Status === 'Updated') {
-            alert('Shift Updated');
+          if (res.data.Status === 'Success') {
+            alert('Thêm thành công');
             window.location.reload();
           } else {
-            alert('Shift not Updated');
+            alert('Thêm thất bại');
           }
         })
         .catch((err) => {
@@ -75,16 +71,11 @@ export default function OvertimeShiftMoreMenu(Shift) {
         });
     }
   });
-  const handleOpen = () => {
-    formik.setFieldValue('ShiftID', Shift.dulieu.ShiftID);
-    formik.setFieldValue('ShiftName', Shift.dulieu.ShiftName);
-    formik.setFieldValue('StartShift', Shift.dulieu.StartShift);
-    formik.setFieldValue('EndShift', Shift.dulieu.EndShift);
-    setTimeStart(new Date(`12/12/2000 ${Shift.dulieu.StartShift}`));
-    setTimeEnd(new Date(`12/12/2000 ${Shift.dulieu.EndShift}`));
-    setOpen(true);
-  };
   const { handleSubmit, getFieldProps } = formik;
+  const handleChange = (event) => {
+    formik.setFieldValue('EmployeeID', event.target.value);
+    setEmployees(event.target.value);
+  };
   return (
     <>
       <IconButton ref={ref} onClick={() => setIsOpen(true)}>
@@ -101,21 +92,7 @@ export default function OvertimeShiftMoreMenu(Shift) {
         anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
         transformOrigin={{ vertical: 'top', horizontal: 'right' }}
       >
-        <MenuItem
-          onClick={() => {
-            if (confirm('Are you sure you want to delete this shift?')) {
-              axios.delete(`Organization/DeleteShift?ID=${Shift.dulieu.ShiftID}`).then((res) => {
-                if (res.data.Status === 'Delete') {
-                  alert('Shift Deleted');
-                  window.location.reload();
-                } else {
-                  alert('Shift Not Deleted');
-                }
-              });
-            }
-          }}
-          sx={{ color: 'text.secondary' }}
-        >
+        <MenuItem sx={{ color: 'text.secondary' }}>
           <ListItemIcon>
             <Icon icon={trash2Outline} width={24} height={24} />
           </ListItemIcon>
@@ -149,44 +126,50 @@ export default function OvertimeShiftMoreMenu(Shift) {
               <Box sx={style}>
                 <Stack spacing={1}>
                   <Typography id="modal-modal-title" variant="h6" component="h2">
-                    Edit Shift
+                    Add Overtime
                   </Typography>
                   <Stack direction={{ xs: 'column', sm: 'row' }} spacing={2}>
                     <TextField
                       fullWidth
-                      label="Shift Name"
-                      {...getFieldProps('ShiftName')}
+                      label="Overtime Name"
+                      {...getFieldProps('OvertimeName')}
                       variant="outlined"
                     />
+                    <FormControl fullWidth>
+                      <InputLabel id="demo-simple-select-label">Employee Name</InputLabel>
+                      <Select
+                        labelId="select-label"
+                        label="Employee"
+                        value={employees}
+                        {...getFieldProps('EmployeeID')}
+                        variant="outlined"
+                        onChange={handleChange}
+                      >
+                        {employee.map((item) => (
+                          <MenuItem key={item.emp.EmployeeID} value={item.emp.EmployeeID}>
+                            {item.emp.FullName}
+                          </MenuItem>
+                        ))}
+                      </Select>
+                    </FormControl>
                   </Stack>
                   <Stack direction={{ xs: 'column', sm: 'row' }} spacing={2}>
                     <LocalizationProvider dateAdapter={AdapterDateFns}>
                       <TimePicker
-                        label="Time Start"
-                        views={['hours', 'minutes', 'seconds']}
-                        value={timeStart}
-                        inputFormat="HH:mm:ss"
-                        onChange={(newValue) => {
-                          setTimeStart(newValue);
-                        }}
+                        value={value}
+                        onChange={setValue}
                         renderInput={(params) => <TextField {...params} />}
                       />
                     </LocalizationProvider>
-                    <LocalizationProvider dateAdapter={AdapterDateFns}>
-                      <TimePicker
-                        label="Time End"
-                        value={timeEnd}
-                        views={['hours', 'minutes', 'seconds']}
-                        inputFormat="HH:mm:ss"
-                        onChange={(newValue) => {
-                          setTimeEnd(newValue);
-                        }}
-                        renderInput={(params) => <TextField {...params} />}
-                      />
-                    </LocalizationProvider>
+                    <TextField
+                      fullWidth
+                      label="Overtime type"
+                      {...getFieldProps('OvertimeType')}
+                      variant="outlined"
+                    />
                   </Stack>
                   <LoadingButton fullWidth size="large" type="submit" variant="contained">
-                    Edit Shift
+                    Add Overtime
                   </LoadingButton>
                 </Stack>
               </Box>

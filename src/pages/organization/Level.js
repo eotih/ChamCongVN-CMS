@@ -1,5 +1,4 @@
 /* eslint-disable jsx-a11y/label-has-associated-control */
-import * as React from 'react';
 import { filter } from 'lodash';
 import { Icon } from '@iconify/react';
 import { useState, useEffect } from 'react';
@@ -22,15 +21,8 @@ import {
   TablePagination,
   Modal,
   TextField,
-  Box,
-  FormControl,
-  InputLabel,
-  Select,
-  MenuItem
+  Box
 } from '@mui/material';
-import AdapterDateFns from '@mui/lab/AdapterDateFns';
-import LocalizationProvider from '@mui/lab/LocalizationProvider';
-import DatePicker from '@mui/lab/DatePicker';
 
 import { LoadingButton } from '@mui/lab';
 import axios from '../../functions/Axios';
@@ -38,23 +30,17 @@ import axios from '../../functions/Axios';
 import Page from '../../components/Page';
 import Scrollbar from '../../components/Scrollbar';
 import SearchNotFound from '../../components/SearchNotFound';
-import {
-  SalarytbListHead,
-  SalarytbListToolbar,
-  SalarytbMoreMenu
-} from '../../components/_dashboard/salarytable';
-import { getAllSalaryTables } from '../../functions/Salary';
+import { LevelListHead, LevelListToolbar, LevelMoreMenu } from '../../components/_dashboard/level';
+import { getAllLevels } from '../../functions/Organization';
 //
 
 // ----------------------------------------------------------------------
 
 const TABLE_HEAD = [
-  { id: 'SalaryTableID', label: 'SalaryTableID', alignRight: false },
-  { id: 'SalaryTableName', label: 'SalaryTable Name', alignRight: false },
-  { id: 'Month', label: 'Month', alignRight: false },
-  { id: 'Year', label: 'Year', alignRight: false },
-  { id: 'MinSalary', label: 'Min Salary', alignRight: false },
-  { id: 'TotalTimeRegulation', label: 'Total Time Regulation', alignRight: false },
+  { id: 'LevelID', label: 'LevelID', alignRight: false },
+  { id: 'PositionName', label: 'Position Name', alignRight: false },
+  { id: 'LevelName', label: 'Level Name', alignRight: false },
+  { id: 'Coefficient', label: 'Coefficient', alignRight: false },
   { id: '' }
 ];
 
@@ -89,23 +75,21 @@ function applySortFilter(array, comparator, query) {
   return stabilizedThis.map((el) => el[0]);
 }
 
-export default function User() {
+export default function Level() {
   const [page, setPage] = useState(0);
-  const [year, setYear] = React.useState(new Date());
-  const [month, setMonth] = React.useState('');
   const [order, setOrder] = useState('asc');
   const [selected, setSelected] = useState([]);
   const [orderBy, setOrderBy] = useState('name');
   const [filterName, setFilterName] = useState('');
-  const [salarytable, setSalaryTable] = useState([]);
+  const [level, setLevel] = useState([]);
   const [rowsPerPage, setRowsPerPage] = useState(5);
   const [open, setOpen] = useState(false);
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
 
   useEffect(() => {
-    getAllSalaryTables().then((res) => {
-      setSalaryTable(res);
+    getAllLevels().then((res) => {
+      setLevel(res);
     });
   }, []);
   const handleRequestSort = (event, property) => {
@@ -116,7 +100,7 @@ export default function User() {
 
   const handleSelectAllClick = (event) => {
     if (event.target.checked) {
-      const newSelecteds = salarytable.map((n) => n.name);
+      const newSelecteds = level.map((n) => n.name);
       setSelected(newSelecteds);
       return;
     }
@@ -144,11 +128,7 @@ export default function User() {
   const handleChangePage = (event, newPage) => {
     setPage(newPage);
   };
-  const convertDate = (date) => {
-    const newDate = new Date(date);
-    const years = newDate.getFullYear();
-    return `${years}`;
-  };
+
   const handleChangeRowsPerPage = (event) => {
     setRowsPerPage(parseInt(event.target.value, 10));
     setPage(0);
@@ -165,23 +145,12 @@ export default function User() {
   };
   const formik = useFormik({
     initialValues: {
-      SalaryTableName: '',
-      Month: '',
-      Year: convertDate(year),
-      MinSalary: '',
-      TotalTimeRegulation: '',
-      CreatedBy: '',
+      LevelName: '',
       remember: true
     },
     onSubmit: () => {
       axios
-        .post(`Salary/AddOrEditSalaryTable`, {
-          SalaryTableName: formik.values.SalaryTableName,
-          Month: formik.values.SalaryTableName,
-          MinSalary: formik.values.SalaryTableName,
-          TotalTimeRegulation: formik.values.SalaryTableName,
-          Year: convertDate(year)
-        })
+        .post(`Organization/AddOrEditlevel`, formik.values)
         .then((res) => {
           if (res.data.Status === 'Success') {
             alert('Thêm thành công');
@@ -195,20 +164,16 @@ export default function User() {
         });
     }
   });
-  const handleChange = (event) => {
-    formik.setFieldValue('Month', event.target.value);
-    setMonth(event.target.value);
-  };
   const { handleSubmit, getFieldProps } = formik;
 
-  const emptyRows = page > 0 ? Math.max(0, (1 + page) * rowsPerPage - salarytable.length) : 0;
+  const emptyRows = page > 0 ? Math.max(0, (1 + page) * rowsPerPage - level.length) : 0;
 
-  const filteredUsers = applySortFilter(salarytable, getComparator(order, orderBy), filterName);
+  const filteredUsers = applySortFilter(level, getComparator(order, orderBy), filterName);
 
   const isUserNotFound = filteredUsers.length === 0;
 
   return (
-    <Page title="Salary Table | ChamCongVN">
+    <Page title="Level | ChamCongVN">
       <Modal
         open={open}
         sx={{
@@ -225,68 +190,18 @@ export default function User() {
             <Box sx={style}>
               <Stack spacing={1}>
                 <Typography id="modal-modal-title" variant="h6" component="h2">
-                  Add Salary Table
+                  Add Level
                 </Typography>
                 <Stack direction={{ xs: 'column', sm: 'row' }} spacing={2}>
                   <TextField
                     fullWidth
-                    label="Salary Table Name"
-                    {...getFieldProps('SalaryTableName')}
-                    variant="outlined"
-                  />
-                </Stack>
-                <Stack direction={{ xs: 'column', sm: 'row' }} spacing={2}>
-                  <FormControl fullWidth>
-                    <InputLabel id="demo-simple-select-label">Month</InputLabel>
-                    <Select
-                      labelId="demo-simple-select-label"
-                      id="demo-simple-select"
-                      value={month}
-                      label="Month"
-                      onChange={handleChange}
-                    >
-                      <MenuItem value={1}>January</MenuItem>
-                      <MenuItem value={2}>February</MenuItem>
-                      <MenuItem value={3}>March</MenuItem>
-                      <MenuItem value={4}>April</MenuItem>
-                      <MenuItem value={5}>May</MenuItem>
-                      <MenuItem value={6}>June</MenuItem>
-                      <MenuItem value={7}>July</MenuItem>
-                      <MenuItem value={8}>August</MenuItem>
-                      <MenuItem value={9}>September</MenuItem>
-                      <MenuItem value={10}>October</MenuItem>
-                      <MenuItem value={11}>November</MenuItem>
-                      <MenuItem value={12}>December</MenuItem>
-                    </Select>
-                  </FormControl>
-                  <LocalizationProvider dateAdapter={AdapterDateFns}>
-                    <DatePicker
-                      views={['year']}
-                      label="Year"
-                      value={year}
-                      onChange={(newValue) => {
-                        setYear(newValue);
-                      }}
-                      renderInput={(params) => <TextField {...params} helperText={null} />}
-                    />
-                  </LocalizationProvider>
-                </Stack>
-                <Stack direction={{ xs: 'column', sm: 'row' }} spacing={2}>
-                  <TextField
-                    fullWidth
-                    label="Min Salary"
-                    {...getFieldProps('MinSalary')}
-                    variant="outlined"
-                  />
-                  <TextField
-                    fullWidth
-                    label="Total Time Regulation"
-                    {...getFieldProps('TotalTimeRegulation')}
+                    label="Level Name"
+                    {...getFieldProps('LevelName')}
                     variant="outlined"
                   />
                 </Stack>
                 <LoadingButton fullWidth size="large" type="submit" variant="contained">
-                  Add Salary Table
+                  Add Level
                 </LoadingButton>
               </Stack>
             </Box>
@@ -296,7 +211,7 @@ export default function User() {
       <Container>
         <Stack direction="row" alignItems="center" justifyContent="space-between" mb={5}>
           <Typography variant="h4" gutterBottom>
-            Salary Table
+            Level
           </Typography>
           <Button
             onClick={handleOpen}
@@ -305,12 +220,12 @@ export default function User() {
             to="#"
             startIcon={<Icon icon={plusFill} />}
           >
-            New Salary Table
+            New Level
           </Button>
         </Stack>
 
         <Card>
-          <SalarytbListToolbar
+          <LevelListToolbar
             numSelected={selected.length}
             filterName={filterName}
             onFilterName={handleFilterByName}
@@ -319,56 +234,46 @@ export default function User() {
           <Scrollbar>
             <TableContainer sx={{ minWidth: 800 }}>
               <Table>
-                <SalarytbListHead
+                <LevelListHead
                   order={order}
                   orderBy={orderBy}
                   headLabel={TABLE_HEAD}
-                  rowCount={salarytable.length}
+                  rowCount={level.length}
                   numSelected={selected.length}
                   onRequestSort={handleRequestSort}
                   onSelectAllClick={handleSelectAllClick}
                 />
                 <TableBody>
-                  {salarytable
-                    .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-                    .map((row) => {
-                      const {
-                        SalaryTableID,
-                        SalaryTableName,
-                        Month,
-                        Year,
-                        MinSalary,
-                        TotalTimeRegulation
-                      } = row;
-                      const isItemSelected = selected.indexOf(SalaryTableName) !== -1;
+                  {level.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((row) => {
+                    const { LevelID, LevelName, Coefficient } = row.Level;
+                    const { PositionName } = row;
+                    const isItemSelected = selected.indexOf(LevelName) !== -1;
 
-                      return (
-                        <TableRow
-                          hover
-                          key={SalaryTableID}
-                          tabIndex={-1}
-                          role="checkbox"
-                          selected={isItemSelected}
-                          aria-checked={isItemSelected}
-                        >
-                          <TableCell padding="checkbox">
-                            <Checkbox
-                              checked={isItemSelected}
-                              onChange={(event) => handleClick(event, SalaryTableName)}
-                            />
-                          </TableCell>
-                          <TableCell align="left">{SalaryTableID}</TableCell>
-                          <TableCell align="left">{SalaryTableName}</TableCell>
-                          <TableCell align="left">{Month}</TableCell>
-                          <TableCell align="left">{Year}</TableCell>
-                          <TableCell align="left">{MinSalary}</TableCell>
-                          <TableCell align="left">{TotalTimeRegulation}</TableCell>
-                          <TableCell align="right">
-                            <SalarytbMoreMenu dulieu={row} />
-                          </TableCell>
-                        </TableRow>
-                      );
-                    })}
+                    return (
+                      <TableRow
+                        hover
+                        key={LevelID}
+                        tabIndex={-1}
+                        level="checkbox"
+                        selected={isItemSelected}
+                        aria-checked={isItemSelected}
+                      >
+                        <TableCell padding="checkbox">
+                          <Checkbox
+                            checked={isItemSelected}
+                            onChange={(event) => handleClick(event, LevelName)}
+                          />
+                        </TableCell>
+                        <TableCell align="left">{LevelID}</TableCell>
+                        <TableCell align="left">{PositionName}</TableCell>
+                        <TableCell align="left">{LevelName}</TableCell>
+                        <TableCell align="left">{Coefficient}</TableCell>
+                        <TableCell align="right">
+                          <LevelMoreMenu dulieu={row} />
+                        </TableCell>
+                      </TableRow>
+                    );
+                  })}
                   {emptyRows > 0 && (
                     <TableRow style={{ height: 53 * emptyRows }}>
                       <TableCell colSpan={6} />
@@ -391,7 +296,7 @@ export default function User() {
           <TablePagination
             rowsPerPageOptions={[5, 10, 25]}
             component="div"
-            count={salarytable.length}
+            count={level.length}
             rowsPerPage={rowsPerPage}
             page={page}
             onPageChange={handleChangePage}

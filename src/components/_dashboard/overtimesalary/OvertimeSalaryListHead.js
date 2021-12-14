@@ -5,7 +5,7 @@ import { Box, Checkbox, TableRow, TableCell, TableHead, TableSortLabel } from '@
 
 // ----------------------------------------------------------------------
 
-OvertimeListToolbar.propTypes = {
+OvertimeListHead.propTypes = {
   order: PropTypes.oneOf(['asc', 'desc']),
   orderBy: PropTypes.string,
   rowCount: PropTypes.number,
@@ -15,7 +15,7 @@ OvertimeListToolbar.propTypes = {
   onSelectAllClick: PropTypes.func
 };
 
-export default function OvertimeListToolbar({
+export default function OvertimeListHead({
   order,
   orderBy,
   rowCount,

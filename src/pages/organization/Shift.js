@@ -38,7 +38,7 @@ import { ShiftListHead, ShiftListToolbar, ShiftMoreMenu } from '../../components
 //
 
 import { getAllShift } from '../../functions/Organization';
-
+import { convertTime } from '../../utils/formatDatetime';
 // ----------------------------------------------------------------------
 
 const TABLE_HEAD = [
@@ -133,13 +133,6 @@ export default function Shift() {
     setSelected(newSelected);
   };
 
-  const convertDateTime = (date) => {
-    const newDate = new Date(date);
-    const hour = newDate.getHours();
-    const min = newDate.getMinutes();
-    const sec = newDate.getSeconds();
-    return `${hour}:${min}:${sec}`;
-  };
   const handleChangePage = (event, newPage) => {
     setPage(newPage);
   };
@@ -161,15 +154,15 @@ export default function Shift() {
   const formik = useFormik({
     initialValues: {
       ShiftName: '',
-      StartShift: convertDateTime(timeStart),
-      EndShift: convertDateTime(timeEnd)
+      StartShift: convertTime(timeStart),
+      EndShift: convertTime(timeEnd)
     },
     onSubmit: () => {
       axios
         .post(`Organization/AddOrEditShift`, {
           ShiftName: formik.values.ShiftName,
-          StartShift: convertDateTime(timeStart),
-          EndShift: convertDateTime(timeEnd)
+          StartShift: convertTime(timeStart),
+          EndShift: convertTime(timeEnd)
         })
         .then((res) => {
           if (res.data.Status === 'Success') {

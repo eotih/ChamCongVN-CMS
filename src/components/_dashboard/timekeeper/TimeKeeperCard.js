@@ -45,7 +45,7 @@ export default function TimeKeeperCards({ time }) {
               Đúng giờ
             </Typography>
             <Typography variant="subtitle1" sx={{ color: 'white', p: 2, pt: 1 }}>
-              {convertDateTime(CheckInCreatedAt)}
+              {convertDate(CheckInCreatedAt)}
             </Typography>
           </Grid>
         </>
@@ -66,7 +66,7 @@ export default function TimeKeeperCards({ time }) {
               Đi muộn
             </Typography>
             <Typography variant="subtitle1" sx={{ color: 'white', p: 2, pt: 1 }}>
-              {convertDateTime(CheckInCreatedAt)}
+              {convertDate(CheckInCreatedAt)}
             </Typography>
           </Grid>
         </>
@@ -89,7 +89,7 @@ export default function TimeKeeperCards({ time }) {
               Đúng giờ
             </Typography>
             <Typography variant="subtitle1" sx={{ color: 'white', p: 2, pt: 1 }}>
-              {convertDateTime(CheckOutCreatedAt)}
+              {convertDate(CheckOutCreatedAt)}
             </Typography>
           </Grid>
         </>
@@ -110,14 +110,14 @@ export default function TimeKeeperCards({ time }) {
               Về sớm
             </Typography>
             <Typography variant="subtitle1" sx={{ color: 'white', p: 2, pt: 1 }}>
-              {convertDateTime(CheckOutCreatedAt)}
+              {convertDate(CheckOutCreatedAt)}
             </Typography>
           </Grid>
         </>
       );
     }
   };
-  const convertDateTime = (date) => {
+  const convertDate = (date) => {
     const dateTime = new Date(date);
     const options = {
       year: 'numeric',

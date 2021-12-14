@@ -41,6 +41,7 @@ import SearchNotFound from '../../components/SearchNotFound';
 import { SalaryListHead, SalaryListToolbar } from '../../components/_dashboard/salary';
 import { getAllSalarys } from '../../functions/Salary';
 import { getAllEmployees } from '../../functions/Employee';
+import { convertDate } from '../../utils/formatDatetime';
 //
 
 // ----------------------------------------------------------------------
@@ -153,13 +154,6 @@ export default function User() {
   const handleFilterByName = (event) => {
     setFilterName(event.target.value);
   };
-  const convertDateTime = (date) => {
-    const newDate = new Date(date);
-    const day = newDate.getDate();
-    const month = newDate.getMonth() + 1;
-    const year = newDate.getFullYear();
-    return `${day}/${month}/${year}`;
-  };
   const formik = useFormik({
     initialValues: {
       EmployeeID: '',
@@ -171,7 +165,6 @@ export default function User() {
       remember: true
     },
     onSubmit: () => {
-      console.log(formik.values);
       axios
         .post(``, {
           EmployeeID: formik.values.EmployeeID,
@@ -275,7 +268,7 @@ export default function User() {
                           </Stack>
                         </TableCell>
                         <TableCell align="left">{SalaryName}</TableCell>
-                        <TableCell align="left">{convertDateTime(SalaryDate)}</TableCell>
+                        <TableCell align="left">{convertDate(SalaryDate)}</TableCell>
                         <TableCell align="left">{Reason}</TableCell>
                         <TableCell align="left">{Amount}</TableCell>
                       </TableRow>

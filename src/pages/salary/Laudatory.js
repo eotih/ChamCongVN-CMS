@@ -45,6 +45,7 @@ import {
 } from '../../components/_dashboard/laudatory';
 import { getAllLaudatorys } from '../../functions/Salary';
 import { getAllEmployees } from '../../functions/Employee';
+import { convertDate } from '../../utils/formatDatetime';
 //
 
 // ----------------------------------------------------------------------
@@ -157,13 +158,6 @@ export default function User() {
   const handleFilterByName = (event) => {
     setFilterName(event.target.value);
   };
-  const convertDateTime = (date) => {
-    const newDate = new Date(date);
-    const day = newDate.getDate();
-    const month = newDate.getMonth() + 1;
-    const year = newDate.getFullYear();
-    return `${day}/${month}/${year}`;
-  };
   const style = {
     position: 'relative',
     bgcolor: 'background.paper',
@@ -181,7 +175,6 @@ export default function User() {
       remember: true
     },
     onSubmit: () => {
-      console.log(formik.values);
       axios
         .post(`Salary/AddOrEditLaudatoryEmployee`, {
           EmployeeID: formik.values.EmployeeID,
@@ -209,7 +202,6 @@ export default function User() {
   const handleChange = (event) => {
     formik.setFieldValue('EmployeeID', event.target.value);
   };
-  console.log(laudate);
   const emptyRows = page > 0 ? Math.max(0, (1 + page) * rowsPerPage - laudatory.length) : 0;
 
   const filteredLaudatorys = applySortFilter(laudatory, getComparator(order, orderBy), filterName);
@@ -366,7 +358,7 @@ export default function User() {
                             </Stack>
                           </TableCell>
                           <TableCell align="left">{LaudatoryName}</TableCell>
-                          <TableCell align="left">{convertDateTime(LaudatoryDate)}</TableCell>
+                          <TableCell align="left">{convertDate(LaudatoryDate)}</TableCell>
                           <TableCell align="left">{Reason}</TableCell>
                           <TableCell align="left">{Amount}</TableCell>
                           <TableCell align="right">

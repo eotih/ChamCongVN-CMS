@@ -47,6 +47,7 @@ import {
 //
 import { getAllDeductions } from '../../functions/Salary';
 import { getAllEmployees } from '../../functions/Employee';
+import { convertDate } from '../../utils/formatDatetime';
 
 // ----------------------------------------------------------------------
 
@@ -131,13 +132,6 @@ export default function User() {
       return;
     }
     setSelected([]);
-  };
-  const convertDateTime = (date) => {
-    const newDate = new Date(date);
-    const day = newDate.getDate();
-    const month = newDate.getMonth() + 1;
-    const year = newDate.getUTCFullYear();
-    return `${day}/${month}/${year}`;
   };
   const handleClick = (event, name) => {
     const selectedIndex = selected.indexOf(name);
@@ -367,7 +361,7 @@ export default function User() {
                             </Stack>
                           </TableCell>
                           <TableCell align="left">{DeductionName}</TableCell>
-                          <TableCell align="left">{convertDateTime(DeductionDate)}</TableCell>
+                          <TableCell align="left">{convertDate(DeductionDate)}</TableCell>
                           <TableCell align="left">{Reason}</TableCell>
                           <TableCell align="left">{Amount}</TableCell>
                           <TableCell align="right">
