@@ -16,10 +16,14 @@ import {
   TableBody,
   TableCell,
   Container,
+  MenuItem,
   Typography,
   TableContainer,
   TablePagination,
   Modal,
+  FormControl,
+  InputLabel,
+  Select,
   TextField,
   Box
 } from '@mui/material';
@@ -31,7 +35,7 @@ import Page from '../../components/Page';
 import Scrollbar from '../../components/Scrollbar';
 import SearchNotFound from '../../components/SearchNotFound';
 import { LevelListHead, LevelListToolbar, LevelMoreMenu } from '../../components/_dashboard/level';
-import { getAllLevels } from '../../functions/Organization';
+import { getAllLevels, getAllPosition } from '../../functions/Organization';
 //
 
 // ----------------------------------------------------------------------
@@ -82,6 +86,7 @@ export default function Level() {
   const [orderBy, setOrderBy] = useState('name');
   const [filterName, setFilterName] = useState('');
   const [level, setLevel] = useState([]);
+  const [position, setPosition] = useState([]);
   const [rowsPerPage, setRowsPerPage] = useState(5);
   const [open, setOpen] = useState(false);
   const handleOpen = () => setOpen(true);
@@ -90,6 +95,9 @@ export default function Level() {
   useEffect(() => {
     getAllLevels().then((res) => {
       setLevel(res);
+    });
+    getAllPosition().then((res) => {
+      setPosition(res);
     });
   }, []);
   const handleRequestSort = (event, property) => {
@@ -145,7 +153,9 @@ export default function Level() {
   };
   const formik = useFormik({
     initialValues: {
+      PositionID: '',
       LevelName: '',
+      Coefficient: '',
       remember: true
     },
     onSubmit: () => {
@@ -164,6 +174,9 @@ export default function Level() {
         });
     }
   });
+  const handleChangePostion = (event) => {
+    formik.setFieldValue('PositionID', event.target.value);
+  };
   const { handleSubmit, getFieldProps } = formik;
 
   const emptyRows = page > 0 ? Math.max(0, (1 + page) * rowsPerPage - level.length) : 0;
@@ -192,11 +205,35 @@ export default function Level() {
                 <Typography id="modal-modal-title" variant="h6" component="h2">
                   Add Level
                 </Typography>
+                <FormControl fullWidth>
+                  <InputLabel id="demo-simple-select-label">Position</InputLabel>
+                  <Select
+                    labelId="demo-simple-select-label"
+                    id="demo-simple-select"
+                    {...getFieldProps('PositionID')}
+                    label="Position"
+                    onChange={handleChangePostion}
+                  >
+                    {position.map((item) => (
+                      <MenuItem key={item.PositionID} value={item.PositionID}>
+                        {item.PositionName}
+                      </MenuItem>
+                    ))}
+                  </Select>
+                </FormControl>
                 <Stack direction={{ xs: 'column', sm: 'row' }} spacing={2}>
                   <TextField
                     fullWidth
                     label="Level Name"
                     {...getFieldProps('LevelName')}
+                    variant="outlined"
+                  />
+                </Stack>
+                <Stack direction={{ xs: 'column', sm: 'row' }} spacing={2}>
+                  <TextField
+                    fullWidth
+                    label="Coefficient"
+                    {...getFieldProps('Coefficient')}
                     variant="outlined"
                   />
                 </Stack>

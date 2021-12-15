@@ -48,7 +48,10 @@ export default function LevelMoreMenu(Level) {
   };
   const formik = useFormik({
     initialValues: {
+      LevelID: '',
+      PositionID: '',
       LevelName: '',
+      Coefficient: '',
       remember: true
     },
     onSubmit: () => {
