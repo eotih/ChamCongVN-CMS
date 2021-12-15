@@ -41,6 +41,7 @@ export default function SalarytbMoreMenu(SalaryTable) {
 
   const style = {
     position: 'relative',
+    borderRadius: '10px',
     bgcolor: 'background.paper',
     boxShadow: 24,
     p: 4

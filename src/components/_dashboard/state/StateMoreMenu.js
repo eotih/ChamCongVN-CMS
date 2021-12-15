@@ -23,14 +23,14 @@ import { LoadingButton } from '@mui/lab';
 import axios from '../../../functions/Axios';
 // ----------------------------------------------------------------------
 
-export default function StateMoreMenu(State) {
+export default function StateMoreMenu({ dulieu, handleOpenToast }) {
   const ref = useRef(null);
   const [isOpen, setIsOpen] = useState(false);
   const [open, setOpen] = useState(false);
   const handleClose = () => setOpen(false);
-
   const style = {
     position: 'relative',
+    borderRadius: '10px',
     bgcolor: 'background.paper',
     boxShadow: 24,
     p: 4
@@ -46,10 +46,23 @@ export default function StateMoreMenu(State) {
         .post(`Component/AddOrEditState`, formik.values)
         .then((res) => {
           if (res.data.Status === 'Updated') {
-            alert('State Updated');
-            window.location.reload();
+            setOpen(false);
+            handleOpenToast({
+              isOpen: true,
+              horizontal: 'right',
+              vertical: 'top',
+              message: 'Successfully updated',
+              color: 'info'
+            })();
+            formik.resetForm();
           } else {
-            alert('State not Updated');
+            handleOpenToast({
+              isOpen: true,
+              horizontal: 'right',
+              vertical: 'top',
+              message: 'Fail updated',
+              color: 'error'
+            })();
           }
         })
         .catch((err) => {
@@ -58,8 +71,8 @@ export default function StateMoreMenu(State) {
     }
   });
   const handleOpen = () => {
-    formik.setFieldValue('StateID', State.dulieu.StateID);
-    formik.setFieldValue('StateName', State.dulieu.StateName);
+    formik.setFieldValue('StateID', dulieu.StateID);
+    formik.setFieldValue('StateName', dulieu.StateName);
     setOpen(true);
   };
   const { handleSubmit, getFieldProps } = formik;
@@ -83,12 +96,23 @@ export default function StateMoreMenu(State) {
         <MenuItem
           onClick={() => {
             if (confirm('Are you sure you want to delete this state?')) {
-              axios.delete(`Component/DeleteState?ID=${State.dulieu.StateID}`).then((res) => {
+              axios.delete(`Component/DeleteState?ID=${dulieu.StateID}`).then((res) => {
                 if (res.data.Status === 'Delete') {
-                  alert('State Deleted');
-                  window.location.reload();
+                  handleOpenToast({
+                    isOpen: true,
+                    horizontal: 'right',
+                    vertical: 'top',
+                    message: 'Successfully deleted',
+                    color: 'warning'
+                  })();
                 } else {
-                  alert('State Not Deleted');
+                  handleOpenToast({
+                    isOpen: true,
+                    horizontal: 'right',
+                    vertical: 'top',
+                    message: 'Fail deleted',
+                    color: 'error'
+                  })();
                 }
               });
             }
