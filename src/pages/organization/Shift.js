@@ -147,6 +147,7 @@ export default function Shift() {
   };
   const style = {
     position: 'relative',
+    borderRadius: '10px',
     bgcolor: 'background.paper',
     boxShadow: 24,
     p: 4

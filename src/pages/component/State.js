@@ -32,6 +32,7 @@ import Scrollbar from '../../components/Scrollbar';
 import SearchNotFound from '../../components/SearchNotFound';
 import { StateListHead, StateListToolbar, StateMoreMenu } from '../../components/_dashboard/state';
 import { getAllState } from '../../functions/Component';
+import Toast from '../../components/Toast';
 //
 
 // ----------------------------------------------------------------------
@@ -79,9 +80,23 @@ export default function State() {
   const [selected, setSelected] = useState([]);
   const [orderBy, setOrderBy] = useState('name');
   const [filterName, setFilterName] = useState('');
-  const [State, setState] = useState([]);
+  const [state, setState] = useState([]);
   const [rowsPerPage, setRowsPerPage] = useState(5);
   const [open, setOpen] = useState(false);
+  const [openToast, setOpenToast] = useState({
+    isOpen: false,
+    vertical: 'top',
+    message: '',
+    color: '',
+    horizontal: 'right'
+  });
+
+  const handleOpenToast = (newState) => () => {
+    setOpenToast({ isOpen: true, ...newState });
+  };
+  const handleCloseToast = () => {
+    setOpenToast({ ...openToast, isOpen: false });
+  };
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
 
@@ -89,7 +104,7 @@ export default function State() {
     getAllState().then((res) => {
       setState(res);
     });
-  }, []);
+  }, [state]);
   const handleRequestSort = (event, property) => {
     const isAsc = orderBy === property && order === 'asc';
     setOrder(isAsc ? 'desc' : 'asc');
@@ -98,7 +113,7 @@ export default function State() {
 
   const handleSelectAllClick = (event) => {
     if (event.target.checked) {
-      const newSelecteds = State.map((n) => n.name);
+      const newSelecteds = state.map((n) => n.name);
       setSelected(newSelecteds);
       return;
     }
@@ -137,6 +152,7 @@ export default function State() {
   };
   const style = {
     position: 'relative',
+    borderRadius: '10px',
     bgcolor: 'background.paper',
     boxShadow: 24,
     p: 4
@@ -151,10 +167,23 @@ export default function State() {
         .post(`Component/AddOrEditState`, formik.values)
         .then((res) => {
           if (res.data.Status === 'Success') {
-            alert('Thêm thành công');
-            window.location.reload();
+            setOpen(false);
+            handleOpenToast({
+              isOpen: true,
+              horizontal: 'right',
+              vertical: 'top',
+              message: 'Successfully Added',
+              color: 'success'
+            })();
+            formik.resetForm();
           } else {
-            alert('Thêm thất bại');
+            handleOpenToast({
+              isOpen: true,
+              horizontal: 'right',
+              vertical: 'top',
+              message: 'Fail deleted',
+              color: 'error'
+            })();
           }
         })
         .catch((err) => {
@@ -164,14 +193,15 @@ export default function State() {
   });
   const { handleSubmit, getFieldProps } = formik;
 
-  const emptyRows = page > 0 ? Math.max(0, (1 + page) * rowsPerPage - State.length) : 0;
+  const emptyRows = page > 0 ? Math.max(0, (1 + page) * rowsPerPage - state.length) : 0;
 
-  const filteredUsers = applySortFilter(State, getComparator(order, orderBy), filterName);
+  const filteredUsers = applySortFilter(state, getComparator(order, orderBy), filterName);
 
   const isUserNotFound = filteredUsers.length === 0;
 
   return (
     <Page title="State | ChamCongVN">
+      {openToast.isOpen === true && <Toast open={openToast} handleCloseToast={handleCloseToast} />}
       <Modal
         open={open}
         sx={{
@@ -236,13 +266,13 @@ export default function State() {
                   order={order}
                   orderBy={orderBy}
                   headLabel={TABLE_HEAD}
-                  rowCount={State.length}
+                  rowCount={state.length}
                   numSelected={selected.length}
                   onRequestSort={handleRequestSort}
                   onSelectAllClick={handleSelectAllClick}
                 />
                 <TableBody>
-                  {State.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((row) => {
+                  {state.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((row) => {
                     const { StateID, StateName } = row;
                     const isItemSelected = selected.indexOf(StateName) !== -1;
 
@@ -264,7 +294,7 @@ export default function State() {
                         <TableCell align="left">{StateID}</TableCell>
                         <TableCell align="left">{StateName}</TableCell>
                         <TableCell align="right">
-                          <StateMoreMenu dulieu={row} />
+                          <StateMoreMenu dulieu={row} handleOpenToast={handleOpenToast} />
                         </TableCell>
                       </TableRow>
                     );
@@ -291,7 +321,7 @@ export default function State() {
           <TablePagination
             rowsPerPageOptions={[5, 10, 25]}
             component="div"
-            count={State.length}
+            count={state.length}
             rowsPerPage={rowsPerPage}
             page={page}
             onPageChange={handleChangePage}

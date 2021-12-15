@@ -176,6 +176,7 @@ export default function Overtime() {
   };
   const style = {
     position: 'relative',
+    borderRadius: '10px',
     bgcolor: 'background.paper',
     boxShadow: 24,
     p: 4
