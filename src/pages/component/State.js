@@ -166,7 +166,7 @@ export default function State() {
       axios
         .post(`Component/AddOrEditState`, formik.values)
         .then((res) => {
-          if (res.data.Status === 'Success') {
+          if (res.data.Status === 200) {
             setOpen(false);
             handleOpenToast({
               isOpen: true,

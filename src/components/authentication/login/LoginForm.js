@@ -40,7 +40,7 @@ export default function LoginForm() {
       axios
         .post(`Organization/Login`, formik.values)
         .then((res) => {
-          if (res.data.Status === 'Success') {
+          if (res.data.Status === 200) {
             alert('Đăng nhập thành công');
             localStorage.setItem('token', res.data.Message);
             navigate('/dashboard');

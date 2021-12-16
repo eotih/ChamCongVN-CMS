@@ -188,9 +188,9 @@ export default function Account() {
     },
     onSubmit: () => {
       axios
-        .post(`Organization/AddAccount`, formik.values)
+        .post(`Organization/Account`, formik.values)
         .then((res) => {
-          if (res.data.Status === 'Success') {
+          if (res.data.Status === 200) {
             setOpen(false);
             handleOpenToast({
               isOpen: true,

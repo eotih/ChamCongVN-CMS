@@ -47,7 +47,7 @@ export default function SpecialtyMoreMenu(Specialty) {
       axios
         .post(`Component/AddOrEditSpecialities`, formik.values)
         .then((res) => {
-          if (res.data.Status === 'Updated') {
+          if (res.data.Status === 200) {
             alert('Specialty Updated');
             window.location.reload();
           } else {
@@ -88,7 +88,7 @@ export default function SpecialtyMoreMenu(Specialty) {
               axios
                 .delete(`Component/DeleteSpecialitie?ID=${Specialty.dulieu.SpecialtyID}`)
                 .then((res) => {
-                  if (res.data.Status === 'Delete') {
+                  if (res.data.Status === 200) {
                     alert('Specialty Deleted');
                     window.location.reload();
                   } else {

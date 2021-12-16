@@ -45,7 +45,7 @@ export default function StateMoreMenu({ dulieu, handleOpenToast }) {
       axios
         .post(`Component/AddOrEditState`, formik.values)
         .then((res) => {
-          if (res.data.Status === 'Updated') {
+          if (res.data.Status === 200) {
             setOpen(false);
             handleOpenToast({
               isOpen: true,
@@ -97,7 +97,7 @@ export default function StateMoreMenu({ dulieu, handleOpenToast }) {
           onClick={() => {
             if (confirm('Are you sure you want to delete this state?')) {
               axios.delete(`Component/DeleteState?ID=${dulieu.StateID}`).then((res) => {
-                if (res.data.Status === 'Delete') {
+                if (res.data.Status === 200) {
                   handleOpenToast({
                     isOpen: true,
                     horizontal: 'right',

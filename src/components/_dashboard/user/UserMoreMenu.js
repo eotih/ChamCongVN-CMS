@@ -47,7 +47,7 @@ export default function UserMoreMenu() {
       axios
         .post(`Component/AddOrEditDepartment`, formik.values)
         .then((res) => {
-          if (res.data.Status === 'Success') {
+          if (res.data.Status === 200) {
             alert('Thêm thành công');
             window.location.reload();
           } else {

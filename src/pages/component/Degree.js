@@ -171,7 +171,7 @@ export default function Degree() {
       axios
         .post(`Component/AddOrEditDegrees`, formik.values)
         .then((res) => {
-          if (res.data.Status === 'Success') {
+          if (res.data.Status === 200) {
             setOpen(false);
             handleOpenToast({
               isOpen: true,

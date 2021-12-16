@@ -80,9 +80,9 @@ export default function AddRecruit() {
       axios
         .post(`Employee/AddOrEditEmployee`, formik.values)
         .then((res) => {
-          if (res.data.Status === 'Success') {
+          if (res.data.Status === 200) {
             axios.delete(`Employee/DeleteRecruitment?ID=${id}`).then((res) => {
-              if (res.data.Status === 'Delete') {
+              if (res.data.Status === 200) {
                 alert('Thêm thành công');
                 window.location.href = 'http://localhost:3000/employee/recruitments';
               } else {

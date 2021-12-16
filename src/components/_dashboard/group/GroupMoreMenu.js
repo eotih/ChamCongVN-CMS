@@ -47,7 +47,7 @@ export default function GroupMoreMenu(Group) {
       axios
         .post(`Component/AddOrEditGroup`, formik.values)
         .then((res) => {
-          if (res.data.Status === 'Updated') {
+          if (res.data.Status === 200) {
             alert('Group Updated');
             window.location.reload();
           } else {
@@ -86,7 +86,7 @@ export default function GroupMoreMenu(Group) {
           onClick={() => {
             if (confirm('Are you sure you want to delete this group?')) {
               axios.delete(`Component/DeleteGroup?ID=${Group.dulieu.GroupID}`).then((res) => {
-                if (res.data.Status === 'Delete') {
+                if (res.data.Status === 200) {
                   alert('Group Deleted');
                   window.location.reload();
                 } else {

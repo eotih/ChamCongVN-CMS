@@ -46,7 +46,7 @@ export default function WorkMoreMenu(Work) {
       axios
         .post(`Component/AddOrEditWork`, formik.values)
         .then((res) => {
-          if (res.data.Status === 'Updated') {
+          if (res.data.Status === 200) {
             alert('Work Updated');
             window.location.reload();
           } else {
@@ -84,7 +84,7 @@ export default function WorkMoreMenu(Work) {
           onClick={() => {
             if (confirm('Are you sure you want to delete this work?')) {
               axios.delete(`Component/DeleteWork?ID=${Work.dulieu.WorkID}`).then((res) => {
-                if (res.data.Status === 'Delete') {
+                if (res.data.Status === 200) {
                   alert('Work Deleted');
                   window.location.reload();
                 } else {

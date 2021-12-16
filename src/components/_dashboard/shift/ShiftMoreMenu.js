@@ -65,7 +65,7 @@ export default function ShiftMoreMenu(Shift) {
           EndShift: convertTime(timeEnd)
         })
         .then((res) => {
-          if (res.data.Status === 'Updated') {
+          if (res.data.Status === 200) {
             alert('Shift Updated');
             window.location.reload();
           } else {
@@ -107,7 +107,7 @@ export default function ShiftMoreMenu(Shift) {
           onClick={() => {
             if (confirm('Are you sure you want to delete this shift?')) {
               axios.delete(`Organization/DeleteShift?ID=${Shift.dulieu.ShiftID}`).then((res) => {
-                if (res.data.Status === 'Delete') {
+                if (res.data.Status === 200) {
                   alert('Shift Deleted');
                   window.location.reload();
                 } else {

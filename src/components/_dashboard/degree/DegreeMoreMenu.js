@@ -46,7 +46,7 @@ export default function DegreeMoreMenu(Degree) {
       axios
         .post(`Component/AddOrEditDegrees`, formik.values)
         .then((res) => {
-          if (res.data.Status === 'Updated') {
+          if (res.data.Status === 200) {
             alert('Degree Updated');
             window.location.reload();
           } else {
@@ -86,7 +86,7 @@ export default function DegreeMoreMenu(Degree) {
           onClick={() => {
             if (confirm('Are you sure you want to delete this degree?')) {
               axios.delete(`Component/DeleteDegree?ID=${Degree.dulieu.DegreeID}`).then((res) => {
-                if (res.data.Status === 'Delete') {
+                if (res.data.Status === 200) {
                   alert('Degree Deleted');
                   window.location.reload();
                 } else {

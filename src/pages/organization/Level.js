@@ -175,9 +175,9 @@ export default function Level() {
     },
     onSubmit: () => {
       axios
-        .post(`Organization/AddOrEditlevel`, formik.values)
+        .post(`Organization/Level`, formik.values)
         .then((res) => {
-          if (res.data.Status === 'Success') {
+          if (res.data.Status === 200) {
             setOpen(false);
             handleOpenToast({
               isOpen: true,

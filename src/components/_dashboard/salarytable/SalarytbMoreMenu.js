@@ -74,7 +74,7 @@ export default function SalarytbMoreMenu(SalaryTable) {
           Year: convertDate(year)
         })
         .then((res) => {
-          if (res.data.Status === 'Updated') {
+          if (res.data.Status === 200) {
             alert('Salary Table Updated');
             window.location.reload();
           } else {
@@ -124,7 +124,7 @@ export default function SalarytbMoreMenu(SalaryTable) {
               axios
                 .delete(`Salary/DeleteSalaryTable?ID=${SalaryTable.dulieu.SalaryTableID}`)
                 .then((res) => {
-                  if (res.data.Status === 'Delete') {
+                  if (res.data.Status === 200) {
                     alert('Salary Table Deleted');
                     window.location.reload();
                   } else {

@@ -175,7 +175,7 @@ export default function User() {
           SalaryDate: laudate
         })
         .then((res) => {
-          if (res.data.Status === 'Success') {
+          if (res.data.Status === 200) {
             alert('Thêm thành công');
             window.location.reload();
           } else {

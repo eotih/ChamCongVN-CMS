@@ -45,7 +45,7 @@ export default function RoleMoreMenu(Role) {
       axios
         .post(`Organization/AddOrEditRole`, formik.values)
         .then((res) => {
-          if (res.data.Status === 'Updated') {
+          if (res.data.Status === 200) {
             alert('Role Updated');
             window.location.reload();
           } else {
@@ -85,7 +85,7 @@ export default function RoleMoreMenu(Role) {
           onClick={() => {
             if (confirm('Are you sure you want to delete this role?')) {
               axios.delete(`Organization/DeleteRole?ID=${Role.dulieu.RoleID}`).then((res) => {
-                if (res.data.Status === 'Delete') {
+                if (res.data.Status === 200) {
                   alert('Role Deleted');
                   window.location.reload();
                 } else {

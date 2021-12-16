@@ -75,7 +75,7 @@ export default function LaudatoryMoreMenu(Laudatory) {
           LaudatoryDate: laudate
         })
         .then((res) => {
-          if (res.data.Status === 'Updated') {
+          if (res.data.Status === 200) {
             alert('Laudatory Updated');
             window.location.reload();
           } else {
@@ -129,7 +129,7 @@ export default function LaudatoryMoreMenu(Laudatory) {
                   `Salary/DeleteLaudatoryEmployee?ID=${Laudatory.dulieu.LaudatoryEmployee.LaudatoryEmployeeID}`
                 )
                 .then((res) => {
-                  if (res.data.Status === 'Delete') {
+                  if (res.data.Status === 200) {
                     alert('Laudatory Deleted');
                     window.location.reload();
                   } else {

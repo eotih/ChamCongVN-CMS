@@ -79,7 +79,7 @@ export default function OvertimeMoreMenu(Overtime) {
           EndTime: convertTime(timeEnd)
         })
         .then((res) => {
-          if (res.data.Status === 'Updated') {
+          if (res.data.Status === 200) {
             alert('Overtime Updated');
             window.location.reload();
           } else {
@@ -141,7 +141,7 @@ export default function OvertimeMoreMenu(Overtime) {
           onClick={() => {
             if (confirm('Are you sure you want to delete this Overtime?')) {
               axios.delete(`Organization/DeleteOvertime?ID=${OverTimeID}`).then((res) => {
-                if (res.data.Status === 'Delete') {
+                if (res.data.Status === 200) {
                   alert('Overtime Deleted');
                   window.location.reload();
                 } else {

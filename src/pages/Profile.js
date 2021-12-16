@@ -65,7 +65,7 @@ export default function EditAccount() {
       axios
         .post(`Organization/AddOrEditAccount`, formik.values)
         .then((res) => {
-          if (res.data.Status === 'Updated') {
+          if (res.data.Status === 200) {
             alert('Account Edit Successfully');
             window.location.reload();
           } else {
@@ -96,7 +96,7 @@ export default function EditAccount() {
           Password: newPassword
         })
         .then((res) => {
-          if (res.data.Status === 'Updated') {
+          if (res.data.Status === 200) {
             alert('Thay đổi mật khẩu thành công');
             window.location.reload();
           } else {

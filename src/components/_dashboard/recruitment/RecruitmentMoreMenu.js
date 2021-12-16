@@ -34,7 +34,7 @@ export default function RecruitmentMoreMenu(Recruitment) {
       axios
         .post(`Organization/EditRecruitment`, formik.values)
         .then((res) => {
-          if (res.data.Status === 'Updated') {
+          if (res.data.Status === 200) {
             alert('Recruitment Updated');
             window.location.reload();
           } else {
@@ -69,7 +69,7 @@ export default function RecruitmentMoreMenu(Recruitment) {
               axios
                 .delete(`Employee/DeleteRecruitment?ID=${Recruitment.dulieu.RecruitmentID}`)
                 .then((res) => {
-                  if (res.data.Status === 'Delete') {
+                  if (res.data.Status === 200) {
                     alert('Recruitment Deleted');
                     window.location.reload();
                   } else {

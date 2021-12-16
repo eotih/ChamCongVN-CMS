@@ -46,7 +46,7 @@ export default function DepartMoreMenu(Department) {
       axios
         .post(`Component/AddOrEditDepartment`, formik.values)
         .then((res) => {
-          if (res.data.Status === 'Updated') {
+          if (res.data.Status === 200) {
             alert('Department Updated');
             window.location.reload();
           } else {
@@ -89,7 +89,7 @@ export default function DepartMoreMenu(Department) {
               axios
                 .delete(`Component/DeleteDepartment?ID=${Department.dulieu.DepartmentID}`)
                 .then((res) => {
-                  if (res.data.Status === 'Delete') {
+                  if (res.data.Status === 200) {
                     alert('Department Deleted');
                     window.location.reload();
                   } else {

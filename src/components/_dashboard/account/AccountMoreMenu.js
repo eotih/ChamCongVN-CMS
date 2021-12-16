@@ -71,7 +71,7 @@ export default function AccountMoreMenu(Account) {
       axios
         .post(`Organization/EditAccount`, formik.values)
         .then((res) => {
-          if (res.data.Status === 'Updated') {
+          if (res.data.Status === 200) {
             alert('Account Updated');
             window.location.reload();
           } else {
@@ -130,7 +130,7 @@ export default function AccountMoreMenu(Account) {
               axios
                 .delete(`Organization/DeleteAccount?ID=${Account.dulieu.Account.AccountID}`)
                 .then((res) => {
-                  if (res.data.Status === 'Delete') {
+                  if (res.data.Status === 200) {
                     alert('Account Deleted');
                     window.location.reload();
                   } else {

@@ -167,7 +167,7 @@ export default function Recruitment() {
       axios
         .post(`Organization/AddRecruitment`, formik.values)
         .then((res) => {
-          if (res.data.Status === 'Success') {
+          if (res.data.Status === 200) {
             alert('Thêm thành công');
             window.location.reload();
           } else {

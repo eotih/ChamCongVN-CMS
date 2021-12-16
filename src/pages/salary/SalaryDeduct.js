@@ -204,7 +204,7 @@ export default function User() {
           DeductionDate: deductdate
         })
         .then((res) => {
-          if (res.data.Status === 'Success') {
+          if (res.data.Status === 200) {
             setOpen(false);
             handleOpenToast({
               isOpen: true,

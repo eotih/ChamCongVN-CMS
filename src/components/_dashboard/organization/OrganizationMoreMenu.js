@@ -57,7 +57,7 @@ export default function OrganizationMoreMenu(Organization) {
       axios
         .post(`Organization/AddOrEditOrganization`, formik.values)
         .then((res) => {
-          if (res.data.Status === 'Updated') {
+          if (res.data.Status === 200) {
             alert('Organization Updated');
             window.location.reload();
           } else {
@@ -106,7 +106,7 @@ export default function OrganizationMoreMenu(Organization) {
               axios
                 .delete(`Organization/DeleteOrganization?ID=${Organization.dulieu.OrganizationID}`)
                 .then((res) => {
-                  if (res.data.Status === 'Delete') {
+                  if (res.data.Status === 200) {
                     alert('Organization Deleted');
                     window.location.reload();
                   } else {

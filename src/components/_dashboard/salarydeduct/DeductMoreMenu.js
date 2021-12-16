@@ -74,7 +74,7 @@ export default function DeductMoreMenu(Deduct) {
           DeductionDate: deductdate
         })
         .then((res) => {
-          if (res.data.Status === 'Updated') {
+          if (res.data.Status === 200) {
             alert('Dedduction Updated');
             window.location.reload();
           } else {
@@ -127,7 +127,7 @@ export default function DeductMoreMenu(Deduct) {
                   `Salary/DeleteDeductionEmployee?ID=${Deduct.dulieu.DeductionEmployee.DeductionEmployeeID}`
                 )
                 .then((res) => {
-                  if (res.data.Status === 'Delete') {
+                  if (res.data.Status === 200) {
                     alert('Deduction Deleted');
                     window.location.reload();
                   } else {

@@ -46,7 +46,7 @@ export default function PositionMoreMenu(Position) {
       axios
         .post(`Organization/AddOrEditPosition`, formik.values)
         .then((res) => {
-          if (res.data.Status === 'Updated') {
+          if (res.data.Status === 200) {
             alert('Position Updated');
             window.location.reload();
           } else {
@@ -87,7 +87,7 @@ export default function PositionMoreMenu(Position) {
               axios
                 .delete(`Organization/DeletePosition?ID=${Position.dulieu.PositionID}`)
                 .then((res) => {
-                  if (res.data.Status === 'Delete') {
+                  if (res.data.Status === 200) {
                     alert('Position Deleted');
                     window.location.reload();
                   } else {

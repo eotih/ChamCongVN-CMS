@@ -59,7 +59,7 @@ export default function LevelMoreMenu(Level) {
       axios
         .post(`Organization/AddOrEditLevel`, formik.values)
         .then((res) => {
-          if (res.data.Status === 'Updated') {
+          if (res.data.Status === 200) {
             alert('Level Updated');
             window.location.reload();
           } else {
@@ -105,7 +105,7 @@ export default function LevelMoreMenu(Level) {
           onClick={() => {
             if (confirm('Are you sure you want to delete this Level?')) {
               axios.delete(`Organization/DeleteLevel?ID=${LevelID}`).then((res) => {
-                if (res.data.Status === 'Delete') {
+                if (res.data.Status === 200) {
                   alert('Level Deleted');
                   window.location.reload();
                 } else {
