@@ -44,7 +44,7 @@ export default function WorkMoreMenu(Work) {
     },
     onSubmit: () => {
       axios
-        .post(`Component/AddOrEditWork`, formik.values)
+        .post(`Component/Work`, formik.values)
         .then((res) => {
           if (res.data.Status === 200) {
             alert('Work Updated');

@@ -43,7 +43,7 @@ export default function RoleMoreMenu(Role) {
     },
     onSubmit: () => {
       axios
-        .post(`Organization/AddOrEditRole`, formik.values)
+        .post(`Organization/Role`, formik.values)
         .then((res) => {
           if (res.data.Status === 200) {
             alert('Role Updated');

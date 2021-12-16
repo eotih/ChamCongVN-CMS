@@ -191,7 +191,7 @@ export default function User() {
     },
     onSubmit: () => {
       axios
-        .post(`Salary/AddOrEditLaudatoryEmployee`, {
+        .post(`Salary/LaudatoryEmployee`, {
           EmployeeID: formik.values.EmployeeID,
           LaudatoryName: formik.values.LaudatoryName,
           Reason: formik.values.Reason,

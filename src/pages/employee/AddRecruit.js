@@ -78,7 +78,7 @@ export default function AddRecruit() {
     },
     onSubmit: () => {
       axios
-        .post(`Employee/AddOrEditEmployee`, formik.values)
+        .post(`Employee/Employee`, formik.values)
         .then((res) => {
           if (res.data.Status === 200) {
             axios.delete(`Employee/DeleteRecruitment?ID=${id}`).then((res) => {

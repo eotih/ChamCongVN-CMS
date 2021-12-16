@@ -23,7 +23,8 @@ import { LoadingButton } from '@mui/lab';
 import axios from '../../../functions/Axios';
 // ----------------------------------------------------------------------
 
-export default function GroupMoreMenu(Group) {
+export default function GroupMoreMenu({ dulieu, handleOpenToast }) {
+  const { GroupID, GroupName, Note } = dulieu;
   const ref = useRef(null);
   const [isOpen, setIsOpen] = useState(false);
   const [open, setOpen] = useState(false);
@@ -45,13 +46,26 @@ export default function GroupMoreMenu(Group) {
     },
     onSubmit: () => {
       axios
-        .post(`Component/AddOrEditGroup`, formik.values)
+        .put(`Component/Group/${GroupID}`, formik.values)
         .then((res) => {
           if (res.data.Status === 200) {
-            alert('Group Updated');
-            window.location.reload();
+            setOpen(false);
+            handleOpenToast({
+              isOpen: true,
+              horizontal: 'right',
+              vertical: 'top',
+              message: 'Successfully updated',
+              color: 'info'
+            })();
+            formik.resetForm();
           } else {
-            alert('Group not Updated');
+            handleOpenToast({
+              isOpen: true,
+              horizontal: 'right',
+              vertical: 'top',
+              message: 'Fail updated',
+              color: 'error'
+            })();
           }
         })
         .catch((err) => {
@@ -60,9 +74,9 @@ export default function GroupMoreMenu(Group) {
     }
   });
   const handleOpen = () => {
-    formik.setFieldValue('GroupID', Group.dulieu.GroupID);
-    formik.setFieldValue('GroupName', Group.dulieu.GroupName);
-    formik.setFieldValue('Note', Group.dulieu.Note);
+    formik.setFieldValue('GroupID', GroupID);
+    formik.setFieldValue('GroupName', GroupName);
+    formik.setFieldValue('Note', Note);
     setOpen(true);
   };
   const { handleSubmit, getFieldProps } = formik;
@@ -85,12 +99,23 @@ export default function GroupMoreMenu(Group) {
         <MenuItem
           onClick={() => {
             if (confirm('Are you sure you want to delete this group?')) {
-              axios.delete(`Component/DeleteGroup?ID=${Group.dulieu.GroupID}`).then((res) => {
+              axios.delete(`Component/Group/${GroupID}`).then((res) => {
                 if (res.data.Status === 200) {
-                  alert('Group Deleted');
-                  window.location.reload();
+                  handleOpenToast({
+                    isOpen: true,
+                    horizontal: 'right',
+                    vertical: 'top',
+                    message: 'Successfully deleted',
+                    color: 'warning'
+                  })();
                 } else {
-                  alert('Group Not Deleted');
+                  handleOpenToast({
+                    isOpen: true,
+                    horizontal: 'right',
+                    vertical: 'top',
+                    message: 'Fail deleted',
+                    color: 'error'
+                  })();
                 }
               });
             }

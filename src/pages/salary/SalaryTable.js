@@ -190,7 +190,7 @@ export default function User() {
     },
     onSubmit: () => {
       axios
-        .post(`Salary/AddOrEditSalaryTable`, {
+        .post(`Salary/SalaryTable`, {
           SalaryTableName: formik.values.SalaryTableName,
           Month: formik.values.SalaryTableName,
           MinSalary: formik.values.SalaryTableName,

@@ -44,7 +44,7 @@ export default function PositionMoreMenu(Position) {
     },
     onSubmit: () => {
       axios
-        .post(`Organization/AddOrEditPosition`, formik.values)
+        .post(`Organization/Position`, formik.values)
         .then((res) => {
           if (res.data.Status === 200) {
             alert('Position Updated');

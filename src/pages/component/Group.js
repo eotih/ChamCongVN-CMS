@@ -166,7 +166,7 @@ export default function Group() {
     },
     onSubmit: () => {
       axios
-        .post(`Component/AddOrEditGroup`, formik.values)
+        .post(`Component/Group`, formik.values)
         .then((res) => {
           if (res.data.Status === 200) {
             setOpen(false);

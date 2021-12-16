@@ -64,7 +64,7 @@ export default function SalarytbMoreMenu(SalaryTable) {
     },
     onSubmit: () => {
       axios
-        .post(`Salary/AddOrEditSalaryTable`, {
+        .post(`Salary/SalaryTable`, {
           SalaryTableID: formik.values.SalaryTableID,
           SalaryTableName: formik.values.SalaryTableName,
           Month: formik.values.Month,

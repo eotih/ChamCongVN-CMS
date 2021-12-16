@@ -208,7 +208,7 @@ export default function Overtime() {
     },
     onSubmit: () => {
       axios
-        .post(`Organization/AddOrEditOverTime`, {
+        .post(`Organization/OverTime`, {
           OvertimeName: formik.values.OvertimeName,
           DepartmentID: formik.values.DepartmentID,
           IsActive: formik.values.IsActive,

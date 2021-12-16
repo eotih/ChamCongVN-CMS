@@ -68,7 +68,7 @@ export default function OvertimeMoreMenu(Overtime) {
     },
     onSubmit: () => {
       axios
-        .post(`Organization/AddOrEditOvertime`, {
+        .post(`Organization/Overtime`, {
           OverTimeID: formik.values.OverTimeID,
           OvertimeName: formik.values.OvertimeName,
           DepartmentID: formik.values.DepartmentID,

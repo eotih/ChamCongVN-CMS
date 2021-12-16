@@ -58,7 +58,7 @@ export default function ShiftMoreMenu(Shift) {
     },
     onSubmit: () => {
       axios
-        .post(`Organization/AddOrEditShift`, {
+        .post(`Organization/Shift`, {
           ShiftID: formik.values.ShiftID,
           ShiftName: formik.values.ShiftName,
           StartShift: convertTime(timeStart),

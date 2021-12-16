@@ -164,7 +164,7 @@ export default function State() {
     },
     onSubmit: () => {
       axios
-        .post(`Component/AddOrEditState`, formik.values)
+        .post(`Component/State`, formik.values)
         .then((res) => {
           if (res.data.Status === 200) {
             setOpen(false);

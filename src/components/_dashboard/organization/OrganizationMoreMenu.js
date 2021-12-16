@@ -55,7 +55,7 @@ export default function OrganizationMoreMenu(Organization) {
     },
     onSubmit: () => {
       axios
-        .post(`Organization/AddOrEditOrganization`, formik.values)
+        .post(`Organization/Organization`, formik.values)
         .then((res) => {
           if (res.data.Status === 200) {
             alert('Organization Updated');

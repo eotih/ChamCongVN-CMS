@@ -170,7 +170,7 @@ export default function Specialty() {
     },
     onSubmit: () => {
       axios
-        .post(`Component/AddOrEditSpecialities`, formik.values)
+        .post(`Component/Specialities`, formik.values)
         .then((res) => {
           if (res.data.Status === 200) {
             setOpen(false);

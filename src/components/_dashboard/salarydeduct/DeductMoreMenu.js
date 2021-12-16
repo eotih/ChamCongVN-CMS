@@ -64,7 +64,7 @@ export default function DeductMoreMenu(Deduct) {
     },
     onSubmit: () => {
       axios
-        .post(`Salary/AddOrEditDeductionEmployee`, {
+        .post(`Salary/DeductionEmployee`, {
           DeductionEmployeeID: formik.values.DeductionEmployeeID,
           EmployeeID: formik.values.EmployeeID,
           DeductionName: formik.values.DeductionName,

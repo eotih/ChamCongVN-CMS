@@ -169,7 +169,7 @@ export default function Degree() {
     },
     onSubmit: () => {
       axios
-        .post(`Component/AddOrEditDegrees`, formik.values)
+        .post(`Component/Degrees`, formik.values)
         .then((res) => {
           if (res.data.Status === 200) {
             setOpen(false);

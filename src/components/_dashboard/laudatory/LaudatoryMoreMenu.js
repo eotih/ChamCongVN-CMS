@@ -32,7 +32,9 @@ import { getAllEmployees } from '../../../functions/Employee';
 // --------------------------------------------------
 // ----------------------------------------------------------------------
 
-export default function LaudatoryMoreMenu(Laudatory) {
+export default function LaudatoryMoreMenu({ dulieu, handleOpenToast }) {
+  const { LaudatoryEmployee, EmployeeID } = dulieu;
+  const { LaudatoryEmployeeID, LaudatoryName, Reason, Amount, LaudatoryDate } = LaudatoryEmployee;
   const ref = useRef(null);
   const [employee, setEmployee] = useState([]);
   const [employees, setEmployees] = useState([]);
@@ -65,7 +67,7 @@ export default function LaudatoryMoreMenu(Laudatory) {
     },
     onSubmit: () => {
       axios
-        .post(`Salary/AddOrEditLaudatoryEmployee`, {
+        .put(`Salary/LaudatoryEmployee/${LaudatoryEmployeeID}`, {
           LaudatoryEmployeeID: formik.values.LaudatoryEmployeeID,
           EmployeeID: formik.values.EmployeeID,
           LaudatoryName: formik.values.LaudatoryName,
@@ -76,10 +78,23 @@ export default function LaudatoryMoreMenu(Laudatory) {
         })
         .then((res) => {
           if (res.data.Status === 200) {
-            alert('Laudatory Updated');
-            window.location.reload();
+            setOpen(false);
+            handleOpenToast({
+              isOpen: true,
+              horizontal: 'right',
+              vertical: 'top',
+              message: 'Successfully updated',
+              color: 'info'
+            })();
+            formik.resetForm();
           } else {
-            alert('Laudatory not Updated');
+            handleOpenToast({
+              isOpen: true,
+              horizontal: 'right',
+              vertical: 'top',
+              message: 'Fail updated',
+              color: 'error'
+            })();
           }
         })
         .catch((err) => {
@@ -88,15 +103,12 @@ export default function LaudatoryMoreMenu(Laudatory) {
     }
   });
   const handleOpen = () => {
-    formik.setFieldValue(
-      'LaudatoryEmployeeID',
-      Laudatory.dulieu.LaudatoryEmployee.LaudatoryEmployeeID
-    );
-    formik.setFieldValue('LaudatoryName', Laudatory.dulieu.LaudatoryEmployee.LaudatoryName);
-    formik.setFieldValue('Reason', Laudatory.dulieu.LaudatoryEmployee.Reason);
-    formik.setFieldValue('Amount', Laudatory.dulieu.LaudatoryEmployee.Amount);
-    formik.setFieldValue('EmployeeID', Laudatory.dulieu.EmployeeID);
-    setLauDate(new Date(`${Laudatory.dulieu.LaudatoryEmployee.LaudatoryDate}`));
+    formik.setFieldValue('LaudatoryEmployeeID', LaudatoryEmployeeID);
+    formik.setFieldValue('LaudatoryName', LaudatoryName);
+    formik.setFieldValue('Reason', Reason);
+    formik.setFieldValue('Amount', Amount);
+    formik.setFieldValue('EmployeeID', EmployeeID);
+    setLauDate(new Date(`${LaudatoryDate}`));
     setOpen(true);
   };
   const { handleSubmit, getFieldProps } = formik;
@@ -124,18 +136,25 @@ export default function LaudatoryMoreMenu(Laudatory) {
         <MenuItem
           onClick={() => {
             if (confirm('Are you sure you want to delete this laudatory?')) {
-              axios
-                .delete(
-                  `Salary/DeleteLaudatoryEmployee?ID=${Laudatory.dulieu.LaudatoryEmployee.LaudatoryEmployeeID}`
-                )
-                .then((res) => {
-                  if (res.data.Status === 200) {
-                    alert('Laudatory Deleted');
-                    window.location.reload();
-                  } else {
-                    alert('Laudatory Not Deleted');
-                  }
-                });
+              axios.delete(`Salary/LaudatoryEmployee/${LaudatoryEmployeeID}`).then((res) => {
+                if (res.data.Status === 200) {
+                  handleOpenToast({
+                    isOpen: true,
+                    horizontal: 'right',
+                    vertical: 'top',
+                    message: 'Successfully deleted',
+                    color: 'warning'
+                  })();
+                } else {
+                  handleOpenToast({
+                    isOpen: true,
+                    horizontal: 'right',
+                    vertical: 'top',
+                    message: 'Fail deleted',
+                    color: 'error'
+                  })();
+                }
+              });
             }
           }}
           sx={{ color: 'text.secondary' }}

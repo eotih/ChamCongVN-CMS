@@ -30,17 +30,19 @@ import { getAllState } from '../../../functions/Component';
 import { getAllRole } from '../../../functions/Organization';
 // ----------------------------------------------------------------------
 
-export default function AccountMoreMenu(Account) {
+export default function AccountMoreMenu({ dulieu, handleOpenToast }) {
+  const { AccountID, Email, StateID, EmployeeID, RoleID } = dulieu.Account;
+  const { FullName } = dulieu.Employee;
   const ref = useRef(null);
   const [isOpen, setIsOpen] = useState(false);
   const [open, setOpen] = useState(false);
-  const handleClose = () => setOpen(false);
   const [role, setRole] = useState([]);
   const [state, setState] = useState([]);
   const [employee, setEmployee] = useState([]);
   const [roles, setRoles] = useState([]);
   const [states, setStates] = useState([]);
   const [employees, setEmployees] = useState([]);
+  const handleClose = () => setOpen(false);
 
   useEffect(() => {
     getAllEmployees().then((res) => {
@@ -69,13 +71,26 @@ export default function AccountMoreMenu(Account) {
     },
     onSubmit: () => {
       axios
-        .post(`Organization/EditAccount`, formik.values)
+        .put(`Organization/Account/${AccountID}`, formik.values)
         .then((res) => {
           if (res.data.Status === 200) {
-            alert('Account Updated');
-            window.location.reload();
+            setOpen(false);
+            handleOpenToast({
+              isOpen: true,
+              horizontal: 'right',
+              vertical: 'top',
+              message: 'Successfully updated',
+              color: 'info'
+            })();
+            formik.resetForm();
           } else {
-            alert('Account not Updated');
+            handleOpenToast({
+              isOpen: true,
+              horizontal: 'right',
+              vertical: 'top',
+              message: 'Fail updated',
+              color: 'error'
+            })();
           }
         })
         .catch((err) => {
@@ -84,8 +99,6 @@ export default function AccountMoreMenu(Account) {
     }
   });
   const handleOpen = () => {
-    const { AccountID, Email, StateID, EmployeeID, RoleID } = Account.dulieu.Account;
-    const { FullName } = Account.dulieu.Employee;
     formik.setFieldValue('AccountID', AccountID);
     formik.setFieldValue('FullName', FullName);
     formik.setFieldValue('Email', Email);
@@ -127,16 +140,25 @@ export default function AccountMoreMenu(Account) {
         <MenuItem
           onClick={() => {
             if (confirm('Are you sure you want to delete this account?')) {
-              axios
-                .delete(`Organization/DeleteAccount?ID=${Account.dulieu.Account.AccountID}`)
-                .then((res) => {
-                  if (res.data.Status === 200) {
-                    alert('Account Deleted');
-                    window.location.reload();
-                  } else {
-                    alert('Account Not Deleted');
-                  }
-                });
+              axios.delete(`Organization/Account/${AccountID}`).then((res) => {
+                if (res.data.Status === 200) {
+                  handleOpenToast({
+                    isOpen: true,
+                    horizontal: 'right',
+                    vertical: 'top',
+                    message: 'Successfully deleted',
+                    color: 'warning'
+                  })();
+                } else {
+                  handleOpenToast({
+                    isOpen: true,
+                    horizontal: 'right',
+                    vertical: 'top',
+                    message: 'Fail deleted',
+                    color: 'error'
+                  })();
+                }
+              });
             }
           }}
           sx={{ color: 'text.secondary' }}
@@ -175,7 +197,7 @@ export default function AccountMoreMenu(Account) {
               <Box sx={style}>
                 <Stack spacing={1}>
                   <Typography id="modal-modal-title" variant="h6" component="h2">
-                    Add Account
+                    Edit Account
                   </Typography>
                   <Stack direction={{ xs: 'column', sm: 'row' }} spacing={2}>
                     <TextField
@@ -239,7 +261,7 @@ export default function AccountMoreMenu(Account) {
                     </FormControl>
                   </Stack>
                   <LoadingButton fullWidth size="large" type="submit" variant="contained">
-                    Add Account
+                    Edit Account
                   </LoadingButton>
                 </Stack>
               </Box>
