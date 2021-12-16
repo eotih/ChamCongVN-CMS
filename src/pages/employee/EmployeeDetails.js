@@ -1,10 +1,22 @@
 import { useFormik } from 'formik';
+import { Icon } from '@iconify/react';
 import { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import CircularProgress from '@mui/material/CircularProgress';
 import Box from '@mui/material/Box';
 // material
-import { Container, Stack, Typography, Link, Breadcrumbs, Grid, Card, Avatar } from '@mui/material';
+import {
+  Container,
+  Stack,
+  Typography,
+  Link,
+  Breadcrumbs,
+  Grid,
+  Card,
+  Avatar,
+  Divider,
+  Paper
+} from '@mui/material';
 // components
 import Page from '../../components/Page';
 import Scrollbar from '../../components/Scrollbar';
@@ -98,37 +110,108 @@ export default function EmployeeDetails() {
                         sx={{ width: '100%', height: 'auto' }}
                       />
                     </Grid>
-                    <Stack direction={{ xs: 'column' }} spacing={2}>
-                      <Typography variant="h4" noWrap>
-                        Tên: {Employee.FullName}
-                      </Typography>
-                      <Stack direction={{ xs: 'column' }} spacing={2}>
-                        <Typography variant="subtitle1">Phòng: {DepartmentName}</Typography>
-                        <Typography variant="subtitle1">Tổ: {GroupName}</Typography>
-                        <Typography variant="subtitle1">Chức vụ: {PositionName}</Typography>
-                        <Typography variant="subtitle1">Công việc: {WorkName}</Typography>
+                    <Grid item xs={12} md={6}>
+                      <Stack direction={{ xs: 'column' }} spacing={1}>
+                        <Grid container direction="row" justifyContent="center">
+                          <Typography justifyContent="center" variant="h3" noWrap>
+                            {Employee.FullName}
+                          </Typography>
+                        </Grid>
+                        <Divider />
+                        <Grid sx={{ pr: 3 }} container spacing={2}>
+                          <Grid item xs={12} sm={6}>
+                            <Paper variant="outlined" sx={{ py: 2.5, textAlign: 'center' }}>
+                              <Box sx={{ mb: 0.5 }}>
+                                <Icon icon="ic:outline-badge" width="50" height="50" />
+                              </Box>
+                              <Typography variant="h6">Phòng:</Typography>
+                              <Typography variant="body1" sx={{ color: 'text.secondary' }}>
+                                {DepartmentName}
+                              </Typography>
+                            </Paper>
+                          </Grid>
+                          <Grid item xs={12} sm={6}>
+                            <Paper variant="outlined" sx={{ py: 2.5, textAlign: 'center' }}>
+                              <Box sx={{ mb: 0.5 }}>
+                                <Icon
+                                  icon="ic:baseline-supervised-user-circle"
+                                  width="50"
+                                  height="50"
+                                />
+                              </Box>
+                              <Typography variant="h6">Tổ:</Typography>
+                              <Typography variant="body1" sx={{ color: 'text.secondary' }}>
+                                {GroupName}
+                              </Typography>
+                            </Paper>
+                          </Grid>
+                          <Grid item xs={12} sm={6}>
+                            <Paper variant="outlined" sx={{ py: 2.5, textAlign: 'center' }}>
+                              <Box sx={{ mb: 0.5 }}>
+                                <Icon
+                                  icon="ic:round-precision-manufacturing"
+                                  width="50"
+                                  height="50"
+                                />
+                              </Box>
+                              <Typography variant="h6">Chức vụ:</Typography>
+                              <Typography variant="body1" sx={{ color: 'text.secondary' }}>
+                                {PositionName}
+                              </Typography>
+                            </Paper>
+                          </Grid>
+                          <Grid item xs={12} sm={6}>
+                            <Paper variant="outlined" sx={{ py: 2.5, textAlign: 'center' }}>
+                              <Box sx={{ mb: 0.5 }}>
+                                <Icon icon="ic:baseline-work" width="50" height="50" />
+                              </Box>
+                              <Typography variant="h6">Công việc:</Typography>
+                              <Typography variant="body1" sx={{ color: 'text.secondary' }}>
+                                {WorkName}
+                              </Typography>
+                            </Paper>
+                          </Grid>
+                          <Grid item xs={6} md={12}>
+                            <Paper variant="outlined" sx={{ p: 2, textAlign: 'center' }}>
+                              <Stack
+                                alignItems="center"
+                                direction={{ xs: 'column', sm: 'row' }}
+                                spacing={2}
+                              >
+                                <Icon icon="ic:outline-school" width="50" height="50" />
+                                {ListDegree && ListDegree.length > 0 && (
+                                  <>
+                                    <Typography variant="h6">Bằng cấp:</Typography>
+                                    {ListDegree.map((item, index) => (
+                                      <Typography key={index}>{item.DegreeName},</Typography>
+                                    ))}
+                                  </>
+                                )}
+                              </Stack>
+                            </Paper>
+                          </Grid>
+                          <Grid item xs={6} md={12}>
+                            <Paper variant="outlined" sx={{ p: 2, textAlign: 'center' }}>
+                              <Stack
+                                alignItems="center"
+                                direction={{ xs: 'column', sm: 'row' }}
+                                spacing={2}
+                              >
+                                <Icon icon="ic:outline-hail" width="50" height="50" />
+                                {ListSpeciality && ListSpeciality.length > 0 && (
+                                  <>
+                                    <Typography variant="h6">Chuyên môn:</Typography>
+                                    {ListSpeciality.map((item, index) => (
+                                      <Typography key={index}>{item.SpecialtyName},</Typography>
+                                    ))}
+                                  </>
+                                )}
+                              </Stack>
+                            </Paper>
+                          </Grid>
+                        </Grid>
                       </Stack>
-                      {ListDegree && ListDegree.length > 0 && (
-                        <>
-                          <Typography variant="subtitle1">Bằng cấp:</Typography>
-                          <ul>
-                            {ListDegree.map((item, index) => (
-                              <li key={index}>{item.DegreeName}</li>
-                            ))}
-                          </ul>
-                        </>
-                      )}
-                      {ListSpeciality && ListSpeciality.length > 0 && (
-                        <>
-                          <Typography variant="subtitle1">Chuyên môn:</Typography>
-                          <ul>
-                            {ListSpeciality.map((item, index) => (
-                              <li key={index}>{item.SpecialtyName}</li>
-                            ))}
-                          </ul>
-                        </>
-                      )}
-                    </Stack>
+                    </Grid>
                   </Stack>
                 </Card>
               </Grid>
