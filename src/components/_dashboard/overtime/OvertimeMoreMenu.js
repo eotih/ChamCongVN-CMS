@@ -32,7 +32,17 @@ import { convertTime } from '../../../utils/formatDatetime';
 import { getAllDepartments } from '../../../functions/Component';
 // ----------------------------------------------------------------------
 
-export default function OvertimeMoreMenu(Overtime) {
+export default function OvertimeMoreMenu({ dulieu, handleOpenToast }) {
+  const {
+    OverTimeID,
+    OverTimeDate,
+    OverTimeName,
+    StartTime,
+    EndTime,
+    Quantity,
+    IsActive,
+    DepartmentID
+  } = dulieu.Overtime;
   const ref = useRef(null);
   const [isOpen, setIsOpen] = useState(false);
   const [timeStart, setTimeStart] = useState([]);
@@ -68,7 +78,7 @@ export default function OvertimeMoreMenu(Overtime) {
     },
     onSubmit: () => {
       axios
-        .post(`Organization/Overtime`, {
+        .put(`Organization/Overtime/${OverTimeID}`, {
           OverTimeID: formik.values.OverTimeID,
           OvertimeName: formik.values.OvertimeName,
           DepartmentID: formik.values.DepartmentID,
@@ -80,10 +90,23 @@ export default function OvertimeMoreMenu(Overtime) {
         })
         .then((res) => {
           if (res.data.Status === 200) {
-            alert('Overtime Updated');
-            window.location.reload();
+            setOpen(false);
+            handleOpenToast({
+              isOpen: true,
+              horizontal: 'right',
+              vertical: 'top',
+              message: 'Successfully updated',
+              color: 'info'
+            })();
+            formik.resetForm();
           } else {
-            alert('Overtime not Updated');
+            handleOpenToast({
+              isOpen: true,
+              horizontal: 'right',
+              vertical: 'top',
+              message: 'Fail updated',
+              color: 'error'
+            })();
           }
         })
         .catch((err) => {
@@ -97,16 +120,7 @@ export default function OvertimeMoreMenu(Overtime) {
   const handleChangeDepartment = (event) => {
     setDepartments(event.target.value);
   };
-  const {
-    OverTimeID,
-    OverTimeDate,
-    OverTimeName,
-    StartTime,
-    EndTime,
-    Quantity,
-    IsActive,
-    DepartmentID
-  } = Overtime.dulieu.Overtime;
+
   const handleOpen = () => {
     formik.setFieldValue('OverTimeID', OverTimeID);
     formik.setFieldValue('OvertimeName', OverTimeName);
@@ -114,7 +128,7 @@ export default function OvertimeMoreMenu(Overtime) {
     formik.setFieldValue('StartTime', StartTime);
     formik.setFieldValue('EndTime', EndTime);
     formik.setFieldValue('Quantity', Quantity);
-    formik.setFieldValue('IsActive', IsActive);
+    formik.setFieldValue('IsActive', IsActive); // Active chỗ này hình như không get được chưa liệu ra được
     formik.setFieldValue('DepartmentID', DepartmentID);
     setTimeStart(new Date(`12/12/2000 ${StartTime}`));
     setTimeEnd(new Date(`12/12/2000 ${EndTime}`));
@@ -140,12 +154,23 @@ export default function OvertimeMoreMenu(Overtime) {
         <MenuItem
           onClick={() => {
             if (confirm('Are you sure you want to delete this Overtime?')) {
-              axios.delete(`Organization/DeleteOvertime?ID=${OverTimeID}`).then((res) => {
+              axios.delete(`Organization/Overtime/${OverTimeID}`).then((res) => {
                 if (res.data.Status === 200) {
-                  alert('Overtime Deleted');
-                  window.location.reload();
+                  handleOpenToast({
+                    isOpen: true,
+                    horizontal: 'right',
+                    vertical: 'top',
+                    message: 'Successfully deleted',
+                    color: 'warning'
+                  })();
                 } else {
-                  alert('Overtime Not Deleted');
+                  handleOpenToast({
+                    isOpen: true,
+                    horizontal: 'right',
+                    vertical: 'top',
+                    message: 'Fail deleted',
+                    color: 'error'
+                  })();
                 }
               });
             }

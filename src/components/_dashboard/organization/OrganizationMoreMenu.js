@@ -28,7 +28,9 @@ import { LoadingButton } from '@mui/lab';
 import axios from '../../../functions/Axios';
 // ----------------------------------------------------------------------
 
-export default function OrganizationMoreMenu(Organization) {
+export default function OrganizationMoreMenu({ dulieu, handleOpenToast }) {
+  const { OrganizationID, Name, Logo, Email, Latitude, Longitude, Website, PublicIP, PythonIP } =
+    dulieu;
   const ref = useRef(null);
   const [isOpen, setIsOpen] = useState(false);
   const [open, setOpen] = useState(false);
@@ -55,13 +57,26 @@ export default function OrganizationMoreMenu(Organization) {
     },
     onSubmit: () => {
       axios
-        .post(`Organization/Organization`, formik.values)
+        .put(`Organization/Organization/${OrganizationID}`, formik.values)
         .then((res) => {
           if (res.data.Status === 200) {
-            alert('Organization Updated');
-            window.location.reload();
+            setOpen(false);
+            handleOpenToast({
+              isOpen: true,
+              horizontal: 'right',
+              vertical: 'top',
+              message: 'Successfully updated',
+              color: 'info'
+            })();
+            formik.resetForm();
           } else {
-            alert('Organization not Updated');
+            handleOpenToast({
+              isOpen: true,
+              horizontal: 'right',
+              vertical: 'top',
+              message: 'Fail updated',
+              color: 'error'
+            })();
           }
         })
         .catch((err) => {
@@ -70,8 +85,6 @@ export default function OrganizationMoreMenu(Organization) {
     }
   });
   const handleOpen = () => {
-    const { OrganizationID, Name, Logo, Email, Latitude, Longitude, Website, PublicIP, PythonIP } =
-      Organization.dulieu;
     formik.setFieldValue('OrganizationID', OrganizationID);
     formik.setFieldValue('Name', Name);
     formik.setFieldValue('Logo', Logo);
@@ -103,16 +116,25 @@ export default function OrganizationMoreMenu(Organization) {
         <MenuItem
           onClick={() => {
             if (confirm('Are you sure you want to delete this organization?')) {
-              axios
-                .delete(`Organization/DeleteOrganization?ID=${Organization.dulieu.OrganizationID}`)
-                .then((res) => {
-                  if (res.data.Status === 200) {
-                    alert('Organization Deleted');
-                    window.location.reload();
-                  } else {
-                    alert('Organization Not Deleted');
-                  }
-                });
+              axios.delete(`Organization/Organization/${OrganizationID}`).then((res) => {
+                if (res.data.Status === 200) {
+                  handleOpenToast({
+                    isOpen: true,
+                    horizontal: 'right',
+                    vertical: 'top',
+                    message: 'Successfully deleted',
+                    color: 'warning'
+                  })();
+                } else {
+                  handleOpenToast({
+                    isOpen: true,
+                    horizontal: 'right',
+                    vertical: 'top',
+                    message: 'Fail deleted',
+                    color: 'error'
+                  })();
+                }
+              });
             }
           }}
           sx={{ color: 'text.secondary' }}
