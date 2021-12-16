@@ -24,6 +24,7 @@ import axios from '../../../functions/Axios';
 // ----------------------------------------------------------------------
 
 export default function StateMoreMenu({ dulieu, handleOpenToast }) {
+  const { StateID, StateName } = dulieu;
   const ref = useRef(null);
   const [isOpen, setIsOpen] = useState(false);
   const [open, setOpen] = useState(false);
@@ -43,7 +44,7 @@ export default function StateMoreMenu({ dulieu, handleOpenToast }) {
     },
     onSubmit: () => {
       axios
-        .post(`Component/AddOrEditState`, formik.values)
+        .put(`Component/State/${StateID}`, formik.values)
         .then((res) => {
           if (res.data.Status === 200) {
             setOpen(false);
@@ -71,8 +72,8 @@ export default function StateMoreMenu({ dulieu, handleOpenToast }) {
     }
   });
   const handleOpen = () => {
-    formik.setFieldValue('StateID', dulieu.StateID);
-    formik.setFieldValue('StateName', dulieu.StateName);
+    formik.setFieldValue('StateID', StateID);
+    formik.setFieldValue('StateName', StateName);
     setOpen(true);
   };
   const { handleSubmit, getFieldProps } = formik;
@@ -96,7 +97,7 @@ export default function StateMoreMenu({ dulieu, handleOpenToast }) {
         <MenuItem
           onClick={() => {
             if (confirm('Are you sure you want to delete this state?')) {
-              axios.delete(`Component/DeleteState?ID=${dulieu.StateID}`).then((res) => {
+              axios.delete(`Component/State?ID=${StateID}`).then((res) => {
                 if (res.data.Status === 200) {
                   handleOpenToast({
                     isOpen: true,

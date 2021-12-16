@@ -58,7 +58,7 @@ export default function OvertimeMoreMenu() {
     },
     onSubmit: () => {
       axios
-        .post(`Salary/AddOrEditOvertimeionEmployee`, formik.values)
+        .post(`Salary/OvertimeionEmployee`, formik.values)
         .then((res) => {
           if (res.data.Status === 200) {
             alert('Thêm thành công');

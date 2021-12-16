@@ -63,7 +63,7 @@ export default function EditAccount() {
     },
     onSubmit: () => {
       axios
-        .post(`Organization/AddOrEditAccount`, formik.values)
+        .post(`Organization/Account`, formik.values)
         .then((res) => {
           if (res.data.Status === 200) {
             alert('Account Edit Successfully');

@@ -23,7 +23,8 @@ import { LoadingButton } from '@mui/lab';
 import axios from '../../../functions/Axios';
 // ----------------------------------------------------------------------
 
-export default function DegreeMoreMenu(Degree) {
+export default function DegreeMoreMenu({ dulieu, handleOpenToast }) {
+  const { DegreeID, DegreeName, Note } = dulieu;
   const ref = useRef(null);
   const [isOpen, setIsOpen] = useState(false);
   const [open, setOpen] = useState(false);
@@ -44,13 +45,26 @@ export default function DegreeMoreMenu(Degree) {
     },
     onSubmit: () => {
       axios
-        .post(`Component/AddOrEditDegrees`, formik.values)
+        .put(`Component/Degrees/${DegreeID}`, formik.values)
         .then((res) => {
           if (res.data.Status === 200) {
-            alert('Degree Updated');
-            window.location.reload();
+            setOpen(false);
+            handleOpenToast({
+              isOpen: true,
+              horizontal: 'right',
+              vertical: 'top',
+              message: 'Successfully updated',
+              color: 'info'
+            })();
+            formik.resetForm();
           } else {
-            alert('Thêm thất bại');
+            handleOpenToast({
+              isOpen: true,
+              horizontal: 'right',
+              vertical: 'top',
+              message: 'Fail updated',
+              color: 'error'
+            })();
           }
         })
         .catch((err) => {
@@ -59,9 +73,9 @@ export default function DegreeMoreMenu(Degree) {
     }
   });
   const handleOpen = () => {
-    formik.setFieldValue('DegreeID', Degree.dulieu.DegreeID);
-    formik.setFieldValue('DegreeName', Degree.dulieu.DegreeName);
-    formik.setFieldValue('Note', Degree.dulieu.Note);
+    formik.setFieldValue('DegreeID', DegreeID);
+    formik.setFieldValue('DegreeName', DegreeName);
+    formik.setFieldValue('Note', Note);
     setOpen(true);
   };
   const { handleSubmit, getFieldProps } = formik;
@@ -85,12 +99,23 @@ export default function DegreeMoreMenu(Degree) {
         <MenuItem
           onClick={() => {
             if (confirm('Are you sure you want to delete this degree?')) {
-              axios.delete(`Component/DeleteDegree?ID=${Degree.dulieu.DegreeID}`).then((res) => {
+              axios.delete(`Component/Degrees/${DegreeID}`).then((res) => {
                 if (res.data.Status === 200) {
-                  alert('Degree Deleted');
-                  window.location.reload();
+                  handleOpenToast({
+                    isOpen: true,
+                    horizontal: 'right',
+                    vertical: 'top',
+                    message: 'Successfully deleted',
+                    color: 'warning'
+                  })();
                 } else {
-                  alert('Degree Not Deleted');
+                  handleOpenToast({
+                    isOpen: true,
+                    horizontal: 'right',
+                    vertical: 'top',
+                    message: 'Fail deleted',
+                    color: 'error'
+                  })();
                 }
               });
             }

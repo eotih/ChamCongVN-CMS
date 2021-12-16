@@ -81,7 +81,7 @@ export default function SalarytbMoreMenu({ dulieu, handleOpenToast }) {
               isOpen: true,
               horizontal: 'right',
               vertical: 'top',
-              message: 'Successfully edited',
+              message: 'Successfully updated',
               color: 'info'
             })();
           } else {
@@ -89,7 +89,7 @@ export default function SalarytbMoreMenu({ dulieu, handleOpenToast }) {
               isOpen: true,
               horizontal: 'right',
               vertical: 'top',
-              message: 'Fail edited',
+              message: 'Fail updated',
               color: 'error'
             })();
           }

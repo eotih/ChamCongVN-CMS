@@ -24,7 +24,7 @@ import axios from '../../../functions/Axios';
 // ----------------------------------------------------------------------
 
 export default function PositionMoreMenu({ dulieu, handleOpenToast }) {
-  const { PositionID, PositionName, Note } = dulieu;
+  const { PositionName, Note, PositionID } = dulieu;
   const ref = useRef(null);
   const [isOpen, setIsOpen] = useState(false);
   const [open, setOpen] = useState(false);
@@ -53,7 +53,7 @@ export default function PositionMoreMenu({ dulieu, handleOpenToast }) {
               isOpen: true,
               horizontal: 'right',
               vertical: 'top',
-              message: 'Successfully edited',
+              message: 'Successfully updated',
               color: 'info'
             })();
           } else {
@@ -61,7 +61,7 @@ export default function PositionMoreMenu({ dulieu, handleOpenToast }) {
               isOpen: true,
               horizontal: 'right',
               vertical: 'top',
-              message: 'Fail edited',
+              message: 'Fail updated',
               color: 'error'
             })();
           }
@@ -97,7 +97,7 @@ export default function PositionMoreMenu({ dulieu, handleOpenToast }) {
         <MenuItem
           onClick={() => {
             if (confirm('Are you sure you want to delete this position?')) {
-              axios.delete(`Organization/Position?ID=${PositionID}`).then((res) => {
+              axios.delete(`Organization/Position/${PositionID}`).then((res) => {
                 if (res.data.Status === 200) {
                   handleOpenToast({
                     isOpen: true,

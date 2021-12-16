@@ -23,7 +23,8 @@ import { LoadingButton } from '@mui/lab';
 import axios from '../../../functions/Axios';
 // ----------------------------------------------------------------------
 
-export default function DepartMoreMenu(Department) {
+export default function DepartMoreMenu({ dulieu, handleOpenToast }) {
+  const { DepartmentID, DepartmentName, Note, Phone } = dulieu;
   const ref = useRef(null);
   const [isOpen, setIsOpen] = useState(false);
   const [open, setOpen] = useState(false);
@@ -44,13 +45,26 @@ export default function DepartMoreMenu(Department) {
     },
     onSubmit: () => {
       axios
-        .post(`Component/AddOrEditDepartment`, formik.values)
+        .put(`Component/Department/${DepartmentID}`, formik.values)
         .then((res) => {
           if (res.data.Status === 200) {
-            alert('Department Updated');
-            window.location.reload();
+            setOpen(false);
+            handleOpenToast({
+              isOpen: true,
+              horizontal: 'right',
+              vertical: 'top',
+              message: 'Successfully updated',
+              color: 'info'
+            })();
+            formik.resetForm();
           } else {
-            alert('Department not Update');
+            handleOpenToast({
+              isOpen: true,
+              horizontal: 'right',
+              vertical: 'top',
+              message: 'Fail updated',
+              color: 'error'
+            })();
           }
         })
         .catch((err) => {
@@ -59,10 +73,10 @@ export default function DepartMoreMenu(Department) {
     }
   });
   const handleOpen = () => {
-    formik.setFieldValue('DepartmentID', Department.dulieu.DepartmentID);
-    formik.setFieldValue('DepartmentName', Department.dulieu.DepartmentName);
-    formik.setFieldValue('Note', Department.dulieu.Note);
-    formik.setFieldValue('Phone', Department.dulieu.Phone);
+    formik.setFieldValue('DepartmentID', DepartmentID);
+    formik.setFieldValue('DepartmentName', DepartmentName);
+    formik.setFieldValue('Note', Note);
+    formik.setFieldValue('Phone', Phone);
     setOpen(true);
   };
   const { handleSubmit, getFieldProps } = formik;
@@ -86,16 +100,25 @@ export default function DepartMoreMenu(Department) {
         <MenuItem
           onClick={() => {
             if (confirm('Are you sure you want to delete this department?')) {
-              axios
-                .delete(`Component/DeleteDepartment?ID=${Department.dulieu.DepartmentID}`)
-                .then((res) => {
-                  if (res.data.Status === 200) {
-                    alert('Department Deleted');
-                    window.location.reload();
-                  } else {
-                    alert('Department Not Deleted');
-                  }
-                });
+              axios.delete(`Component/Department/${DepartmentID}`).then((res) => {
+                if (res.data.Status === 200) {
+                  handleOpenToast({
+                    isOpen: true,
+                    horizontal: 'right',
+                    vertical: 'top',
+                    message: 'Successfully deleted',
+                    color: 'warning'
+                  })();
+                } else {
+                  handleOpenToast({
+                    isOpen: true,
+                    horizontal: 'right',
+                    vertical: 'top',
+                    message: 'Fail deleted',
+                    color: 'error'
+                  })();
+                }
+              });
             }
           }}
           sx={{ color: 'text.secondary' }}

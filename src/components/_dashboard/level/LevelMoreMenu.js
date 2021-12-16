@@ -28,8 +28,10 @@ import { getAllPosition } from '../../../functions/Organization';
 import axios from '../../../functions/Axios';
 // ----------------------------------------------------------------------
 
-export default function LevelMoreMenu(Level) {
+export default function LevelMoreMenu({ dulieu, handleOpenToast }) {
+  const { LevelID, PositionID, LevelName, Coefficient } = dulieu.Level;
   const ref = useRef(null);
+  const [loading, setLoading] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
   const [open, setOpen] = useState(false);
   const [position, setPosition] = useState([]);
@@ -56,14 +58,29 @@ export default function LevelMoreMenu(Level) {
       remember: true
     },
     onSubmit: () => {
+      setLoading(true);
       axios
-        .post(`Organization/AddOrEditLevel`, formik.values)
+        .put(`Organization/Level/${LevelID}`, formik.values)
         .then((res) => {
           if (res.data.Status === 200) {
-            alert('Level Updated');
-            window.location.reload();
+            setOpen(false);
+            handleOpenToast({
+              isOpen: true,
+              horizontal: 'right',
+              vertical: 'top',
+              message: 'Successfully updated',
+              color: 'info'
+            })();
+            formik.resetForm();
+            setLoading(false);
           } else {
-            alert('Level not Updated');
+            handleOpenToast({
+              isOpen: true,
+              horizontal: 'right',
+              vertical: 'top',
+              message: 'Fail updated',
+              color: 'error'
+            })();
           }
         })
         .catch((err) => {
@@ -71,7 +88,6 @@ export default function LevelMoreMenu(Level) {
         });
     }
   });
-  const { LevelID, LevelName, Coefficient, PositionID } = Level.dulieu.Level;
   const handleOpen = () => {
     formik.setFieldValue('LevelID', LevelID);
     formik.setFieldValue('PositionID', PositionID);
@@ -104,12 +120,23 @@ export default function LevelMoreMenu(Level) {
         <MenuItem
           onClick={() => {
             if (confirm('Are you sure you want to delete this Level?')) {
-              axios.delete(`Organization/DeleteLevel?ID=${LevelID}`).then((res) => {
+              axios.delete(`Organization/Level/${LevelID}`).then((res) => {
                 if (res.data.Status === 200) {
-                  alert('Level Deleted');
-                  window.location.reload();
+                  handleOpenToast({
+                    isOpen: true,
+                    horizontal: 'right',
+                    vertical: 'top',
+                    message: 'Successfully deleted',
+                    color: 'warning'
+                  })();
                 } else {
-                  alert('Level Not Deleted');
+                  handleOpenToast({
+                    isOpen: true,
+                    horizontal: 'right',
+                    vertical: 'top',
+                    message: 'Fail deleted',
+                    color: 'error'
+                  })();
                 }
               });
             }
@@ -184,7 +211,13 @@ export default function LevelMoreMenu(Level) {
                       variant="outlined"
                     />
                   </Stack>
-                  <LoadingButton fullWidth size="large" type="submit" variant="contained">
+                  <LoadingButton
+                    loading={loading}
+                    fullWidth
+                    size="large"
+                    type="submit"
+                    variant="contained"
+                  >
                     Edit Level
                   </LoadingButton>
                 </Stack>
