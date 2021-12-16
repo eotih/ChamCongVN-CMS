@@ -31,7 +31,9 @@ import axios from '../../../functions/Axios';
 import { getAllEmployees } from '../../../functions/Employee';
 // ----------------------------------------------------------------------
 
-export default function DeductMoreMenu(Deduct) {
+export default function DeductMoreMenu({ dulieu, handleOpenToast }) {
+  const { EmployeeID, DeductionEmployee } = dulieu;
+  const { DeductionEmployeeID, DeductionName, DeductionDate, Reason, Amount } = DeductionEmployee;
   const ref = useRef(null);
   const [deductdate, setDeductDate] = useState([]);
   const [employee, setEmployee] = useState([]);
@@ -64,7 +66,7 @@ export default function DeductMoreMenu(Deduct) {
     },
     onSubmit: () => {
       axios
-        .post(`Salary/DeductionEmployee`, {
+        .put(`Salary/DeductionEmployee/${DeductionEmployeeID}`, {
           DeductionEmployeeID: formik.values.DeductionEmployeeID,
           EmployeeID: formik.values.EmployeeID,
           DeductionName: formik.values.DeductionName,
@@ -75,10 +77,22 @@ export default function DeductMoreMenu(Deduct) {
         })
         .then((res) => {
           if (res.data.Status === 200) {
-            alert('Dedduction Updated');
-            window.location.reload();
+            setOpen(false);
+            handleOpenToast({
+              isOpen: true,
+              horizontal: 'right',
+              vertical: 'top',
+              message: 'Successfully updated',
+              color: 'info'
+            })();
           } else {
-            alert('Dedduction not Updated');
+            handleOpenToast({
+              isOpen: true,
+              horizontal: 'right',
+              vertical: 'top',
+              message: 'Fail updated',
+              color: 'error'
+            })();
           }
         })
         .catch((err) => {
@@ -87,9 +101,6 @@ export default function DeductMoreMenu(Deduct) {
     }
   });
   const handleOpen = () => {
-    const { DeductionEmployeeID, DeductionName, DeductionDate, Reason, Amount } =
-      Deduct.dulieu.DeductionEmployee;
-    const { EmployeeID } = Deduct.dulieu;
     formik.setFieldValue('DeductionEmployeeID', DeductionEmployeeID);
     formik.setFieldValue('DeductionName', DeductionName);
     formik.setFieldValue('Reason', Reason);
@@ -122,18 +133,25 @@ export default function DeductMoreMenu(Deduct) {
         <MenuItem
           onClick={() => {
             if (confirm('Are you sure you want to delete this deduction?')) {
-              axios
-                .delete(
-                  `Salary/DeleteDeductionEmployee?ID=${Deduct.dulieu.DeductionEmployee.DeductionEmployeeID}`
-                )
-                .then((res) => {
-                  if (res.data.Status === 200) {
-                    alert('Deduction Deleted');
-                    window.location.reload();
-                  } else {
-                    alert('Deduction Not Deleted');
-                  }
-                });
+              axios.delete(`Salary/DeductionEmployee/${DeductionEmployeeID}`).then((res) => {
+                if (res.data.Status === 200) {
+                  handleOpenToast({
+                    isOpen: true,
+                    horizontal: 'right',
+                    vertical: 'top',
+                    message: 'Successfully deleted',
+                    color: 'warning'
+                  })();
+                } else {
+                  handleOpenToast({
+                    isOpen: true,
+                    horizontal: 'right',
+                    vertical: 'top',
+                    message: 'Fail deleted',
+                    color: 'error'
+                  })();
+                }
+              });
             }
           }}
           sx={{ color: 'text.secondary' }}

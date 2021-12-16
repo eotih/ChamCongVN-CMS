@@ -23,7 +23,8 @@ import { LoadingButton } from '@mui/lab';
 import axios from '../../../functions/Axios';
 // ----------------------------------------------------------------------
 
-export default function RoleMoreMenu(Role) {
+export default function RoleMoreMenu({ dulieu, handleOpenToast }) {
+  const { RoleID, RoleName } = dulieu;
   const ref = useRef(null);
   const [isOpen, setIsOpen] = useState(false);
   const [open, setOpen] = useState(false);
@@ -38,18 +39,31 @@ export default function RoleMoreMenu(Role) {
   };
   const formik = useFormik({
     initialValues: {
+      RoleID: '',
       RoleName: '',
       remember: true
     },
     onSubmit: () => {
       axios
-        .post(`Organization/Role`, formik.values)
+        .put(`Organization/Role/${RoleID}`, formik.values)
         .then((res) => {
           if (res.data.Status === 200) {
-            alert('Role Updated');
-            window.location.reload();
+            setOpen(false);
+            handleOpenToast({
+              isOpen: true,
+              horizontal: 'right',
+              vertical: 'top',
+              message: 'Successfully updated',
+              color: 'info'
+            })();
           } else {
-            alert('Role not Updated');
+            handleOpenToast({
+              isOpen: true,
+              horizontal: 'right',
+              vertical: 'top',
+              message: 'Fail updated',
+              color: 'error'
+            })();
           }
         })
         .catch((err) => {
@@ -58,8 +72,8 @@ export default function RoleMoreMenu(Role) {
     }
   });
   const handleOpen = () => {
-    formik.setFieldValue('RoleID', Role.dulieu.RoleID);
-    formik.setFieldValue('RoleName', Role.dulieu.RoleName);
+    formik.setFieldValue('RoleID', RoleID);
+    formik.setFieldValue('RoleName', RoleName);
     setOpen(true);
   };
 
@@ -84,12 +98,23 @@ export default function RoleMoreMenu(Role) {
         <MenuItem
           onClick={() => {
             if (confirm('Are you sure you want to delete this role?')) {
-              axios.delete(`Organization/DeleteRole?ID=${Role.dulieu.RoleID}`).then((res) => {
+              axios.delete(`Organization/Role/${RoleID}`).then((res) => {
                 if (res.data.Status === 200) {
-                  alert('Role Deleted');
-                  window.location.reload();
+                  handleOpenToast({
+                    isOpen: true,
+                    horizontal: 'right',
+                    vertical: 'top',
+                    message: 'Successfully deleted',
+                    color: 'warning'
+                  })();
                 } else {
-                  alert('Role Not Deleted');
+                  handleOpenToast({
+                    isOpen: true,
+                    horizontal: 'right',
+                    vertical: 'top',
+                    message: 'Fail deleted',
+                    color: 'error'
+                  })();
                 }
               });
             }

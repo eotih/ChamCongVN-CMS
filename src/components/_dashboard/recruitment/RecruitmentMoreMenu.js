@@ -12,7 +12,7 @@ import { Menu, MenuItem, IconButton, ListItemIcon, ListItemText } from '@mui/mat
 import axios from '../../../functions/Axios';
 // ----------------------------------------------------------------------
 
-export default function RecruitmentMoreMenu(Recruitment) {
+export default function RecruitmentMoreMenu({ dulieu, handleOpenToast }) {
   const ref = useRef(null);
   const [isOpen, setIsOpen] = useState(false);
 
@@ -30,23 +30,9 @@ export default function RecruitmentMoreMenu(Recruitment) {
       UpdatedBy: '',
       remember: true
     },
-    onSubmit: () => {
-      axios
-        .post(`Organization/EditRecruitment`, formik.values)
-        .then((res) => {
-          if (res.data.Status === 200) {
-            alert('Recruitment Updated');
-            window.location.reload();
-          } else {
-            alert('Recruitment not Updated');
-          }
-        })
-        .catch((err) => {
-          console.log(err);
-        });
-    }
+    onSubmit: () => {}
   });
-  const { RecruitmentID } = Recruitment.dulieu;
+  const { RecruitmentID } = dulieu;
   return (
     <>
       <IconButton ref={ref} onClick={() => setIsOpen(true)}>
@@ -66,16 +52,25 @@ export default function RecruitmentMoreMenu(Recruitment) {
         <MenuItem
           onClick={() => {
             if (confirm('Are you sure you want to delete this Recruitment?')) {
-              axios
-                .delete(`Employee/DeleteRecruitment?ID=${Recruitment.dulieu.RecruitmentID}`)
-                .then((res) => {
-                  if (res.data.Status === 200) {
-                    alert('Recruitment Deleted');
-                    window.location.reload();
-                  } else {
-                    alert('Recruitment Not Deleted');
-                  }
-                });
+              axios.delete(`Employee/Recruitment/${RecruitmentID}`).then((res) => {
+                if (res.data.Status === 200) {
+                  handleOpenToast({
+                    isOpen: true,
+                    horizontal: 'right',
+                    vertical: 'top',
+                    message: 'Successfully deleted',
+                    color: 'warning'
+                  })();
+                } else {
+                  handleOpenToast({
+                    isOpen: true,
+                    horizontal: 'right',
+                    vertical: 'top',
+                    message: 'Fail deleted',
+                    color: 'error'
+                  })();
+                }
+              });
             }
           }}
           sx={{ color: 'text.secondary' }}

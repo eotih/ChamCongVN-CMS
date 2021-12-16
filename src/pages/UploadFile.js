@@ -12,7 +12,7 @@ class UploadFile extends React.Component {
 
   async submit(e) {
     e.preventDefault();
-    const url = `Employee/UploadListRecruitment`;
+    const url = `Employee/Recruitment`;
     const formData = new FormData();
     formData.append('body', this.state.file);
     const config = {

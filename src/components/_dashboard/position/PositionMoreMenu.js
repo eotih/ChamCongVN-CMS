@@ -56,7 +56,6 @@ export default function PositionMoreMenu({ dulieu, handleOpenToast }) {
               message: 'Successfully updated',
               color: 'info'
             })();
-            formik.resetForm();
           } else {
             handleOpenToast({
               isOpen: true,

@@ -23,7 +23,8 @@ import { LoadingButton } from '@mui/lab';
 import axios from '../../../functions/Axios';
 // ----------------------------------------------------------------------
 
-export default function WorkMoreMenu(Work) {
+export default function WorkMoreMenu({ dulieu, handleOpenToast }) {
+  const { WorkID, WorkName, Note } = dulieu;
   const ref = useRef(null);
   const [isOpen, setIsOpen] = useState(false);
   const [open, setOpen] = useState(false);
@@ -44,13 +45,25 @@ export default function WorkMoreMenu(Work) {
     },
     onSubmit: () => {
       axios
-        .post(`Component/Work`, formik.values)
+        .put(`Component/Work/${WorkID}`, formik.values)
         .then((res) => {
           if (res.data.Status === 200) {
-            alert('Work Updated');
-            window.location.reload();
+            setOpen(false);
+            handleOpenToast({
+              isOpen: true,
+              horizontal: 'right',
+              vertical: 'top',
+              message: 'Successfully updated',
+              color: 'info'
+            })();
           } else {
-            alert('Work not Updated');
+            handleOpenToast({
+              isOpen: true,
+              horizontal: 'right',
+              vertical: 'top',
+              message: 'Fail updated',
+              color: 'error'
+            })();
           }
         })
         .catch((err) => {
@@ -59,8 +72,9 @@ export default function WorkMoreMenu(Work) {
     }
   });
   const handleOpen = () => {
-    formik.setFieldValue('WorkID', Work.dulieu.WorkID);
-    formik.setFieldValue('WorkName', Work.dulieu.WorkName);
+    formik.setFieldValue('WorkID', WorkID);
+    formik.setFieldValue('WorkName', WorkName);
+    formik.setFieldValue('Note', Note);
     setOpen(true);
   };
   const { handleSubmit, getFieldProps } = formik;
@@ -83,12 +97,23 @@ export default function WorkMoreMenu(Work) {
         <MenuItem
           onClick={() => {
             if (confirm('Are you sure you want to delete this work?')) {
-              axios.delete(`Component/DeleteWork?ID=${Work.dulieu.WorkID}`).then((res) => {
+              axios.delete(`Component/Work/${WorkID}`).then((res) => {
                 if (res.data.Status === 200) {
-                  alert('Work Deleted');
-                  window.location.reload();
+                  handleOpenToast({
+                    isOpen: true,
+                    horizontal: 'right',
+                    vertical: 'top',
+                    message: 'Successfully deleted',
+                    color: 'warning'
+                  })();
                 } else {
-                  alert('Work Not Deleted');
+                  handleOpenToast({
+                    isOpen: true,
+                    horizontal: 'right',
+                    vertical: 'top',
+                    message: 'Fail deleted',
+                    color: 'error'
+                  })();
                 }
               });
             }
