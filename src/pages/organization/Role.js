@@ -32,6 +32,7 @@ import Scrollbar from '../../components/Scrollbar';
 import SearchNotFound from '../../components/SearchNotFound';
 import { RoleListHead, RoleListToolbar, RoleMoreMenu } from '../../components/_dashboard/role';
 import { getAllRole } from '../../functions/Organization';
+import Toast from '../../components/Toast';
 //
 
 // ----------------------------------------------------------------------
@@ -84,12 +85,25 @@ export default function Role() {
   const [open, setOpen] = useState(false);
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
+  const [openToast, setOpenToast] = useState({
+    isOpen: false,
+    vertical: 'top',
+    message: '',
+    color: '',
+    horizontal: 'right'
+  });
 
+  const handleOpenToast = (newState) => () => {
+    setOpenToast({ isOpen: true, ...newState });
+  };
+  const handleCloseToast = () => {
+    setOpenToast({ ...openToast, isOpen: false });
+  };
   useEffect(() => {
     getAllRole().then((res) => {
       setRole(res);
     });
-  }, []);
+  }, [role]);
   const handleRequestSort = (event, property) => {
     const isAsc = orderBy === property && order === 'asc';
     setOrder(isAsc ? 'desc' : 'asc');
@@ -137,6 +151,7 @@ export default function Role() {
   };
   const style = {
     position: 'relative',
+    borderRadius: '10px',
     bgcolor: 'background.paper',
     boxShadow: 24,
     p: 4
@@ -151,10 +166,23 @@ export default function Role() {
         .post(`Organization/AddOrEditRole`, formik.values)
         .then((res) => {
           if (res.data.Status === 'Success') {
-            alert('Thêm thành công');
-            window.location.reload();
+            setOpen(false);
+            handleOpenToast({
+              isOpen: true,
+              horizontal: 'right',
+              vertical: 'top',
+              message: 'Successfully Added',
+              color: 'success'
+            })();
+            formik.resetForm();
           } else {
-            alert('Thêm thất bại');
+            handleOpenToast({
+              isOpen: true,
+              horizontal: 'right',
+              vertical: 'top',
+              message: 'Fail deleted',
+              color: 'error'
+            })();
           }
         })
         .catch((err) => {
@@ -172,6 +200,7 @@ export default function Role() {
 
   return (
     <Page title="Role | ChamCongVN">
+      {openToast.isOpen === true && <Toast open={openToast} handleCloseToast={handleCloseToast} />}
       <Modal
         open={open}
         sx={{
@@ -264,7 +293,7 @@ export default function Role() {
                         <TableCell align="left">{RoleID}</TableCell>
                         <TableCell align="left">{RoleName}</TableCell>
                         <TableCell align="right">
-                          <RoleMoreMenu dulieu={row} />
+                          <RoleMoreMenu dulieu={row} handleOpenToast={handleOpenToast} />
                         </TableCell>
                       </TableRow>
                     );

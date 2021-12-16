@@ -33,7 +33,7 @@ import SearchNotFound from '../../components/SearchNotFound';
 import { WorkListHead, WorkListToolbar, WorkMoreMenu } from '../../components/_dashboard/work';
 //
 import { getAllWorks } from '../../functions/Component';
-
+import Toast from '../../components/Toast';
 // ----------------------------------------------------------------------
 
 const TABLE_HEAD = [
@@ -85,12 +85,24 @@ export default function Work() {
   const [open, setOpen] = useState(false);
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
+  const [openToast, setOpenToast] = useState({
+    isOpen: false,
+    vertical: 'top',
+    message: '',
+    horizontal: 'right'
+  });
 
+  const handleOpenToast = (newState) => () => {
+    setOpenToast({ isOpen: true, ...newState });
+  };
+  const handleCloseToast = () => {
+    setOpenToast({ ...openToast, isOpen: false });
+  };
   useEffect(() => {
     getAllWorks().then((res) => {
       setWork(res);
     });
-  }, []);
+  }, [work]);
   const handleRequestSort = (event, property) => {
     const isAsc = orderBy === property && order === 'asc';
     setOrder(isAsc ? 'desc' : 'asc');
@@ -138,6 +150,7 @@ export default function Work() {
   };
   const style = {
     position: 'relative',
+    borderRadius: '10px',
     bgcolor: 'background.paper',
     boxShadow: 24,
     p: 4
@@ -153,10 +166,23 @@ export default function Work() {
         .post(`Component/AddOrEditWork`, formik.values)
         .then((res) => {
           if (res.data.Status === 'Success') {
-            alert('Thêm thành công');
-            window.location.reload();
+            setOpen(false);
+            handleOpenToast({
+              isOpen: true,
+              horizontal: 'right',
+              vertical: 'top',
+              message: 'Successfully Added',
+              color: 'success'
+            })();
+            formik.resetForm();
           } else {
-            alert('Thêm thất bại');
+            handleOpenToast({
+              isOpen: true,
+              horizontal: 'right',
+              vertical: 'top',
+              message: 'Fail deleted',
+              color: 'error'
+            })();
           }
         })
         .catch((err) => {
@@ -174,6 +200,7 @@ export default function Work() {
 
   return (
     <Page title="Work | ChamCongVN">
+      {openToast.isOpen === true && <Toast open={openToast} handleCloseToast={handleCloseToast} />}
       <Modal
         open={open}
         sx={{
@@ -279,7 +306,7 @@ export default function Work() {
                           <TableCell align="left">{WorkName}</TableCell>
                           <TableCell align="left">{Note}</TableCell>
                           <TableCell align="right">
-                            <WorkMoreMenu dulieu={row} />
+                            <WorkMoreMenu dulieu={row} handleOpenToast={handleOpenToast} />
                           </TableCell>
                         </TableRow>
                       );

@@ -39,12 +39,20 @@ const sidebarConfig = [
         path: '/organization/shift'
       },
       {
+        title: 'Overtime',
+        path: '/organization/overtime'
+      },
+      {
         title: 'Account',
         path: '/organization/account'
       },
       {
         title: 'Role',
         path: '/organization/role'
+      },
+      {
+        title: 'Level',
+        path: '/organization/level'
       },
       {
         title: 'Position',

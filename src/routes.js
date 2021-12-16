@@ -19,9 +19,11 @@ import EmployeeDetails from './pages/employee/EmployeeDetails';
 import Account from './pages/organization/Account';
 import Profile from './pages/Profile';
 import Shift from './pages/organization/Shift';
+import Overtime from './pages/organization/Overtime';
 import Role from './pages/organization/Role';
 import Position from './pages/organization/Position';
 import Organization from './pages/organization/Organization';
+import Level from './pages/organization/Level';
 // Component
 import State from './pages/component/State';
 import Work from './pages/component/Work';
@@ -34,7 +36,7 @@ import Salary from './pages/salary/Salary';
 import SalaryTable from './pages/salary/SalaryTable';
 import SalaryDeduct from './pages/salary/SalaryDeduct';
 import Laudatory from './pages/salary/Laudatory';
-import Overtime from './pages/salary/OvertimeSalary';
+import OvertimeSalary from './pages/salary/OvertimeSalary';
 import TimeKeeper from './pages/TimeKeeper';
 
 // ----------------------------------------------------------------------
@@ -73,7 +75,9 @@ export default function Router() {
         { path: 'account', element: <Account /> },
         { path: 'profile', element: <Profile /> },
         { path: 'shift', element: <Shift /> },
+        { path: 'overtime', element: <Overtime /> },
         { path: 'role', element: <Role /> },
+        { path: 'level', element: <Level /> },
         { path: 'position', element: <Position /> }
       ]
     },
@@ -97,7 +101,7 @@ export default function Router() {
         { path: 'salarytable', element: <SalaryTable /> },
         { path: 'salarydeduct', element: <SalaryDeduct /> },
         { path: 'laudatory', element: <Laudatory /> },
-        { path: 'overtimesalary', element: <Overtime /> }
+        { path: 'overtimesalary', element: <OvertimeSalary /> }
       ]
     },
     {

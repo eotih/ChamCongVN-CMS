@@ -40,6 +40,7 @@ import {
   OrganizationMoreMenu
 } from '../../components/_dashboard/organization';
 import { getAllOrganization } from '../../functions/Organization';
+import Toast from '../../components/Toast';
 //
 
 // ----------------------------------------------------------------------
@@ -98,12 +99,25 @@ export default function Organization() {
   const [open, setOpen] = useState(false);
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
+  const [openToast, setOpenToast] = useState({
+    isOpen: false,
+    vertical: 'top',
+    message: '',
+    color: '',
+    horizontal: 'right'
+  });
 
+  const handleOpenToast = (newState) => () => {
+    setOpenToast({ isOpen: true, ...newState });
+  };
+  const handleCloseToast = () => {
+    setOpenToast({ ...openToast, isOpen: false });
+  };
   useEffect(() => {
     getAllOrganization().then((res) => {
       setOrganization(res);
     });
-  }, []);
+  }, [organization]);
   const handleRequestSort = (event, property) => {
     const isAsc = orderBy === property && order === 'asc';
     setOrder(isAsc ? 'desc' : 'asc');
@@ -151,6 +165,7 @@ export default function Organization() {
   };
   const style = {
     position: 'relative',
+    borderRadius: '10px',
     bgcolor: 'background.paper',
     boxShadow: 24,
     p: 4
@@ -172,10 +187,23 @@ export default function Organization() {
         .post(`Organization/AddOrEditOrganization`, formik.values)
         .then((res) => {
           if (res.data.Status === 'Success') {
-            alert('Thêm thành công');
-            window.location.reload();
+            setOpen(false);
+            handleOpenToast({
+              isOpen: true,
+              horizontal: 'right',
+              vertical: 'top',
+              message: 'Successfully Added',
+              color: 'success'
+            })();
+            formik.resetForm();
           } else {
-            alert('Thêm thất bại');
+            handleOpenToast({
+              isOpen: true,
+              horizontal: 'right',
+              vertical: 'top',
+              message: 'Fail deleted',
+              color: 'error'
+            })();
           }
         })
         .catch((err) => {
@@ -192,6 +220,7 @@ export default function Organization() {
 
   return (
     <Page title="Organization | ChamCongVN">
+      {openToast.isOpen === true && <Toast open={openToast} handleCloseToast={handleCloseToast} />}
       <Modal
         open={open}
         sx={{
@@ -340,7 +369,7 @@ export default function Organization() {
                           <TableCell align="left">{PublicIP}</TableCell>
                           <TableCell align="left">{PythonIP}</TableCell>
                           <TableCell align="right">
-                            <OrganizationMoreMenu dulieu={row} />
+                            <OrganizationMoreMenu dulieu={row} handleOpenToast={handleOpenToast} />
                           </TableCell>
                         </TableRow>
                       );

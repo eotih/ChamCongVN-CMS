@@ -41,11 +41,12 @@ export default function SalarytbMoreMenu(SalaryTable) {
 
   const style = {
     position: 'relative',
+    borderRadius: '10px',
     bgcolor: 'background.paper',
     boxShadow: 24,
     p: 4
   };
-  const convertDateTime = (date) => {
+  const convertDate = (date) => {
     const newDate = new Date(date);
     const years = newDate.getFullYear();
     return `${years}`;
@@ -55,7 +56,7 @@ export default function SalarytbMoreMenu(SalaryTable) {
       SalaryTableID: '',
       SalaryTableName: '',
       Month: '',
-      Year: convertDateTime(year),
+      Year: convertDate(year),
       MinSalary: '',
       TotalTimeRegulation: '',
       UpdatedBy: '',
@@ -70,7 +71,7 @@ export default function SalarytbMoreMenu(SalaryTable) {
           MinSalary: formik.values.MinSalary,
           TotalTimeRegulation: formik.values.TotalTimeRegulation,
           UpdatedBy: formik.values.UpdatedBy,
-          Year: convertDateTime(year)
+          Year: convertDate(year)
         })
         .then((res) => {
           if (res.data.Status === 'Updated') {

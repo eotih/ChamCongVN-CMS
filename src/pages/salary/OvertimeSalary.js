@@ -41,10 +41,10 @@ import Label from '../../components/Label';
 import Scrollbar from '../../components/Scrollbar';
 import SearchNotFound from '../../components/SearchNotFound';
 import {
-  OvertimeListHead,
-  OvertimeListToolbar,
-  OvertimeMoreMenu
-} from '../../components/_dashboard/overtime';
+  OvertimeSalaryListHead,
+  OvertimeSalaryListToolbar,
+  OvertimeSalaryMoreMenu
+} from '../../components/_dashboard/overtimesalary';
 import { getAllOvertimes } from '../../functions/Salary';
 import { getAllEmployees } from '../../functions/Employee';
 //
@@ -160,15 +160,9 @@ export default function User() {
   const handleFilterByName = (event) => {
     setFilterName(event.target.value);
   };
-  const convertDateTime = (date) => {
-    const newDate = new Date(date);
-    const hour = newDate.getHours();
-    const min = newDate.getMinutes();
-    const sec = newDate.getSeconds();
-    return `${hour}:${min}:${sec}`;
-  };
   const style = {
     position: 'relative',
+    borderRadius: '10px',
     bgcolor: 'background.paper',
     boxShadow: 24,
     p: 4
@@ -296,7 +290,7 @@ export default function User() {
         </Stack>
 
         <Card>
-          <OvertimeListToolbar
+          <OvertimeSalaryListToolbar
             numSelected={selected.length}
             filterName={filterName}
             onFilterName={handleFilterByName}
@@ -305,7 +299,7 @@ export default function User() {
           <Scrollbar>
             <TableContainer sx={{ minWidth: 800 }}>
               <Table>
-                <OvertimeListHead
+                <OvertimeSalaryListHead
                   order={order}
                   orderBy={orderBy}
                   headLabel={TABLE_HEAD}
@@ -350,7 +344,7 @@ export default function User() {
                           <TableCell align="left">{Reason}</TableCell>
                           <TableCell align="left">{Amount}</TableCell>
                           <TableCell align="right">
-                            <OvertimeMoreMenu />
+                            <OvertimeSalaryMoreMenu />
                           </TableCell>
                         </TableRow>
                       );

@@ -4,12 +4,20 @@ async function getAllAccount() {
   const res = await Axios.get('Organization/getAllAccount');
   return res.data;
 }
+async function GetEmployeeForAccount() {
+  const res = await Axios.get('Organization/GetEmployeeForAccount');
+  return res.data;
+}
 async function getAllPosition() {
   const res = await Axios.get('Organization/getAllPosition');
   return res.data;
 }
 async function getAllShift() {
   const res = await Axios.get('Organization/GetAllShift');
+  return res.data;
+}
+async function getAllOvertimes() {
+  const res = await Axios.get('Organization/GetAllOverTime');
   return res.data;
 }
 async function getAllRole() {
@@ -24,4 +32,13 @@ async function getAllLevels() {
   const res = await Axios.get('Organization/GetAllLevels');
   return res.data;
 }
-export { getAllRole, getAllShift, getAllPosition, getAllAccount, getAllOrganization, getAllLevels };
+export {
+  getAllRole,
+  getAllShift,
+  getAllOvertimes,
+  getAllPosition,
+  getAllAccount,
+  getAllOrganization,
+  getAllLevels,
+  GetEmployeeForAccount
+};
