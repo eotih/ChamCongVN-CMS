@@ -119,7 +119,7 @@ export default function ShiftMoreMenu({ dulieu, handleOpenToast }) {
         <MenuItem
           onClick={() => {
             if (confirm('Are you sure you want to delete this shift?')) {
-              axios.delete(`Organization/Shift?ID=${ShiftID}`).then((res) => {
+              axios.delete(`Organization/Shift/${ShiftID}`).then((res) => {
                 if (res.data.Status === 200) {
                   handleOpenToast({
                     isOpen: true,

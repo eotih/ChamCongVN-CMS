@@ -52,7 +52,7 @@ export default function RecruitmentMoreMenu({ dulieu, handleOpenToast }) {
         <MenuItem
           onClick={() => {
             if (confirm('Are you sure you want to delete this Recruitment?')) {
-              axios.delete(`Employee/Recruitment?ID=${RecruitmentID}`).then((res) => {
+              axios.delete(`Employee/Recruitment/${RecruitmentID}`).then((res) => {
                 if (res.data.Status === 200) {
                   handleOpenToast({
                     isOpen: true,

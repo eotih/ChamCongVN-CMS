@@ -97,7 +97,7 @@ export default function WorkMoreMenu({ dulieu, handleOpenToast }) {
         <MenuItem
           onClick={() => {
             if (confirm('Are you sure you want to delete this work?')) {
-              axios.delete(`Component/Work?ID=${WorkID}`).then((res) => {
+              axios.delete(`Component/Work/${WorkID}`).then((res) => {
                 if (res.data.Status === 200) {
                   handleOpenToast({
                     isOpen: true,

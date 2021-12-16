@@ -98,7 +98,7 @@ export default function RoleMoreMenu({ dulieu, handleOpenToast }) {
         <MenuItem
           onClick={() => {
             if (confirm('Are you sure you want to delete this role?')) {
-              axios.delete(`Organization/Role?ID=${RoleID}`).then((res) => {
+              axios.delete(`Organization/Role/${RoleID}`).then((res) => {
                 if (res.data.Status === 200) {
                   handleOpenToast({
                     isOpen: true,

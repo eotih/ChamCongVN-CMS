@@ -98,7 +98,7 @@ export default function SpecialtyMoreMenu({ dulieu, handleOpenToast }) {
         <MenuItem
           onClick={() => {
             if (confirm('Are you sure you want to delete this specialty?')) {
-              axios.delete(`Component/Specialities?ID=${SpecialtyID}`).then((res) => {
+              axios.delete(`Component/Specialities/${SpecialtyID}`).then((res) => {
                 if (res.data.Status === 200) {
                   handleOpenToast({
                     isOpen: true,

@@ -133,7 +133,7 @@ export default function DeductMoreMenu({ dulieu, handleOpenToast }) {
         <MenuItem
           onClick={() => {
             if (confirm('Are you sure you want to delete this deduction?')) {
-              axios.delete(`Salary/DeductionEmployee?ID=${DeductionEmployeeID}`).then((res) => {
+              axios.delete(`Salary/DeductionEmployee/${DeductionEmployeeID}`).then((res) => {
                 if (res.data.Status === 200) {
                   handleOpenToast({
                     isOpen: true,

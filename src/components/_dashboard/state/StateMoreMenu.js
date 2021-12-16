@@ -97,7 +97,7 @@ export default function StateMoreMenu({ dulieu, handleOpenToast }) {
         <MenuItem
           onClick={() => {
             if (confirm('Are you sure you want to delete this state?')) {
-              axios.delete(`Component/State?ID=${StateID}`).then((res) => {
+              axios.delete(`Component/State/${StateID}`).then((res) => {
                 if (res.data.Status === 200) {
                   handleOpenToast({
                     isOpen: true,

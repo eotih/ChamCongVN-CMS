@@ -134,7 +134,7 @@ export default function SalarytbMoreMenu({ dulieu, handleOpenToast }) {
         <MenuItem
           onClick={() => {
             if (confirm('Are you sure you want to delete this salary table?')) {
-              axios.delete(`Salary/SalaryTable?ID=${SalaryTableID}`).then((res) => {
+              axios.delete(`Salary/SalaryTable/${SalaryTableID}`).then((res) => {
                 if (res.data.Status === 200) {
                   handleOpenToast({
                     isOpen: true,
