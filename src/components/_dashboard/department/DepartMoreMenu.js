@@ -26,6 +26,7 @@ import axios from '../../../functions/Axios';
 export default function DepartMoreMenu({ dulieu, handleOpenToast }) {
   const { DepartmentID, DepartmentName, Note, Phone } = dulieu;
   const ref = useRef(null);
+  const [loading, setLoading] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
   const [open, setOpen] = useState(false);
   const handleClose = () => setOpen(false);
@@ -44,6 +45,7 @@ export default function DepartMoreMenu({ dulieu, handleOpenToast }) {
       Phone: ''
     },
     onSubmit: () => {
+      setLoading(true);
       axios
         .put(`Component/Department/${DepartmentID}`, formik.values)
         .then((res) => {
@@ -57,6 +59,7 @@ export default function DepartMoreMenu({ dulieu, handleOpenToast }) {
               color: 'info'
             })();
             formik.resetForm();
+            setLoading(false);
           } else {
             handleOpenToast({
               isOpen: true,
@@ -182,7 +185,13 @@ export default function DepartMoreMenu({ dulieu, handleOpenToast }) {
                       variant="outlined"
                     />
                   </Stack>
-                  <LoadingButton fullWidth size="large" type="submit" variant="contained">
+                  <LoadingButton
+                    loading={loading}
+                    fullWidth
+                    size="large"
+                    type="submit"
+                    variant="contained"
+                  >
                     Edit Department
                   </LoadingButton>
                 </Stack>
