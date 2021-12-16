@@ -46,6 +46,7 @@ import {
 import { getAllLaudatorys } from '../../functions/Salary';
 import { getAllEmployees } from '../../functions/Employee';
 import { convertDate } from '../../utils/formatDatetime';
+import Toast from '../../components/Toast';
 //
 
 // ----------------------------------------------------------------------
@@ -104,7 +105,20 @@ export default function User() {
   const [open, setOpen] = useState(false);
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
+  const [openToast, setOpenToast] = useState({
+    isOpen: false,
+    vertical: 'top',
+    message: '',
+    color: '',
+    horizontal: 'right'
+  });
 
+  const handleOpenToast = (newState) => () => {
+    setOpenToast({ isOpen: true, ...newState });
+  };
+  const handleCloseToast = () => {
+    setOpenToast({ ...openToast, isOpen: false });
+  };
   useEffect(() => {
     getAllLaudatorys().then((res) => {
       setLaudatory(res);
@@ -112,7 +126,7 @@ export default function User() {
     getAllEmployees().then((res) => {
       setEmployee(res);
     });
-  }, []);
+  }, [laudatory]);
   const handleRequestSort = (event, property) => {
     const isAsc = orderBy === property && order === 'asc';
     setOrder(isAsc ? 'desc' : 'asc');
@@ -187,10 +201,23 @@ export default function User() {
         })
         .then((res) => {
           if (res.data.Status === 'Success') {
-            alert('Thêm thành công');
-            window.location.reload();
+            setOpen(false);
+            handleOpenToast({
+              isOpen: true,
+              horizontal: 'right',
+              vertical: 'top',
+              message: 'Successfully Added',
+              color: 'success'
+            })();
+            formik.resetForm();
           } else {
-            alert('Thêm thất bại');
+            handleOpenToast({
+              isOpen: true,
+              horizontal: 'right',
+              vertical: 'top',
+              message: 'Fail deleted',
+              color: 'error'
+            })();
           }
         })
         .catch((err) => {
@@ -211,6 +238,7 @@ export default function User() {
 
   return (
     <Page title="Laudatory | ChamCongVN">
+      {openToast.isOpen === true && <Toast open={openToast} handleCloseToast={handleCloseToast} />}
       <Container>
         <Modal
           open={open}
@@ -363,7 +391,7 @@ export default function User() {
                           <TableCell align="left">{Reason}</TableCell>
                           <TableCell align="left">{Amount}</TableCell>
                           <TableCell align="right">
-                            <LaudatoryMoreMenu dulieu={row} />
+                            <LaudatoryMoreMenu dulieu={row} handleOpenToast={handleOpenToast} />
                           </TableCell>
                         </TableRow>
                       );

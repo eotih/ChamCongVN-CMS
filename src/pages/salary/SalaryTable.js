@@ -44,6 +44,7 @@ import {
   SalarytbMoreMenu
 } from '../../components/_dashboard/salarytable';
 import { getAllSalaryTables } from '../../functions/Salary';
+import Toast from '../../components/Toast';
 //
 
 // ----------------------------------------------------------------------
@@ -102,12 +103,25 @@ export default function User() {
   const [open, setOpen] = useState(false);
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
+  const [openToast, setOpenToast] = useState({
+    isOpen: false,
+    vertical: 'top',
+    message: '',
+    color: '',
+    horizontal: 'right'
+  });
 
+  const handleOpenToast = (newState) => () => {
+    setOpenToast({ isOpen: true, ...newState });
+  };
+  const handleCloseToast = () => {
+    setOpenToast({ ...openToast, isOpen: false });
+  };
   useEffect(() => {
     getAllSalaryTables().then((res) => {
       setSalaryTable(res);
     });
-  }, []);
+  }, [salarytable]);
   const handleRequestSort = (event, property) => {
     const isAsc = orderBy === property && order === 'asc';
     setOrder(isAsc ? 'desc' : 'asc');
@@ -185,10 +199,23 @@ export default function User() {
         })
         .then((res) => {
           if (res.data.Status === 'Success') {
-            alert('Thêm thành công');
-            window.location.reload();
+            setOpen(false);
+            handleOpenToast({
+              isOpen: true,
+              horizontal: 'right',
+              vertical: 'top',
+              message: 'Successfully Added',
+              color: 'success'
+            })();
+            formik.resetForm();
           } else {
-            alert('Thêm thất bại');
+            handleOpenToast({
+              isOpen: true,
+              horizontal: 'right',
+              vertical: 'top',
+              message: 'Fail deleted',
+              color: 'error'
+            })();
           }
         })
         .catch((err) => {
@@ -210,6 +237,7 @@ export default function User() {
 
   return (
     <Page title="Salary Table | ChamCongVN">
+      {openToast.isOpen === true && <Toast open={openToast} handleCloseToast={handleCloseToast} />}
       <Modal
         open={open}
         sx={{
@@ -365,7 +393,7 @@ export default function User() {
                           <TableCell align="left">{MinSalary}</TableCell>
                           <TableCell align="left">{TotalTimeRegulation}</TableCell>
                           <TableCell align="right">
-                            <SalarytbMoreMenu dulieu={row} />
+                            <SalarytbMoreMenu dulieu={row} handleOpenToast={handleOpenToast} />
                           </TableCell>
                         </TableRow>
                       );

@@ -37,7 +37,7 @@ import {
 } from '../../components/_dashboard/degree';
 //
 import { getAllDegrees } from '../../functions/Component';
-
+import Toast from '../../components/Toast';
 // ----------------------------------------------------------------------
 
 const TABLE_HEAD = [
@@ -87,6 +87,20 @@ export default function Degree() {
   const [degree, setDegree] = useState([]);
   const [rowsPerPage, setRowsPerPage] = useState(5);
   const [open, setOpen] = useState(false);
+  const [openToast, setOpenToast] = useState({
+    isOpen: false,
+    vertical: 'top',
+    message: '',
+    color: '',
+    horizontal: 'right'
+  });
+
+  const handleOpenToast = (newState) => () => {
+    setOpenToast({ isOpen: true, ...newState });
+  };
+  const handleCloseToast = () => {
+    setOpenToast({ ...openToast, isOpen: false });
+  };
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
 
@@ -94,7 +108,7 @@ export default function Degree() {
     getAllDegrees().then((res) => {
       setDegree(res);
     });
-  }, []);
+  }, [degree]);
   const handleRequestSort = (event, property) => {
     const isAsc = orderBy === property && order === 'asc';
     setOrder(isAsc ? 'desc' : 'asc');
@@ -158,10 +172,23 @@ export default function Degree() {
         .post(`Component/AddOrEditDegrees`, formik.values)
         .then((res) => {
           if (res.data.Status === 'Success') {
-            alert('Thêm thành công');
-            window.location.reload();
+            setOpen(false);
+            handleOpenToast({
+              isOpen: true,
+              horizontal: 'right',
+              vertical: 'top',
+              message: 'Successfully Added',
+              color: 'success'
+            })();
+            formik.resetForm();
           } else {
-            alert('Thêm thất bại');
+            handleOpenToast({
+              isOpen: true,
+              horizontal: 'right',
+              vertical: 'top',
+              message: 'Fail deleted',
+              color: 'error'
+            })();
           }
         })
         .catch((err) => {
@@ -179,6 +206,7 @@ export default function Degree() {
 
   return (
     <Page title="Degree | ChamCongVN">
+      {openToast.isOpen === true && <Toast open={openToast} handleCloseToast={handleCloseToast} />}
       <Modal
         open={open}
         sx={{
@@ -284,7 +312,7 @@ export default function Degree() {
                           <TableCell align="left">{DegreeName}</TableCell>
                           <TableCell align="left">{Note}</TableCell>
                           <TableCell align="right">
-                            <DegreeMoreMenu dulieu={row} />
+                            <DegreeMoreMenu dulieu={row} handleOpenToast={handleOpenToast} />
                           </TableCell>
                         </TableRow>
                       );

@@ -42,6 +42,7 @@ import {
   AccountMoreMenu
 } from '../../components/_dashboard/account';
 import { getAllAccount, getAllRole, GetEmployeeForAccount } from '../../functions/Organization';
+import Toast from '../../components/Toast';
 //
 
 // ----------------------------------------------------------------------
@@ -99,7 +100,20 @@ export default function Account() {
   const [open, setOpen] = useState(false);
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
+  const [openToast, setOpenToast] = useState({
+    isOpen: false,
+    vertical: 'top',
+    message: '',
+    color: '',
+    horizontal: 'right'
+  });
 
+  const handleOpenToast = (newState) => () => {
+    setOpenToast({ isOpen: true, ...newState });
+  };
+  const handleCloseToast = () => {
+    setOpenToast({ ...openToast, isOpen: false });
+  };
   useEffect(() => {
     getAllAccount().then((res) => {
       setAccount(res);
@@ -110,7 +124,7 @@ export default function Account() {
     getAllRole().then((res) => {
       setRole(res);
     });
-  }, []);
+  }, [account]);
   const handleRequestSort = (event, property) => {
     const isAsc = orderBy === property && order === 'asc';
     setOrder(isAsc ? 'desc' : 'asc');
@@ -177,10 +191,23 @@ export default function Account() {
         .post(`Organization/AddAccount`, formik.values)
         .then((res) => {
           if (res.data.Status === 'Success') {
-            alert('Thêm thành công');
-            window.location.reload();
+            setOpen(false);
+            handleOpenToast({
+              isOpen: true,
+              horizontal: 'right',
+              vertical: 'top',
+              message: 'Successfully Added',
+              color: 'success'
+            })();
+            formik.resetForm();
           } else {
-            alert('Thêm thất bại');
+            handleOpenToast({
+              isOpen: true,
+              horizontal: 'right',
+              vertical: 'top',
+              message: 'Fail deleted',
+              color: 'error'
+            })();
           }
         })
         .catch((err) => {
@@ -204,6 +231,7 @@ export default function Account() {
 
   return (
     <Page title="Account | ChamCongVN">
+      {openToast.isOpen === true && <Toast open={openToast} handleCloseToast={handleCloseToast} />}
       <Modal
         open={open}
         sx={{
@@ -351,7 +379,7 @@ export default function Account() {
                           <TableCell align="left">{Email}</TableCell>
                           <TableCell align="left">{StateName}</TableCell>
                           <TableCell align="right">
-                            <AccountMoreMenu dulieu={row} />
+                            <AccountMoreMenu dulieu={row} handleOpenToast={handleOpenToast} />
                           </TableCell>
                         </TableRow>
                       );

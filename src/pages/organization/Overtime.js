@@ -44,6 +44,7 @@ import {
   OvertimeListToolbar,
   OvertimeMoreMenu
 } from '../../components/_dashboard/overtime';
+import Toast from '../../components/Toast';
 //
 
 import { getAllOvertimes } from '../../functions/Organization';
@@ -110,7 +111,20 @@ export default function Overtime() {
   const [open, setOpen] = useState(false);
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
+  const [openToast, setOpenToast] = useState({
+    isOpen: false,
+    vertical: 'top',
+    message: '',
+    color: '',
+    horizontal: 'right'
+  });
 
+  const handleOpenToast = (newState) => () => {
+    setOpenToast({ isOpen: true, ...newState });
+  };
+  const handleCloseToast = () => {
+    setOpenToast({ ...openToast, isOpen: false });
+  };
   useEffect(() => {
     getAllOvertimes().then((res) => {
       setOvertime(res);
@@ -118,7 +132,7 @@ export default function Overtime() {
     getAllDepartments().then((res) => {
       setDepartment(res);
     });
-  }, []);
+  }, [overtime]);
   const handleRequestSort = (event, property) => {
     const isAsc = orderBy === property && order === 'asc';
     setOrder(isAsc ? 'desc' : 'asc');
@@ -205,10 +219,23 @@ export default function Overtime() {
         })
         .then((res) => {
           if (res.data.Status === 'Success') {
-            alert('Thêm thành công');
-            window.location.reload();
+            setOpen(false);
+            handleOpenToast({
+              isOpen: true,
+              horizontal: 'right',
+              vertical: 'top',
+              message: 'Successfully Added',
+              color: 'success'
+            })();
+            formik.resetForm();
           } else {
-            alert('Thêm thất bại');
+            handleOpenToast({
+              isOpen: true,
+              horizontal: 'right',
+              vertical: 'top',
+              message: 'Fail deleted',
+              color: 'error'
+            })();
           }
         })
         .catch((err) => {
@@ -226,6 +253,7 @@ export default function Overtime() {
 
   return (
     <Page title="Overtime | ChamCongVN">
+      {openToast.isOpen === true && <Toast open={openToast} handleCloseToast={handleCloseToast} />}
       <Modal
         open={open}
         sx={{
@@ -411,7 +439,7 @@ export default function Overtime() {
                           <TableCell align="left">{Quantity}</TableCell>
                           <TableCell align="left">{convertIsActive(IsActive)}</TableCell>
                           <TableCell align="right">
-                            <OvertimeMoreMenu dulieu={row} />
+                            <OvertimeMoreMenu dulieu={row} handleOpenToast={handleOpenToast} />
                           </TableCell>
                         </TableRow>
                       );

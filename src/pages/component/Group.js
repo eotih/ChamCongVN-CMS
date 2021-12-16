@@ -32,6 +32,7 @@ import Scrollbar from '../../components/Scrollbar';
 import SearchNotFound from '../../components/SearchNotFound';
 import { GroupListHead, GroupListToolbar, GroupMoreMenu } from '../../components/_dashboard/group';
 import { getAllGroups } from '../../functions/Component';
+import Toast from '../../components/Toast';
 //
 
 // ----------------------------------------------------------------------
@@ -85,12 +86,25 @@ export default function Group() {
   const [open, setOpen] = useState(false);
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
+  const [openToast, setOpenToast] = useState({
+    isOpen: false,
+    vertical: 'top',
+    message: '',
+    color: '',
+    horizontal: 'right'
+  });
 
+  const handleOpenToast = (newState) => () => {
+    setOpenToast({ isOpen: true, ...newState });
+  };
+  const handleCloseToast = () => {
+    setOpenToast({ ...openToast, isOpen: false });
+  };
   useEffect(() => {
     getAllGroups().then((res) => {
       setGroup(res);
     });
-  }, []);
+  }, [group]);
 
   const handleRequestSort = (event, property) => {
     const isAsc = orderBy === property && order === 'asc';
@@ -155,10 +169,23 @@ export default function Group() {
         .post(`Component/AddOrEditGroup`, formik.values)
         .then((res) => {
           if (res.data.Status === 'Success') {
-            alert('Thêm thành công');
-            window.location.reload();
+            setOpen(false);
+            handleOpenToast({
+              isOpen: true,
+              horizontal: 'right',
+              vertical: 'top',
+              message: 'Successfully Added',
+              color: 'success'
+            })();
+            formik.resetForm();
           } else {
-            alert('Thêm thất bại');
+            handleOpenToast({
+              isOpen: true,
+              horizontal: 'right',
+              vertical: 'top',
+              message: 'Fail deleted',
+              color: 'error'
+            })();
           }
         })
         .catch((err) => {
@@ -176,6 +203,7 @@ export default function Group() {
 
   return (
     <Page title="Group | ChamCongVN">
+      {openToast.isOpen === true && <Toast open={openToast} handleCloseToast={handleCloseToast} />}
       <Modal
         open={open}
         sx={{
@@ -279,7 +307,7 @@ export default function Group() {
                         <TableCell align="left">{GroupName}</TableCell>
                         <TableCell align="left">{Note}</TableCell>
                         <TableCell align="right">
-                          <GroupMoreMenu dulieu={row} />
+                          <GroupMoreMenu dulieu={row} handleOpenToast={handleOpenToast} />
                         </TableCell>
                       </TableRow>
                     );

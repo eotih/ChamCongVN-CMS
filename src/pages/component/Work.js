@@ -102,7 +102,7 @@ export default function Work() {
     getAllWorks().then((res) => {
       setWork(res);
     });
-  }, []);
+  }, [work]);
   const handleRequestSort = (event, property) => {
     const isAsc = orderBy === property && order === 'asc';
     setOrder(isAsc ? 'desc' : 'asc');
@@ -168,15 +168,21 @@ export default function Work() {
           if (res.data.Status === 'Success') {
             setOpen(false);
             handleOpenToast({
+              isOpen: true,
+              horizontal: 'right',
               vertical: 'top',
-              message: 'Success',
-              horizontal: 'right'
+              message: 'Successfully Added',
+              color: 'success'
             })();
-            getAllWorks().then((res) => {
-              setWork(res);
-            });
+            formik.resetForm();
           } else {
-            alert('Thêm thất bại');
+            handleOpenToast({
+              isOpen: true,
+              horizontal: 'right',
+              vertical: 'top',
+              message: 'Fail deleted',
+              color: 'error'
+            })();
           }
         })
         .catch((err) => {
@@ -300,7 +306,7 @@ export default function Work() {
                           <TableCell align="left">{WorkName}</TableCell>
                           <TableCell align="left">{Note}</TableCell>
                           <TableCell align="right">
-                            <WorkMoreMenu dulieu={row} />
+                            <WorkMoreMenu dulieu={row} handleOpenToast={handleOpenToast} />
                           </TableCell>
                         </TableRow>
                       );

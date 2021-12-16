@@ -36,6 +36,7 @@ import {
   PositionMoreMenu
 } from '../../components/_dashboard/position';
 import { getAllPosition } from '../../functions/Organization';
+import Toast from '../../components/Toast';
 //
 
 // ----------------------------------------------------------------------
@@ -84,17 +85,30 @@ export default function Position() {
   const [selected, setSelected] = useState([]);
   const [orderBy, setOrderBy] = useState('name');
   const [filterName, setFilterName] = useState('');
-  const [Position, setPosition] = useState([]);
+  const [position, setPosition] = useState([]);
   const [rowsPerPage, setRowsPerPage] = useState(5);
   const [open, setOpen] = useState(false);
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
+  const [openToast, setOpenToast] = useState({
+    isOpen: false,
+    vertical: 'top',
+    message: '',
+    color: '',
+    horizontal: 'right'
+  });
 
+  const handleOpenToast = (newState) => () => {
+    setOpenToast({ isOpen: true, ...newState });
+  };
+  const handleCloseToast = () => {
+    setOpenToast({ ...openToast, isOpen: false });
+  };
   useEffect(() => {
     getAllPosition().then((res) => {
       setPosition(res);
     });
-  }, []);
+  }, [position]);
   const handleRequestSort = (event, property) => {
     const isAsc = orderBy === property && order === 'asc';
     setOrder(isAsc ? 'desc' : 'asc');
@@ -157,10 +171,23 @@ export default function Position() {
         .post(`Organization/AddOrEditPosition`, formik.values)
         .then((res) => {
           if (res.data.Status === 'Success') {
-            alert('Thêm thành công');
-            window.location.reload();
+            setOpen(false);
+            handleOpenToast({
+              isOpen: true,
+              horizontal: 'right',
+              vertical: 'top',
+              message: 'Successfully Added',
+              color: 'success'
+            })();
+            formik.resetForm();
           } else {
-            alert('Thêm thất bại');
+            handleOpenToast({
+              isOpen: true,
+              horizontal: 'right',
+              vertical: 'top',
+              message: 'Fail deleted',
+              color: 'error'
+            })();
           }
         })
         .catch((err) => {
@@ -172,12 +199,13 @@ export default function Position() {
 
   const emptyRows = page > 0 ? Math.max(0, (1 + page) * rowsPerPage - Position.length) : 0;
 
-  const filteredUsers = applySortFilter(Position, getComparator(order, orderBy), filterName);
+  const filteredUsers = applySortFilter(position, getComparator(order, orderBy), filterName);
 
   const isUserNotFound = filteredUsers.length === 0;
 
   return (
     <Page title="Position | ChamCongVN">
+      {openToast.isOpen === true && <Toast open={openToast} handleCloseToast={handleCloseToast} />}
       <Modal
         open={open}
         sx={{
@@ -258,8 +286,9 @@ export default function Position() {
                   onSelectAllClick={handleSelectAllClick}
                 />
                 <TableBody>
-                  {Position.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map(
-                    (row) => {
+                  {position
+                    .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+                    .map((row) => {
                       const { PositionID, PositionName, Note } = row;
                       const isItemSelected = selected.indexOf(PositionName) !== -1;
 
@@ -282,12 +311,11 @@ export default function Position() {
                           <TableCell align="left">{PositionName}</TableCell>
                           <TableCell align="left">{Note}</TableCell>
                           <TableCell align="right">
-                            <PositionMoreMenu dulieu={row} />
+                            <PositionMoreMenu dulieu={row} handleOpenToast={handleOpenToast} />
                           </TableCell>
                         </TableRow>
                       );
-                    }
-                  )}
+                    })}
                   {emptyRows > 0 && (
                     <TableRow style={{ height: 53 * emptyRows }}>
                       <TableCell colSpan={6} />

@@ -37,7 +37,7 @@ import {
 } from '../../components/_dashboard/department';
 //
 import { getAllDepartments } from '../../functions/Component';
-
+import Toast from '../../components/Toast';
 // ----------------------------------------------------------------------
 
 const TABLE_HEAD = [
@@ -90,12 +90,25 @@ export default function Department() {
   const [open, setOpen] = useState(false);
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
+  const [openToast, setOpenToast] = useState({
+    isOpen: false,
+    vertical: 'top',
+    message: '',
+    color: '',
+    horizontal: 'right'
+  });
 
+  const handleOpenToast = (newState) => () => {
+    setOpenToast({ isOpen: true, ...newState });
+  };
+  const handleCloseToast = () => {
+    setOpenToast({ ...openToast, isOpen: false });
+  };
   useEffect(() => {
     getAllDepartments().then((res) => {
       setDepartment(res);
     });
-  }, []);
+  }, [department]);
 
   const handleRequestSort = (event, property) => {
     const isAsc = orderBy === property && order === 'asc';
@@ -160,10 +173,23 @@ export default function Department() {
         .post(`Component/AddOrEditDepartment`, formik.values)
         .then((res) => {
           if (res.data.Status === 'Success') {
-            alert('Thêm thành công');
-            window.location.reload();
+            setOpen(false);
+            handleOpenToast({
+              isOpen: true,
+              horizontal: 'right',
+              vertical: 'top',
+              message: 'Successfully Added',
+              color: 'success'
+            })();
+            formik.resetForm();
           } else {
-            alert('Thêm thất bại');
+            handleOpenToast({
+              isOpen: true,
+              horizontal: 'right',
+              vertical: 'top',
+              message: 'Fail deleted',
+              color: 'error'
+            })();
           }
         })
         .catch((err) => {
@@ -181,6 +207,7 @@ export default function Department() {
 
   return (
     <Page title="Department | ChamCongVN">
+      {openToast.isOpen === true && <Toast open={openToast} handleCloseToast={handleCloseToast} />}
       <Modal
         open={open}
         sx={{
@@ -293,7 +320,7 @@ export default function Department() {
                           <TableCell align="left">{Phone}</TableCell>
                           <TableCell align="left">{Note}</TableCell>
                           <TableCell align="right">
-                            <DepartMoreMenu dulieu={row} />
+                            <DepartMoreMenu dulieu={row} handleOpenToast={handleOpenToast} />
                           </TableCell>
                         </TableRow>
                       );
