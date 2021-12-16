@@ -5,19 +5,19 @@ async function getAllSalarys() {
   return res.data;
 }
 async function getAllOvertimes() {
-  const res = await Axios.get('Salary/GetAllOvertimeSalary');
+  const res = await Axios.get('Salary/OvertimeSalary');
   return res.data;
 }
 async function getAllDeductions() {
-  const res = await Axios.get('Salary/GetAllDeductionEmployee');
+  const res = await Axios.get('Salary/DeductionEmployee');
   return res.data;
 }
 async function getAllLaudatorys() {
-  const res = await Axios.get('Salary/GetAllLaudatoryEmployee');
+  const res = await Axios.get('Salary/LaudatoryEmployee');
   return res.data;
 }
 async function getAllSalaryTables() {
-  const res = await Axios.get('Salary/GetAllSalaryTable');
+  const res = await Axios.get('Salary/SalaryTable');
   return res.data;
 }
 export { getAllLaudatorys, getAllSalaryTables, getAllDeductions, getAllOvertimes, getAllSalarys };

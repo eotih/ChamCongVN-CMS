@@ -5,15 +5,15 @@ async function GetAllTimeKeeping() {
   return res.data;
 }
 async function GetCountCheckedIn() {
-  const res = await Axios.get('TimeKeeper/GetCountCheckedIn');
+  const res = await Axios.get('TimeKeeper/CheckIn/checked');
   return res.data;
 }
 async function GetCountLate() {
-  const res = await Axios.get('TimeKeeper/GetCountLate');
+  const res = await Axios.get('TimeKeeper/CheckIn/late');
   return res.data;
 }
 async function GetCountHaventCheckedIn() {
-  const res = await Axios.get('TimeKeeper/GetCountHaventCheckedIn');
+  const res = await Axios.get('TimeKeeper/CheckIn/unchecked');
   return res.data;
 }
 export { GetAllTimeKeeping, GetCountHaventCheckedIn, GetCountLate, GetCountCheckedIn };

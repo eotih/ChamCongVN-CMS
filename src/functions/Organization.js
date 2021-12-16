@@ -1,35 +1,35 @@
 import Axios from './Axios';
 
 async function getAllAccount() {
-  const res = await Axios.get('Organization/getAllAccount');
+  const res = await Axios.get('Organization/Account');
   return res.data;
 }
 async function GetEmployeeForAccount() {
-  const res = await Axios.get('Organization/GetEmployeeForAccount');
+  const res = await Axios.get('Organization/EmployeeForAccount');
   return res.data;
 }
 async function getAllPosition() {
-  const res = await Axios.get('Organization/getAllPosition');
+  const res = await Axios.get('Organization/Position');
   return res.data;
 }
 async function getAllShift() {
-  const res = await Axios.get('Organization/GetAllShift');
+  const res = await Axios.get('Organization/Shift');
   return res.data;
 }
 async function getAllOvertimes() {
-  const res = await Axios.get('Organization/GetAllOverTime');
+  const res = await Axios.get('Organization/OverTime');
   return res.data;
 }
 async function getAllRole() {
-  const res = await Axios.get('Organization/GetAllRole');
+  const res = await Axios.get('Organization/Role');
   return res.data;
 }
 async function getAllOrganization() {
-  const res = await Axios.get('Organization/GetAllOrganization');
+  const res = await Axios.get('Organization/Organization');
   return res.data;
 }
 async function getAllLevels() {
-  const res = await Axios.get('Organization/GetAllLevels');
+  const res = await Axios.get('Organization/Level');
   return res.data;
 }
 export {
