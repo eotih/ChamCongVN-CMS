@@ -44,6 +44,7 @@ export default function OvertimeMoreMenu({ dulieu, handleOpenToast }) {
     DepartmentID
   } = dulieu.Overtime;
   const ref = useRef(null);
+  const [loading, setLoading] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
   const [timeStart, setTimeStart] = useState([]);
   const [timeEnd, setTimeEnd] = useState([]);
@@ -77,6 +78,7 @@ export default function OvertimeMoreMenu({ dulieu, handleOpenToast }) {
       EndTime: convertTime(timeEnd)
     },
     onSubmit: () => {
+      setLoading(true);
       axios
         .put(`Organization/Overtime/${OverTimeID}`, {
           OverTimeID: formik.values.OverTimeID,
@@ -99,6 +101,7 @@ export default function OvertimeMoreMenu({ dulieu, handleOpenToast }) {
               color: 'info'
             })();
             formik.resetForm();
+            setLoading(false);
           } else {
             handleOpenToast({
               isOpen: true,
@@ -297,7 +300,13 @@ export default function OvertimeMoreMenu({ dulieu, handleOpenToast }) {
                       variant="outlined"
                     />
                   </Stack>
-                  <LoadingButton fullWidth size="large" type="submit" variant="contained">
+                  <LoadingButton
+                    loading={loading}
+                    fullWidth
+                    size="large"
+                    type="submit"
+                    variant="contained"
+                  >
                     Edit Overtime
                   </LoadingButton>
                 </Stack>

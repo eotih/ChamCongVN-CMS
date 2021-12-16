@@ -32,6 +32,7 @@ import axios from '../../../functions/Axios';
 
 export default function OvertimeMoreMenu() {
   const ref = useRef(null);
+  const [loading, setLoading] = useState(false);
   const [value, setValue] = React.useState(new Date());
   const [employee, setEmployee] = useState([]);
   const [employees, setEmployees] = useState([]);
@@ -57,11 +58,13 @@ export default function OvertimeMoreMenu() {
       remember: true
     },
     onSubmit: () => {
+      setLoading(true);
       axios
         .post(`Salary/OvertimeionEmployee`, formik.values)
         .then((res) => {
           if (res.data.Status === 200) {
             alert('Thêm thành công');
+            setLoading(false);
             window.location.reload();
           } else {
             alert('Thêm thất bại');
@@ -169,7 +172,13 @@ export default function OvertimeMoreMenu() {
                       variant="outlined"
                     />
                   </Stack>
-                  <LoadingButton fullWidth size="large" type="submit" variant="contained">
+                  <LoadingButton
+                    loading={loading}
+                    fullWidth
+                    size="large"
+                    type="submit"
+                    variant="contained"
+                  >
                     Add Overtime
                   </LoadingButton>
                 </Stack>

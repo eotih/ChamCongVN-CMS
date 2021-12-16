@@ -36,6 +36,7 @@ export default function SalarytbMoreMenu({ dulieu, handleOpenToast }) {
   const [year, setYear] = useState([]);
   const [month, setMonth] = React.useState('');
   const ref = useRef(null);
+  const [loading, setLoading] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
   const [open, setOpen] = useState(false);
   const handleClose = () => setOpen(false);
@@ -64,6 +65,7 @@ export default function SalarytbMoreMenu({ dulieu, handleOpenToast }) {
       remember: true
     },
     onSubmit: () => {
+      setLoading(true);
       axios
         .put(`Salary/SalaryTable/${SalaryTableID}`, {
           SalaryTableID: formik.values.SalaryTableID,
@@ -84,6 +86,8 @@ export default function SalarytbMoreMenu({ dulieu, handleOpenToast }) {
               message: 'Successfully updated',
               color: 'info'
             })();
+            formik.resetForm();
+            setLoading(false);
           } else {
             handleOpenToast({
               isOpen: true,
@@ -250,7 +254,13 @@ export default function SalarytbMoreMenu({ dulieu, handleOpenToast }) {
                       variant="outlined"
                     />
                   </Stack>
-                  <LoadingButton fullWidth size="large" type="submit" variant="contained">
+                  <LoadingButton
+                    loading={loading}
+                    fullWidth
+                    size="large"
+                    type="submit"
+                    variant="contained"
+                  >
                     Edit Salary Table
                   </LoadingButton>
                 </Stack>

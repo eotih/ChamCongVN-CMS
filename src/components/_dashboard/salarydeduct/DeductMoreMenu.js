@@ -35,6 +35,7 @@ export default function DeductMoreMenu({ dulieu, handleOpenToast }) {
   const { EmployeeID, DeductionEmployee } = dulieu;
   const { DeductionEmployeeID, DeductionName, DeductionDate, Reason, Amount } = DeductionEmployee;
   const ref = useRef(null);
+  const [loading, setLoading] = useState(false);
   const [deductdate, setDeductDate] = useState([]);
   const [employee, setEmployee] = useState([]);
   const [employees, setEmployees] = useState([]);
@@ -65,6 +66,7 @@ export default function DeductMoreMenu({ dulieu, handleOpenToast }) {
       remember: true
     },
     onSubmit: () => {
+      setLoading(true);
       axios
         .put(`Salary/DeductionEmployee/${DeductionEmployeeID}`, {
           DeductionEmployeeID: formik.values.DeductionEmployeeID,
@@ -85,6 +87,8 @@ export default function DeductMoreMenu({ dulieu, handleOpenToast }) {
               message: 'Successfully updated',
               color: 'info'
             })();
+            formik.resetForm();
+            setLoading(false);
           } else {
             handleOpenToast({
               isOpen: true,
@@ -245,7 +249,13 @@ export default function DeductMoreMenu({ dulieu, handleOpenToast }) {
                       variant="outlined"
                     />
                   </Stack>
-                  <LoadingButton fullWidth size="large" type="submit" variant="contained">
+                  <LoadingButton
+                    loading={loading}
+                    fullWidth
+                    size="large"
+                    type="submit"
+                    variant="contained"
+                  >
                     Edit Deduct
                   </LoadingButton>
                 </Stack>

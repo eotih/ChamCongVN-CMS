@@ -26,6 +26,7 @@ import axios from '../../../functions/Axios';
 export default function SpecialtyMoreMenu({ dulieu, handleOpenToast }) {
   const { SpecialtyID, SpecialtyName, Note } = dulieu;
   const ref = useRef(null);
+  const [loading, setLoading] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
   const [open, setOpen] = useState(false);
   const handleClose = () => setOpen(false);
@@ -45,6 +46,7 @@ export default function SpecialtyMoreMenu({ dulieu, handleOpenToast }) {
       remember: true
     },
     onSubmit: () => {
+      setLoading(true);
       axios
         .put(`Component/Specialities/${SpecialtyID}`, formik.values)
         .then((res) => {
@@ -57,6 +59,8 @@ export default function SpecialtyMoreMenu({ dulieu, handleOpenToast }) {
               message: 'Successfully updated',
               color: 'info'
             })();
+            formik.resetForm();
+            setLoading(false);
           } else {
             handleOpenToast({
               isOpen: true,
@@ -174,7 +178,13 @@ export default function SpecialtyMoreMenu({ dulieu, handleOpenToast }) {
                       variant="outlined"
                     />
                   </Stack>
-                  <LoadingButton fullWidth size="large" type="submit" variant="contained">
+                  <LoadingButton
+                    loading={loading}
+                    fullWidth
+                    size="large"
+                    type="submit"
+                    variant="contained"
+                  >
                     Edit Specialty
                   </LoadingButton>
                 </Stack>

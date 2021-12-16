@@ -30,6 +30,7 @@ import { convertTime } from '../../../utils/formatDatetime';
 export default function ShiftMoreMenu({ dulieu, handleOpenToast }) {
   const { ShiftID, ShiftName, StartShift, EndShift } = dulieu;
   const ref = useRef(null);
+  const [loading, setLoading] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
   const [timeStart, setTimeStart] = useState([]);
   const [timeEnd, setTimeEnd] = useState([]);
@@ -58,6 +59,7 @@ export default function ShiftMoreMenu({ dulieu, handleOpenToast }) {
       EndShift: convertTime(timeEnd)
     },
     onSubmit: () => {
+      setLoading(true);
       axios
         .put(`Organization/Shift/${ShiftID}`, {
           ShiftID: formik.values.ShiftID,
@@ -75,6 +77,8 @@ export default function ShiftMoreMenu({ dulieu, handleOpenToast }) {
               message: 'Successfully updated',
               color: 'info'
             })();
+            formik.resetForm();
+            setLoading(false);
           } else {
             handleOpenToast({
               isOpen: true,
@@ -211,7 +215,13 @@ export default function ShiftMoreMenu({ dulieu, handleOpenToast }) {
                       />
                     </LocalizationProvider>
                   </Stack>
-                  <LoadingButton fullWidth size="large" type="submit" variant="contained">
+                  <LoadingButton
+                    loading={loading}
+                    fullWidth
+                    size="large"
+                    type="submit"
+                    variant="contained"
+                  >
                     Edit Shift
                   </LoadingButton>
                 </Stack>

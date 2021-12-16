@@ -32,6 +32,7 @@ export default function OrganizationMoreMenu({ dulieu, handleOpenToast }) {
   const { OrganizationID, Name, Logo, Email, Latitude, Longitude, Website, PublicIP, PythonIP } =
     dulieu;
   const ref = useRef(null);
+  const [loading, setLoading] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
   const [open, setOpen] = useState(false);
   const handleClose = () => setOpen(false);
@@ -56,6 +57,7 @@ export default function OrganizationMoreMenu({ dulieu, handleOpenToast }) {
       remember: true
     },
     onSubmit: () => {
+      setLoading(true);
       axios
         .put(`Organization/Organization/${OrganizationID}`, formik.values)
         .then((res) => {
@@ -69,6 +71,7 @@ export default function OrganizationMoreMenu({ dulieu, handleOpenToast }) {
               color: 'info'
             })();
             formik.resetForm();
+            setLoading(false);
           } else {
             handleOpenToast({
               isOpen: true,
@@ -218,7 +221,13 @@ export default function OrganizationMoreMenu({ dulieu, handleOpenToast }) {
                       </Button>
                     </label>
                   </Stack>
-                  <LoadingButton fullWidth size="large" type="submit" variant="contained">
+                  <LoadingButton
+                    loading={loading}
+                    fullWidth
+                    size="large"
+                    type="submit"
+                    variant="contained"
+                  >
                     Edit Organization
                   </LoadingButton>
                 </Stack>
