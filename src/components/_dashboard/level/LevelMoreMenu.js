@@ -31,6 +31,7 @@ import axios from '../../../functions/Axios';
 export default function LevelMoreMenu({ dulieu, handleOpenToast }) {
   const { LevelID, PositionID, LevelName, Coefficient } = dulieu.Level;
   const ref = useRef(null);
+  const [loading, setLoading] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
   const [open, setOpen] = useState(false);
   const [position, setPosition] = useState([]);
@@ -57,6 +58,7 @@ export default function LevelMoreMenu({ dulieu, handleOpenToast }) {
       remember: true
     },
     onSubmit: () => {
+      setLoading(true);
       axios
         .put(`Organization/Level/${LevelID}`, formik.values)
         .then((res) => {
@@ -70,6 +72,7 @@ export default function LevelMoreMenu({ dulieu, handleOpenToast }) {
               color: 'info'
             })();
             formik.resetForm();
+            setLoading(false);
           } else {
             handleOpenToast({
               isOpen: true,
@@ -208,7 +211,13 @@ export default function LevelMoreMenu({ dulieu, handleOpenToast }) {
                       variant="outlined"
                     />
                   </Stack>
-                  <LoadingButton fullWidth size="large" type="submit" variant="contained">
+                  <LoadingButton
+                    loading={loading}
+                    fullWidth
+                    size="large"
+                    type="submit"
+                    variant="contained"
+                  >
                     Edit Level
                   </LoadingButton>
                 </Stack>
