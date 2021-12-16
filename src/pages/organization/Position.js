@@ -168,7 +168,7 @@ export default function Position() {
     },
     onSubmit: () => {
       axios
-        .post(`Organization/AddOrEditPosition`, formik.values)
+        .post(`Organization/Position`, formik.values)
         .then((res) => {
           if (res.data.Status === 200) {
             setOpen(false);
@@ -176,7 +176,7 @@ export default function Position() {
               isOpen: true,
               horizontal: 'right',
               vertical: 'top',
-              message: 'Successfully Added',
+              message: 'Successfully added',
               color: 'success'
             })();
             formik.resetForm();
@@ -185,7 +185,7 @@ export default function Position() {
               isOpen: true,
               horizontal: 'right',
               vertical: 'top',
-              message: 'Fail deleted',
+              message: 'Fail added',
               color: 'error'
             })();
           }

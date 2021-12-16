@@ -23,7 +23,8 @@ import { LoadingButton } from '@mui/lab';
 import axios from '../../../functions/Axios';
 // ----------------------------------------------------------------------
 
-export default function SpecialtyMoreMenu(Specialty) {
+export default function SpecialtyMoreMenu({ dulieu, handleOpenToast }) {
+  const { SpecialtyID, SpecialtyName, Note } = dulieu;
   const ref = useRef(null);
   const [isOpen, setIsOpen] = useState(false);
   const [open, setOpen] = useState(false);
@@ -45,13 +46,25 @@ export default function SpecialtyMoreMenu(Specialty) {
     },
     onSubmit: () => {
       axios
-        .post(`Component/AddOrEditSpecialities`, formik.values)
+        .put(`Component/Specialities/${SpecialtyID}`, formik.values)
         .then((res) => {
           if (res.data.Status === 200) {
-            alert('Specialty Updated');
-            window.location.reload();
+            setOpen(false);
+            handleOpenToast({
+              isOpen: true,
+              horizontal: 'right',
+              vertical: 'top',
+              message: 'Successfully edited',
+              color: 'info'
+            })();
           } else {
-            alert('Specialty not Updated');
+            handleOpenToast({
+              isOpen: true,
+              horizontal: 'right',
+              vertical: 'top',
+              message: 'Fail edited',
+              color: 'error'
+            })();
           }
         })
         .catch((err) => {
@@ -60,9 +73,9 @@ export default function SpecialtyMoreMenu(Specialty) {
     }
   });
   const handleOpen = () => {
-    formik.setFieldValue('SpecialtyID', Specialty.dulieu.SpecialtyID);
-    formik.setFieldValue('SpecialtyName', Specialty.dulieu.SpecialtyName);
-    formik.setFieldValue('Note', Specialty.dulieu.Note);
+    formik.setFieldValue('SpecialtyID', SpecialtyID);
+    formik.setFieldValue('SpecialtyName', SpecialtyName);
+    formik.setFieldValue('Note', Note);
     setOpen(true);
   };
   const { handleSubmit, getFieldProps } = formik;
@@ -85,16 +98,25 @@ export default function SpecialtyMoreMenu(Specialty) {
         <MenuItem
           onClick={() => {
             if (confirm('Are you sure you want to delete this specialty?')) {
-              axios
-                .delete(`Component/DeleteSpecialitie?ID=${Specialty.dulieu.SpecialtyID}`)
-                .then((res) => {
-                  if (res.data.Status === 200) {
-                    alert('Specialty Deleted');
-                    window.location.reload();
-                  } else {
-                    alert('Specialty Not Deleted');
-                  }
-                });
+              axios.delete(`Component/Specialities?ID=${SpecialtyID}`).then((res) => {
+                if (res.data.Status === 200) {
+                  handleOpenToast({
+                    isOpen: true,
+                    horizontal: 'right',
+                    vertical: 'top',
+                    message: 'Successfully deleted',
+                    color: 'warning'
+                  })();
+                } else {
+                  handleOpenToast({
+                    isOpen: true,
+                    horizontal: 'right',
+                    vertical: 'top',
+                    message: 'Fail deleted',
+                    color: 'error'
+                  })();
+                }
+              });
             }
           }}
           sx={{ color: 'text.secondary' }}

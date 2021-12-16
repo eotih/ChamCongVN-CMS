@@ -174,7 +174,7 @@ export default function Shift() {
     },
     onSubmit: () => {
       axios
-        .post(`Organization/AddOrEditShift`, {
+        .post(`Organization/Shift`, {
           ShiftName: formik.values.ShiftName,
           StartShift: convertTime(timeStart),
           EndShift: convertTime(timeEnd)
@@ -186,7 +186,7 @@ export default function Shift() {
               isOpen: true,
               horizontal: 'right',
               vertical: 'top',
-              message: 'Successfully Added',
+              message: 'Successfully added',
               color: 'success'
             })();
             formik.resetForm();
@@ -195,7 +195,7 @@ export default function Shift() {
               isOpen: true,
               horizontal: 'right',
               vertical: 'top',
-              message: 'Fail deleted',
+              message: 'Fail added',
               color: 'error'
             })();
           }

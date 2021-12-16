@@ -169,7 +169,7 @@ export default function Degree() {
     },
     onSubmit: () => {
       axios
-        .post(`Component/AddOrEditDegrees`, formik.values)
+        .post(`Component/Degrees`, formik.values)
         .then((res) => {
           if (res.data.Status === 200) {
             setOpen(false);
@@ -177,7 +177,7 @@ export default function Degree() {
               isOpen: true,
               horizontal: 'right',
               vertical: 'top',
-              message: 'Successfully Added',
+              message: 'Successfully added',
               color: 'success'
             })();
             formik.resetForm();
@@ -186,7 +186,7 @@ export default function Degree() {
               isOpen: true,
               horizontal: 'right',
               vertical: 'top',
-              message: 'Fail deleted',
+              message: 'Fail added',
               color: 'error'
             })();
           }

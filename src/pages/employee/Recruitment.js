@@ -38,6 +38,7 @@ import {
 } from '../../components/_dashboard/recruitment';
 import { getAllRecruitments } from '../../functions/Employee';
 import { convertDate } from '../../utils/formatDatetime';
+import Toast from '../../components/Toast';
 //
 
 // ----------------------------------------------------------------------
@@ -98,11 +99,25 @@ export default function Recruitment() {
   const [open, setOpen] = useState(false);
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
+  const [openToast, setOpenToast] = useState({
+    isOpen: false,
+    vertical: 'top',
+    message: '',
+    color: '',
+    horizontal: 'right'
+  });
+
+  const handleOpenToast = (newState) => () => {
+    setOpenToast({ isOpen: true, ...newState });
+  };
+  const handleCloseToast = () => {
+    setOpenToast({ ...openToast, isOpen: false });
+  };
   useEffect(() => {
     getAllRecruitments().then((res) => {
       setRecruitment(res);
     });
-  }, []);
+  }, [recruitment]);
   const handleRequestSort = (event, property) => {
     const isAsc = orderBy === property && order === 'asc';
     setOrder(isAsc ? 'desc' : 'asc');
@@ -165,7 +180,7 @@ export default function Recruitment() {
     },
     onSubmit: () => {
       axios
-        .post(`Organization/AddRecruitment`, formik.values)
+        .post(`Organization/Recruitment`, formik.values)
         .then((res) => {
           if (res.data.Status === 200) {
             alert('Thêm thành công');
@@ -188,6 +203,7 @@ export default function Recruitment() {
 
   return (
     <Page title="Recruitment | ChamCongVN">
+      {openToast.isOpen === true && <Toast open={openToast} handleCloseToast={handleCloseToast} />}
       <Modal
         open={open}
         sx={{
@@ -291,7 +307,7 @@ export default function Recruitment() {
                           <TableCell align="left">{ApplyFor}</TableCell>
                           <TableCell align="left">{LinkCV}</TableCell>
                           <TableCell align="right">
-                            <RecruitmentMoreMenu dulieu={row} />
+                            <RecruitmentMoreMenu dulieu={row} handleOpenToast={handleOpenToast} />
                           </TableCell>
                         </TableRow>
                       );

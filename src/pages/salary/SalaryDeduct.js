@@ -195,7 +195,7 @@ export default function User() {
     },
     onSubmit: () => {
       axios
-        .post(`Salary/AddOrEditDeductionEmployee`, {
+        .post(`Salary/DeductionEmployee`, {
           EmployeeID: formik.values.EmployeeID,
           DeductionName: formik.values.DeductionName,
           Reason: formik.values.Reason,
@@ -210,7 +210,7 @@ export default function User() {
               isOpen: true,
               horizontal: 'right',
               vertical: 'top',
-              message: 'Successfully Added',
+              message: 'Successfully added',
               color: 'success'
             })();
             formik.resetForm();
@@ -219,7 +219,7 @@ export default function User() {
               isOpen: true,
               horizontal: 'right',
               vertical: 'top',
-              message: 'Fail deleted',
+              message: 'Fail added',
               color: 'error'
             })();
           }

@@ -178,7 +178,7 @@ export default function User() {
     },
     onSubmit: () => {
       axios
-        .post(`Salary/AddOrEditOvertimeEmployee`, formik.values)
+        .post(`Salary/OvertimeEmployee`, formik.values)
         .then((res) => {
           if (res.data.Status === 200) {
             alert('Thêm thành công');

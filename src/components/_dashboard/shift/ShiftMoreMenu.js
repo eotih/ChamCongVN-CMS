@@ -27,7 +27,8 @@ import axios from '../../../functions/Axios';
 import { convertTime } from '../../../utils/formatDatetime';
 // ----------------------------------------------------------------------
 
-export default function ShiftMoreMenu(Shift) {
+export default function ShiftMoreMenu({ dulieu, handleOpenToast }) {
+  const { ShiftID, ShiftName, StartShift, EndShift } = dulieu;
   const ref = useRef(null);
   const [isOpen, setIsOpen] = useState(false);
   const [timeStart, setTimeStart] = useState([]);
@@ -58,7 +59,7 @@ export default function ShiftMoreMenu(Shift) {
     },
     onSubmit: () => {
       axios
-        .post(`Organization/AddOrEditShift`, {
+        .put(`Organization/Shift/${ShiftID}`, {
           ShiftID: formik.values.ShiftID,
           ShiftName: formik.values.ShiftName,
           StartShift: convertTime(timeStart),
@@ -66,10 +67,22 @@ export default function ShiftMoreMenu(Shift) {
         })
         .then((res) => {
           if (res.data.Status === 200) {
-            alert('Shift Updated');
-            window.location.reload();
+            setOpen(false);
+            handleOpenToast({
+              isOpen: true,
+              horizontal: 'right',
+              vertical: 'top',
+              message: 'Successfully edited',
+              color: 'info'
+            })();
           } else {
-            alert('Shift not Updated');
+            handleOpenToast({
+              isOpen: true,
+              horizontal: 'right',
+              vertical: 'top',
+              message: 'Fail edited',
+              color: 'error'
+            })();
           }
         })
         .catch((err) => {
@@ -78,12 +91,12 @@ export default function ShiftMoreMenu(Shift) {
     }
   });
   const handleOpen = () => {
-    formik.setFieldValue('ShiftID', Shift.dulieu.ShiftID);
-    formik.setFieldValue('ShiftName', Shift.dulieu.ShiftName);
-    formik.setFieldValue('StartShift', Shift.dulieu.StartShift);
-    formik.setFieldValue('EndShift', Shift.dulieu.EndShift);
-    setTimeStart(new Date(`12/12/2000 ${Shift.dulieu.StartShift}`));
-    setTimeEnd(new Date(`12/12/2000 ${Shift.dulieu.EndShift}`));
+    formik.setFieldValue('ShiftID', ShiftID);
+    formik.setFieldValue('ShiftName', ShiftName);
+    formik.setFieldValue('StartShift', StartShift);
+    formik.setFieldValue('EndShift', EndShift);
+    setTimeStart(new Date(`12/12/2000 ${StartShift}`));
+    setTimeEnd(new Date(`12/12/2000 ${EndShift}`));
     setOpen(true);
   };
   const { handleSubmit, getFieldProps } = formik;
@@ -106,12 +119,23 @@ export default function ShiftMoreMenu(Shift) {
         <MenuItem
           onClick={() => {
             if (confirm('Are you sure you want to delete this shift?')) {
-              axios.delete(`Organization/DeleteShift?ID=${Shift.dulieu.ShiftID}`).then((res) => {
+              axios.delete(`Organization/Shift?ID=${ShiftID}`).then((res) => {
                 if (res.data.Status === 200) {
-                  alert('Shift Deleted');
-                  window.location.reload();
+                  handleOpenToast({
+                    isOpen: true,
+                    horizontal: 'right',
+                    vertical: 'top',
+                    message: 'Successfully deleted',
+                    color: 'warning'
+                  })();
                 } else {
-                  alert('Shift Not Deleted');
+                  handleOpenToast({
+                    isOpen: true,
+                    horizontal: 'right',
+                    vertical: 'top',
+                    message: 'Fail deleted',
+                    color: 'error'
+                  })();
                 }
               });
             }

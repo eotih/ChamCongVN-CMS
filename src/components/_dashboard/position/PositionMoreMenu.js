@@ -23,7 +23,8 @@ import { LoadingButton } from '@mui/lab';
 import axios from '../../../functions/Axios';
 // ----------------------------------------------------------------------
 
-export default function PositionMoreMenu(Position) {
+export default function PositionMoreMenu({ dulieu, handleOpenToast }) {
+  const { PositionID, PositionName, Note } = dulieu;
   const ref = useRef(null);
   const [isOpen, setIsOpen] = useState(false);
   const [open, setOpen] = useState(false);
@@ -44,13 +45,25 @@ export default function PositionMoreMenu(Position) {
     },
     onSubmit: () => {
       axios
-        .post(`Organization/AddOrEditPosition`, formik.values)
+        .put(`Organization/Position/${PositionID}`, formik.values)
         .then((res) => {
           if (res.data.Status === 200) {
-            alert('Position Updated');
-            window.location.reload();
+            setOpen(false);
+            handleOpenToast({
+              isOpen: true,
+              horizontal: 'right',
+              vertical: 'top',
+              message: 'Successfully edited',
+              color: 'info'
+            })();
           } else {
-            alert('Position not Updated');
+            handleOpenToast({
+              isOpen: true,
+              horizontal: 'right',
+              vertical: 'top',
+              message: 'Fail edited',
+              color: 'error'
+            })();
           }
         })
         .catch((err) => {
@@ -59,9 +72,9 @@ export default function PositionMoreMenu(Position) {
     }
   });
   const handleOpen = () => {
-    formik.setFieldValue('PositionID', Position.dulieu.PositionID);
-    formik.setFieldValue('PositionName', Position.dulieu.PositionName);
-    formik.setFieldValue('Note', Position.dulieu.Note);
+    formik.setFieldValue('PositionID', PositionID);
+    formik.setFieldValue('PositionName', PositionName);
+    formik.setFieldValue('Note', Note);
     setOpen(true);
   };
   const { handleSubmit, getFieldProps } = formik;
@@ -84,16 +97,25 @@ export default function PositionMoreMenu(Position) {
         <MenuItem
           onClick={() => {
             if (confirm('Are you sure you want to delete this position?')) {
-              axios
-                .delete(`Organization/DeletePosition?ID=${Position.dulieu.PositionID}`)
-                .then((res) => {
-                  if (res.data.Status === 200) {
-                    alert('Position Deleted');
-                    window.location.reload();
-                  } else {
-                    alert('Position Not Deleted');
-                  }
-                });
+              axios.delete(`Organization/Position?ID=${PositionID}`).then((res) => {
+                if (res.data.Status === 200) {
+                  handleOpenToast({
+                    isOpen: true,
+                    horizontal: 'right',
+                    vertical: 'top',
+                    message: 'Successfully deleted',
+                    color: 'warning'
+                  })();
+                } else {
+                  handleOpenToast({
+                    isOpen: true,
+                    horizontal: 'right',
+                    vertical: 'top',
+                    message: 'Fail deleted',
+                    color: 'error'
+                  })();
+                }
+              });
             }
           }}
           sx={{ color: 'text.secondary' }}

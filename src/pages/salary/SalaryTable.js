@@ -190,7 +190,7 @@ export default function User() {
     },
     onSubmit: () => {
       axios
-        .post(`Salary/AddOrEditSalaryTable`, {
+        .post(`Salary/SalaryTable`, {
           SalaryTableName: formik.values.SalaryTableName,
           Month: formik.values.SalaryTableName,
           MinSalary: formik.values.SalaryTableName,
@@ -204,7 +204,7 @@ export default function User() {
               isOpen: true,
               horizontal: 'right',
               vertical: 'top',
-              message: 'Successfully Added',
+              message: 'Successfully added',
               color: 'success'
             })();
             formik.resetForm();
@@ -213,7 +213,7 @@ export default function User() {
               isOpen: true,
               horizontal: 'right',
               vertical: 'top',
-              message: 'Fail deleted',
+              message: 'Fail added',
               color: 'error'
             })();
           }

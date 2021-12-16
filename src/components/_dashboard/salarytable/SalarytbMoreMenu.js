@@ -31,7 +31,8 @@ import { LoadingButton } from '@mui/lab';
 import axios from '../../../functions/Axios';
 // ----------------------------------------------------------------------
 
-export default function SalarytbMoreMenu(SalaryTable) {
+export default function SalarytbMoreMenu({ dulieu, handleOpenToast }) {
+  const { SalaryTableID, SalaryTableName, MinSalary, TotalTimeRegulation, Year, Month } = dulieu;
   const [year, setYear] = useState([]);
   const [month, setMonth] = React.useState('');
   const ref = useRef(null);
@@ -64,7 +65,7 @@ export default function SalarytbMoreMenu(SalaryTable) {
     },
     onSubmit: () => {
       axios
-        .post(`Salary/AddOrEditSalaryTable`, {
+        .put(`Salary/SalaryTable/${SalaryTableID}`, {
           SalaryTableID: formik.values.SalaryTableID,
           SalaryTableName: formik.values.SalaryTableName,
           Month: formik.values.Month,
@@ -75,10 +76,22 @@ export default function SalarytbMoreMenu(SalaryTable) {
         })
         .then((res) => {
           if (res.data.Status === 200) {
-            alert('Salary Table Updated');
-            window.location.reload();
+            setOpen(false);
+            handleOpenToast({
+              isOpen: true,
+              horizontal: 'right',
+              vertical: 'top',
+              message: 'Successfully edited',
+              color: 'info'
+            })();
           } else {
-            alert('Salary Table not Updated');
+            handleOpenToast({
+              isOpen: true,
+              horizontal: 'right',
+              vertical: 'top',
+              message: 'Fail edited',
+              color: 'error'
+            })();
           }
         })
         .catch((err) => {
@@ -87,14 +100,14 @@ export default function SalarytbMoreMenu(SalaryTable) {
     }
   });
   const handleOpen = () => {
-    formik.setFieldValue('SalaryTableID', SalaryTable.dulieu.SalaryTableID);
-    formik.setFieldValue('SalaryTableName', SalaryTable.dulieu.SalaryTableName);
-    formik.setFieldValue('MinSalary', SalaryTable.dulieu.MinSalary);
-    formik.setFieldValue('TotalTimeRegulation', SalaryTable.dulieu.TotalTimeRegulation);
-    formik.setFieldValue('Year', SalaryTable.dulieu.Year);
-    formik.setFieldValue('Month', SalaryTable.dulieu.Month);
-    setYear(new Date(`12/12/${SalaryTable.dulieu.Year} 10:00:00`));
-    setMonth(SalaryTable.dulieu.Month);
+    formik.setFieldValue('SalaryTableID', SalaryTableID);
+    formik.setFieldValue('SalaryTableName', SalaryTableName);
+    formik.setFieldValue('MinSalary', MinSalary);
+    formik.setFieldValue('TotalTimeRegulation', TotalTimeRegulation);
+    formik.setFieldValue('Year', Year);
+    formik.setFieldValue('Month', Month);
+    setYear(new Date(`12/12/${Year} 10:00:00`));
+    setMonth(Month);
     setOpen(true);
   };
   const handleChange = (event) => {
@@ -121,16 +134,25 @@ export default function SalarytbMoreMenu(SalaryTable) {
         <MenuItem
           onClick={() => {
             if (confirm('Are you sure you want to delete this salary table?')) {
-              axios
-                .delete(`Salary/DeleteSalaryTable?ID=${SalaryTable.dulieu.SalaryTableID}`)
-                .then((res) => {
-                  if (res.data.Status === 200) {
-                    alert('Salary Table Deleted');
-                    window.location.reload();
-                  } else {
-                    alert('Salary Table Not Deleted');
-                  }
-                });
+              axios.delete(`Salary/SalaryTable?ID=${SalaryTableID}`).then((res) => {
+                if (res.data.Status === 200) {
+                  handleOpenToast({
+                    isOpen: true,
+                    horizontal: 'right',
+                    vertical: 'top',
+                    message: 'Successfully deleted',
+                    color: 'warning'
+                  })();
+                } else {
+                  handleOpenToast({
+                    isOpen: true,
+                    horizontal: 'right',
+                    vertical: 'top',
+                    message: 'Fail deleted',
+                    color: 'error'
+                  })();
+                }
+              });
             }
           }}
           sx={{ color: 'text.secondary' }}

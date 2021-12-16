@@ -166,7 +166,7 @@ export default function Group() {
     },
     onSubmit: () => {
       axios
-        .post(`Component/AddOrEditGroup`, formik.values)
+        .post(`Component/Group`, formik.values)
         .then((res) => {
           if (res.data.Status === 200) {
             setOpen(false);
@@ -174,7 +174,7 @@ export default function Group() {
               isOpen: true,
               horizontal: 'right',
               vertical: 'top',
-              message: 'Successfully Added',
+              message: 'Successfully added',
               color: 'success'
             })();
             formik.resetForm();
@@ -183,7 +183,7 @@ export default function Group() {
               isOpen: true,
               horizontal: 'right',
               vertical: 'top',
-              message: 'Fail deleted',
+              message: 'Fail added',
               color: 'error'
             })();
           }

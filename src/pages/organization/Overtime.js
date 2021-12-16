@@ -208,7 +208,7 @@ export default function Overtime() {
     },
     onSubmit: () => {
       axios
-        .post(`Organization/AddOrEditOverTime`, {
+        .post(`Organization/OverTime`, {
           OvertimeName: formik.values.OvertimeName,
           DepartmentID: formik.values.DepartmentID,
           IsActive: formik.values.IsActive,
@@ -224,7 +224,7 @@ export default function Overtime() {
               isOpen: true,
               horizontal: 'right',
               vertical: 'top',
-              message: 'Successfully Added',
+              message: 'Successfully added',
               color: 'success'
             })();
             formik.resetForm();
@@ -233,7 +233,7 @@ export default function Overtime() {
               isOpen: true,
               horizontal: 'right',
               vertical: 'top',
-              message: 'Fail deleted',
+              message: 'Fail added',
               color: 'error'
             })();
           }

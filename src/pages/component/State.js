@@ -164,7 +164,7 @@ export default function State() {
     },
     onSubmit: () => {
       axios
-        .post(`Component/AddOrEditState`, formik.values)
+        .post(`Component/State`, formik.values)
         .then((res) => {
           if (res.data.Status === 200) {
             setOpen(false);
@@ -172,7 +172,7 @@ export default function State() {
               isOpen: true,
               horizontal: 'right',
               vertical: 'top',
-              message: 'Successfully Added',
+              message: 'Successfully added',
               color: 'success'
             })();
             formik.resetForm();
@@ -181,7 +181,7 @@ export default function State() {
               isOpen: true,
               horizontal: 'right',
               vertical: 'top',
-              message: 'Fail deleted',
+              message: 'Fail added',
               color: 'error'
             })();
           }
