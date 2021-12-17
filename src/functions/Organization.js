@@ -1,4 +1,3 @@
-import JWTDecode from 'jwt-decode';
 import Axios from './Axios';
 
 async function getAllAccount() {

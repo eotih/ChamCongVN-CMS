@@ -11,7 +11,22 @@ import Login from './pages/Login';
 
 // ----------------------------------------------------------------------
 
+const getToken = () => {
+  const token = localStorage.getItem('token');
+  return token;
+};
+const setToken = (token) => {
+  localStorage.setItem('token', token);
+};
 export default function App() {
+  const token = getToken();
+  if (!token) {
+    return (
+      <ThemeConfig>
+        <Login setToken={setToken} />
+      </ThemeConfig>
+    );
+  }
   return (
     <ThemeConfig>
       <ScrollToTop />

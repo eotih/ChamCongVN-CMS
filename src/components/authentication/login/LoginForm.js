@@ -4,6 +4,7 @@ import { Link as RouterLink, useNavigate } from 'react-router-dom';
 import { useFormik, Form, FormikProvider } from 'formik';
 import { Icon } from '@iconify/react';
 import eyeFill from '@iconify/icons-eva/eye-fill';
+import PropTypes from 'prop-types';
 import eyeOffFill from '@iconify/icons-eva/eye-off-fill';
 // material
 import {
@@ -20,7 +21,7 @@ import axios from '../../../functions/Axios';
 
 // ----------------------------------------------------------------------
 
-export default function LoginForm() {
+export default function LoginForm({ setToken }) {
   const navigate = useNavigate();
   const [showPassword, setShowPassword] = useState(false);
 
@@ -118,3 +119,6 @@ export default function LoginForm() {
     </FormikProvider>
   );
 }
+LoginForm.propTypes = {
+  setToken: PropTypes.func.isRequired
+};
