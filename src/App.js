@@ -1,5 +1,4 @@
 // routes
-import { useContext } from 'react';
 import Router from './routes';
 // theme
 import ThemeConfig from './theme';
@@ -8,18 +7,12 @@ import GlobalStyles from './theme/globalStyles';
 import ScrollToTop from './components/ScrollToTop';
 import { BaseOptionChartStyle } from './components/charts/BaseOptionChart';
 import Login from './pages/Login';
+import useToken from './services/useToken';
 
 // ----------------------------------------------------------------------
 
-const getToken = () => {
-  const token = localStorage.getItem('token');
-  return token;
-};
-const setToken = (token) => {
-  localStorage.setItem('token', token);
-};
 export default function App() {
-  const token = getToken();
+  const { token, setToken } = useToken();
   if (!token) {
     return (
       <ThemeConfig>
