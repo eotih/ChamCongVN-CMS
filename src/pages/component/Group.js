@@ -77,6 +77,7 @@ function applySortFilter(array, comparator, query) {
 
 export default function Group() {
   const [page, setPage] = useState(0);
+  const [loading, setLoading] = useState(false);
   const [order, setOrder] = useState('asc');
   const [selected, setSelected] = useState([]);
   const [orderBy, setOrderBy] = useState('name');
@@ -165,6 +166,7 @@ export default function Group() {
       remember: true
     },
     onSubmit: () => {
+      setLoading(true);
       axios
         .post(`Component/Group`, formik.values)
         .then((res) => {
@@ -178,6 +180,7 @@ export default function Group() {
               color: 'success'
             })();
             formik.resetForm();
+            setLoading(false);
           } else {
             handleOpenToast({
               isOpen: true,
@@ -240,7 +243,13 @@ export default function Group() {
                     variant="outlined"
                   />
                 </Stack>
-                <LoadingButton fullWidth size="large" type="submit" variant="contained">
+                <LoadingButton
+                  loading={loading}
+                  fullWidth
+                  size="large"
+                  type="submit"
+                  variant="contained"
+                >
                   Add Group
                 </LoadingButton>
               </Stack>
