@@ -187,6 +187,7 @@ export default function Organization() {
       remember: true
     },
     onSubmit: () => {
+      setLoading(true);
       axios
         .post(`Organization/Organization`, formik.values)
         .then((res) => {

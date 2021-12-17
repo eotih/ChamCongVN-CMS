@@ -213,6 +213,7 @@ export default function Overtime() {
       EndTime: convertTime(timeEnd)
     },
     onSubmit: () => {
+      setLoading(true);
       axios
         .post(`Organization/OverTime`, {
           OvertimeName: formik.values.OvertimeName,

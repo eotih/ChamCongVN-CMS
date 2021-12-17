@@ -171,6 +171,7 @@ export default function Position() {
       remember: true
     },
     onSubmit: () => {
+      setLoading(true);
       axios
         .post(`Organization/Position`, formik.values)
         .then((res) => {

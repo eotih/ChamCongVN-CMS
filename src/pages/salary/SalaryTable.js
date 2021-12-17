@@ -193,6 +193,7 @@ export default function User() {
       remember: true
     },
     onSubmit: () => {
+      setLoading(true);
       axios
         .post(`Salary/SalaryTable`, {
           SalaryTableName: formik.values.SalaryTableName,

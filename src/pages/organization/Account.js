@@ -193,6 +193,7 @@ export default function Account() {
       remember: true
     },
     onSubmit: () => {
+      setLoading(true);
       axios
         .post(`Organization/Account`, formik.values)
         .then((res) => {
