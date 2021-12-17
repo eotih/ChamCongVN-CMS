@@ -12,12 +12,12 @@ async function getAllDeductions() {
   const res = await Axios.get('Salary/DeductionEmployee');
   return res.data;
 }
-async function getAllLaudatorys() {
-  const res = await Axios.get('Salary/LaudatoryEmployee');
-  return res.data;
-}
 async function getAllSalaryTables() {
   const res = await Axios.get('Salary/SalaryTable');
   return res.data;
 }
-export { getAllLaudatorys, getAllSalaryTables, getAllDeductions, getAllOvertimes, getAllSalarys };
+async function getAllAdvances() {
+  const res = await Axios.get('Salary/Advances');
+  return res.data;
+}
+export { getAllSalaryTables, getAllDeductions, getAllOvertimes, getAllSalarys, getAllAdvances };

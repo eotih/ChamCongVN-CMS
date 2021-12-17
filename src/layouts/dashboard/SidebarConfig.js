@@ -95,9 +95,18 @@ const sidebarConfig = [
     children: [
       { title: 'Salary Table', path: '/salary/salarytable' },
       { title: 'Salary Deduct', path: '/salary/salarydeduct' },
-      { title: 'laudatory', path: '/salary/laudatory' },
+      { title: 'Advance', path: '/salary/advance' },
       { title: 'Overtime Salary', path: '/salary/overtimesalary' },
       { title: 'Salary', path: '/salary/salaries' }
+    ]
+  },
+  {
+    title: 'Principle',
+    path: '/principle',
+    icon: getIcon(roundAttachMoney),
+    children: [
+      { title: 'Laudatory', path: '/principle/laudatory' },
+      { title: 'Regulation', path: '/principle/regulation' }
     ]
   },
   {

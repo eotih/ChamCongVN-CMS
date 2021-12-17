@@ -32,9 +32,10 @@ import { getAllEmployees } from '../../../functions/Employee';
 // --------------------------------------------------
 // ----------------------------------------------------------------------
 
-export default function LaudatoryMoreMenu({ dulieu, handleOpenToast }) {
-  const { LaudatoryEmployee, EmployeeID } = dulieu;
-  const { LaudatoryEmployeeID, LaudatoryName, Reason, Amount, LaudatoryDate } = LaudatoryEmployee;
+export default function RegulationMoreMenu({ dulieu, handleOpenToast }) {
+  const { RegulationEmployees, EmployeeID } = dulieu;
+  const { RegulationEmployeeID, RegulationName, RegulationDate, Reason, RegulationFormat } =
+    RegulationEmployees;
   const ref = useRef(null);
   const [loading, setLoading] = useState(false);
   const [employee, setEmployee] = useState([]);
@@ -57,26 +58,26 @@ export default function LaudatoryMoreMenu({ dulieu, handleOpenToast }) {
   };
   const formik = useFormik({
     initialValues: {
-      LaudatoryEmployeeID: '',
+      RegulationEmployeeID: '',
       EmployeeID: '',
-      LaudatoryName: '',
-      LaudatoryDate: laudate,
+      RegulationName: '',
+      RegulationDate: laudate,
       Reason: '',
-      Amount: '',
+      RegulationFormat: '',
       CreatedBy: '',
       remember: true
     },
     onSubmit: () => {
       setLoading(true);
       axios
-        .put(`Principle/LaudatoryEmployee/${LaudatoryEmployeeID}`, {
-          LaudatoryEmployeeID: formik.values.LaudatoryEmployeeID,
+        .put(`Principle/RegulationEmployees/${RegulationEmployeeID}`, {
+          RegulationEmployeeID: formik.values.RegulationEmployeeID,
           EmployeeID: formik.values.EmployeeID,
-          LaudatoryName: formik.values.LaudatoryName,
+          RegulationName: formik.values.RegulationName,
           Reason: formik.values.Reason,
-          Amount: formik.values.Amount,
+          RegulationFormat: formik.values.RegulationFormat,
           UpdatedBy: formik.values.UpdatedBy,
-          LaudatoryDate: laudate
+          RegulationDate: laudate
         })
         .then((res) => {
           if (res.data.Status === 200) {
@@ -107,12 +108,12 @@ export default function LaudatoryMoreMenu({ dulieu, handleOpenToast }) {
     }
   });
   const handleOpen = () => {
-    formik.setFieldValue('LaudatoryEmployeeID', LaudatoryEmployeeID);
-    formik.setFieldValue('LaudatoryName', LaudatoryName);
+    formik.setFieldValue('RegulationEmployeeID', RegulationEmployeeID);
+    formik.setFieldValue('RegulationName', RegulationName);
     formik.setFieldValue('Reason', Reason);
-    formik.setFieldValue('Amount', Amount);
+    formik.setFieldValue('RegulationFormat', RegulationFormat);
     formik.setFieldValue('EmployeeID', EmployeeID);
-    setLauDate(new Date(`${LaudatoryDate}`));
+    setLauDate(new Date(`${RegulationDate}`));
     setOpen(true);
   };
   const { handleSubmit, getFieldProps } = formik;
@@ -139,8 +140,8 @@ export default function LaudatoryMoreMenu({ dulieu, handleOpenToast }) {
       >
         <MenuItem
           onClick={() => {
-            if (confirm('Are you sure you want to delete this laudatory?')) {
-              axios.delete(`Principle/LaudatoryEmployee/${LaudatoryEmployeeID}`).then((res) => {
+            if (confirm('Are you sure you want to delete this Regulation?')) {
+              axios.delete(`Principle/RegulationEmployee/${RegulationEmployeeID}`).then((res) => {
                 if (res.data.Status === 200) {
                   handleOpenToast({
                     isOpen: true,
@@ -196,13 +197,13 @@ export default function LaudatoryMoreMenu({ dulieu, handleOpenToast }) {
               <Box sx={style}>
                 <Stack spacing={1}>
                   <Typography id="modal-modal-title" variant="h6" component="h2">
-                    Edit Laudatory
+                    Edit Regulation
                   </Typography>
                   <Stack direction={{ xs: 'column', sm: 'row' }} spacing={2}>
                     <TextField
                       fullWidth
-                      label="Laudatory Name"
-                      {...getFieldProps('LaudatoryName')}
+                      label="Regulation Name"
+                      {...getFieldProps('RegulationName')}
                       variant="outlined"
                     />
                     <FormControl fullWidth>
@@ -226,7 +227,7 @@ export default function LaudatoryMoreMenu({ dulieu, handleOpenToast }) {
                   <Stack direction={{ xs: 'column', sm: 'row' }} spacing={2}>
                     <LocalizationProvider dateAdapter={AdapterDateFns}>
                       <DatePicker
-                        label="Laudatory Date"
+                        label="Regulation Date"
                         views={['day', 'month', 'year']}
                         value={laudate}
                         onChange={(newValue) => {
@@ -237,8 +238,8 @@ export default function LaudatoryMoreMenu({ dulieu, handleOpenToast }) {
                     </LocalizationProvider>
                     <TextField
                       fullWidth
-                      label="Amount"
-                      {...getFieldProps('Amount')}
+                      label="Regulation Format"
+                      {...getFieldProps('RegulationFormat')}
                       variant="outlined"
                     />
                   </Stack>
@@ -259,7 +260,7 @@ export default function LaudatoryMoreMenu({ dulieu, handleOpenToast }) {
                     type="submit"
                     variant="contained"
                   >
-                    Edit Laudatory
+                    Edit Regulation
                   </LoadingButton>
                 </Stack>
               </Box>

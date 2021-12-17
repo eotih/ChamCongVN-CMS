@@ -32,14 +32,14 @@ import { getAllEmployees } from '../../../functions/Employee';
 // --------------------------------------------------
 // ----------------------------------------------------------------------
 
-export default function LaudatoryMoreMenu({ dulieu, handleOpenToast }) {
-  const { LaudatoryEmployee, EmployeeID } = dulieu;
-  const { LaudatoryEmployeeID, LaudatoryName, Reason, Amount, LaudatoryDate } = LaudatoryEmployee;
+export default function AdvanceMoreMenu({ dulieu, handleOpenToast }) {
+  const { Advance, EmployeeID } = dulieu;
+  const { AdvanceID, Reason, Amount, AdvanceDate } = Advance;
   const ref = useRef(null);
   const [loading, setLoading] = useState(false);
   const [employee, setEmployee] = useState([]);
   const [employees, setEmployees] = useState([]);
-  const [laudate, setLauDate] = useState([]);
+  const [date, setDate] = useState([]);
   const [isOpen, setIsOpen] = useState(false);
   const [open, setOpen] = useState(false);
   const handleClose = () => setOpen(false);
@@ -57,26 +57,24 @@ export default function LaudatoryMoreMenu({ dulieu, handleOpenToast }) {
   };
   const formik = useFormik({
     initialValues: {
-      LaudatoryEmployeeID: '',
+      AdvanceID: '',
       EmployeeID: '',
-      LaudatoryName: '',
-      LaudatoryDate: laudate,
+      AdvanceDate: date,
       Reason: '',
       Amount: '',
-      CreatedBy: '',
+      UpdatedBy: '',
       remember: true
     },
     onSubmit: () => {
       setLoading(true);
       axios
-        .put(`Principle/LaudatoryEmployee/${LaudatoryEmployeeID}`, {
-          LaudatoryEmployeeID: formik.values.LaudatoryEmployeeID,
+        .put(`Salary/Advances/${AdvanceID}`, {
+          AdvanceID: formik.values.AdvanceID,
           EmployeeID: formik.values.EmployeeID,
-          LaudatoryName: formik.values.LaudatoryName,
           Reason: formik.values.Reason,
           Amount: formik.values.Amount,
           UpdatedBy: formik.values.UpdatedBy,
-          LaudatoryDate: laudate
+          AdvanceDate: date
         })
         .then((res) => {
           if (res.data.Status === 200) {
@@ -107,12 +105,11 @@ export default function LaudatoryMoreMenu({ dulieu, handleOpenToast }) {
     }
   });
   const handleOpen = () => {
-    formik.setFieldValue('LaudatoryEmployeeID', LaudatoryEmployeeID);
-    formik.setFieldValue('LaudatoryName', LaudatoryName);
+    formik.setFieldValue('AdvanceID', AdvanceID);
     formik.setFieldValue('Reason', Reason);
     formik.setFieldValue('Amount', Amount);
     formik.setFieldValue('EmployeeID', EmployeeID);
-    setLauDate(new Date(`${LaudatoryDate}`));
+    setDate(new Date(`${AdvanceDate}`));
     setOpen(true);
   };
   const { handleSubmit, getFieldProps } = formik;
@@ -139,8 +136,8 @@ export default function LaudatoryMoreMenu({ dulieu, handleOpenToast }) {
       >
         <MenuItem
           onClick={() => {
-            if (confirm('Are you sure you want to delete this laudatory?')) {
-              axios.delete(`Principle/LaudatoryEmployee/${LaudatoryEmployeeID}`).then((res) => {
+            if (confirm('Are you sure you want to delete this advance?')) {
+              axios.delete(`Salary/Advance/${AdvanceID}`).then((res) => {
                 if (res.data.Status === 200) {
                   handleOpenToast({
                     isOpen: true,
@@ -196,15 +193,9 @@ export default function LaudatoryMoreMenu({ dulieu, handleOpenToast }) {
               <Box sx={style}>
                 <Stack spacing={1}>
                   <Typography id="modal-modal-title" variant="h6" component="h2">
-                    Edit Laudatory
+                    Edit Advance
                   </Typography>
                   <Stack direction={{ xs: 'column', sm: 'row' }} spacing={2}>
-                    <TextField
-                      fullWidth
-                      label="Laudatory Name"
-                      {...getFieldProps('LaudatoryName')}
-                      variant="outlined"
-                    />
                     <FormControl fullWidth>
                       <InputLabel id="demo-simple-select-label">Employee Name</InputLabel>
                       <Select
@@ -226,11 +217,11 @@ export default function LaudatoryMoreMenu({ dulieu, handleOpenToast }) {
                   <Stack direction={{ xs: 'column', sm: 'row' }} spacing={2}>
                     <LocalizationProvider dateAdapter={AdapterDateFns}>
                       <DatePicker
-                        label="Laudatory Date"
+                        label="Advance Date"
                         views={['day', 'month', 'year']}
-                        value={laudate}
+                        value={date}
                         onChange={(newValue) => {
-                          setLauDate(newValue);
+                          setDate(newValue);
                         }}
                         renderInput={(params) => <TextField {...params} />}
                       />
@@ -259,7 +250,7 @@ export default function LaudatoryMoreMenu({ dulieu, handleOpenToast }) {
                     type="submit"
                     variant="contained"
                   >
-                    Edit Laudatory
+                    Edit Advance
                   </LoadingButton>
                 </Stack>
               </Box>
