@@ -4,8 +4,8 @@ async function getAllAccount() {
   const res = await Axios.get('Organization/Account');
   return res.data;
 }
-async function getAccountById() {
-  const res = await Axios.get(`Organization/Account`);
+async function getAccountById(id) {
+  const res = await Axios.get(`Organization/Account/${id}`);
   return res.data;
 }
 async function GetEmployeeForAccount() {

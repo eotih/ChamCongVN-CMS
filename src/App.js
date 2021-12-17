@@ -9,6 +9,7 @@ import { BaseOptionChartStyle } from './components/charts/BaseOptionChart';
 import Login from './pages/Login';
 import useToken from './services/useToken';
 
+import { AccountProvider } from './context/AccountContext';
 // ----------------------------------------------------------------------
 
 export default function App() {
@@ -22,10 +23,12 @@ export default function App() {
   }
   return (
     <ThemeConfig>
-      <ScrollToTop />
-      <GlobalStyles />
-      <BaseOptionChartStyle />
-      <Router />
+      <AccountProvider token={token}>
+        <ScrollToTop />
+        <GlobalStyles />
+        <BaseOptionChartStyle />
+        <Router />
+      </AccountProvider>
     </ThemeConfig>
   );
 }

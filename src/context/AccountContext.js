@@ -1,13 +1,17 @@
 import { useEffect, useState, createContext } from 'react';
+import jwtDecode from 'jwt-decode';
 import { getAccountById } from '../functions/Organization';
 
 const AccountContext = createContext();
 
-function AccountProvider({ children }) {
+function AccountProvider({ children, token }) {
   const [account, setAccount] = useState({});
+  const decodeToken = jwtDecode(token);
+  const accountID = decodeToken.nameid[0];
+  // const EmployeeID = decodeToken.nameid[2];
 
   useEffect(() => {
-    getAccountById().then((res) => setAccount(res).catch((err) => console.log(err)));
+    getAccountById(accountID).then((res) => setAccount(res));
   }, []);
 
   return <AccountContext.Provider value={account}>{children}</AccountContext.Provider>;

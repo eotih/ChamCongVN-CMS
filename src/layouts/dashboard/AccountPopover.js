@@ -11,7 +11,7 @@ import { Button, Box, Divider, MenuItem, Typography, Avatar, IconButton } from '
 import { AccountContext } from '../../context/AccountContext';
 import MenuPopover from '../../components/MenuPopover';
 //
-import account from '../../_mocks_/account';
+// import account from '../../_mocks_/account';
 
 // ----------------------------------------------------------------------
 
@@ -38,7 +38,7 @@ const MENU_OPTIONS = [
 export default function AccountPopover() {
   const anchorRef = useRef(null);
   const [open, setOpen] = useState(false);
-  // const account = useContext(AccountContext);
+  const account = useContext(AccountContext);
 
   const handleOpen = () => {
     setOpen(true);
