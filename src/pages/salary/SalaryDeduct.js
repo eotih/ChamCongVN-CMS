@@ -200,6 +200,7 @@ export default function User() {
       remember: true
     },
     onSubmit: () => {
+      setLoading(true);
       axios
         .post(`Salary/DeductionEmployee`, {
           EmployeeID: formik.values.EmployeeID,

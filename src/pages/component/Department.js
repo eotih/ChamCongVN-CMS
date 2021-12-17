@@ -82,9 +82,9 @@ function applySortFilter(array, comparator, query) {
 
 export default function Department() {
   const [page, setPage] = useState(0);
+  const [loading, setLoading] = useState(false);
   const [order, setOrder] = useState('asc');
   const [isLoaded, setIsLoaded] = useState(false);
-  const [loading, setLoading] = useState(false);
   const [selected, setSelected] = useState([]);
   const [department, setDepartment] = useState([]);
   const [orderBy, setOrderBy] = useState('DepartmentName');
@@ -173,6 +173,7 @@ export default function Department() {
       Phone: ''
     },
     onSubmit: () => {
+      setLoading(true);
       axios
         .post(`Component/Department`, formik.values)
         .then((res) => {

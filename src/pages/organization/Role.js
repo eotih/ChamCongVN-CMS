@@ -166,6 +166,7 @@ export default function Role() {
       remember: true
     },
     onSubmit: () => {
+      setLoading(true);
       axios
         .post(`Organization/Role`, formik.values)
         .then((res) => {

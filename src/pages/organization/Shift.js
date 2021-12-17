@@ -177,6 +177,7 @@ export default function Shift() {
       EndShift: convertTime(timeEnd)
     },
     onSubmit: () => {
+      setLoading(true);
       axios
         .post(`Organization/Shift`, {
           ShiftName: formik.values.ShiftName,

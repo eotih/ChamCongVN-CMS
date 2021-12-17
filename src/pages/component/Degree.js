@@ -172,6 +172,7 @@ export default function Degree() {
       remember: true
     },
     onSubmit: () => {
+      setLoading(true);
       axios
         .post(`Component/Degrees`, formik.values)
         .then((res) => {

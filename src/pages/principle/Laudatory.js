@@ -196,6 +196,7 @@ export default function Laudatory() {
       remember: true
     },
     onSubmit: () => {
+      setLoading(true);
       axios
         .post(`Principle/LaudatoryEmployee`, {
           EmployeeID: formik.values.EmployeeID,

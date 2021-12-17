@@ -77,10 +77,10 @@ function applySortFilter(array, comparator, query) {
 
 export default function State() {
   const [page, setPage] = useState(0);
+  const [loading, setLoading] = useState(false);
   const [order, setOrder] = useState('asc');
   const [selected, setSelected] = useState([]);
   const [orderBy, setOrderBy] = useState('name');
-  const [loading, setLoading] = useState(false);
   const [isLoaded, setIsLoaded] = useState(false);
   const [filterName, setFilterName] = useState('');
   const [state, setState] = useState([]);
@@ -167,6 +167,7 @@ export default function State() {
       remember: true
     },
     onSubmit: () => {
+      setLoading(true);
       axios
         .post(`Component/State`, formik.values)
         .then((res) => {

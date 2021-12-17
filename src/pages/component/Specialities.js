@@ -82,9 +82,9 @@ function applySortFilter(array, comparator, query) {
 
 export default function Specialty() {
   const [page, setPage] = useState(0);
+  const [loading, setLoading] = useState(false);
   const [order, setOrder] = useState('asc');
   const [selected, setSelected] = useState([]);
-  const [loading, setLoading] = useState(false);
   const [isLoaded, setIsLoaded] = useState(false);
   const [orderBy, setOrderBy] = useState('name');
   const [filterName, setFilterName] = useState('');
@@ -173,6 +173,7 @@ export default function Specialty() {
       remember: true
     },
     onSubmit: () => {
+      setLoading(true);
       axios
         .post(`Component/Specialities`, formik.values)
         .then((res) => {

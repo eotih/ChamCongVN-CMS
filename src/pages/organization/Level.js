@@ -180,6 +180,7 @@ export default function Level() {
       remember: true
     },
     onSubmit: () => {
+      setLoading(true);
       axios
         .post(`Organization/Level`, formik.values)
         .then((res) => {
