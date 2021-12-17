@@ -25,6 +25,7 @@ import {
 } from '@mui/material';
 
 import { LoadingButton } from '@mui/lab';
+import CircularProgress from '@mui/material/CircularProgress';
 import axios from '../../functions/Axios';
 // components
 import Page from '../../components/Page';
@@ -82,6 +83,8 @@ function applySortFilter(array, comparator, query) {
 export default function Department() {
   const [page, setPage] = useState(0);
   const [order, setOrder] = useState('asc');
+  const [isLoaded, setIsLoaded] = useState(false);
+  const [loading, setLoading] = useState(false);
   const [selected, setSelected] = useState([]);
   const [department, setDepartment] = useState([]);
   const [orderBy, setOrderBy] = useState('DepartmentName');
@@ -107,6 +110,7 @@ export default function Department() {
   useEffect(() => {
     getAllDepartments().then((res) => {
       setDepartment(res);
+      setIsLoaded(true);
     });
   }, [department]);
 
@@ -182,14 +186,16 @@ export default function Department() {
               color: 'success'
             })();
             formik.resetForm();
+            setLoading(false);
           } else {
             handleOpenToast({
               isOpen: true,
               horizontal: 'right',
               vertical: 'top',
-              message: 'Fail added',
+              message: 'Fail updated',
               color: 'error'
             })();
+            setLoading(false);
           }
         })
         .catch((err) => {
@@ -204,7 +210,13 @@ export default function Department() {
   const filteredUsers = applySortFilter(department, getComparator(order, orderBy), filterName);
 
   const isUserNotFound = filteredUsers.length === 0;
-
+  if (!isLoaded) {
+    return (
+      <Box sx={{ display: 'flex' }}>
+        <CircularProgress />
+      </Box>
+    );
+  }
   return (
     <Page title="Department | ChamCongVN">
       {openToast.isOpen === true && <Toast open={openToast} handleCloseToast={handleCloseToast} />}
@@ -250,7 +262,13 @@ export default function Department() {
                     variant="outlined"
                   />
                 </Stack>
-                <LoadingButton fullWidth size="large" type="submit" variant="contained">
+                <LoadingButton
+                  loading={loading}
+                  fullWidth
+                  size="large"
+                  type="submit"
+                  variant="contained"
+                >
                   Add Department
                 </LoadingButton>
               </Stack>

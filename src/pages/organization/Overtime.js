@@ -3,6 +3,7 @@ import { filter } from 'lodash';
 import { Icon } from '@iconify/react';
 import { useState, useEffect } from 'react';
 import { useFormik, Form, FormikProvider } from 'formik';
+import CircularProgress from '@mui/material/CircularProgress';
 import plusFill from '@iconify/icons-eva/plus-fill';
 import { Link as RouterLink } from 'react-router-dom';
 // material
@@ -102,6 +103,8 @@ export default function Overtime() {
   const [selected, setSelected] = useState([]);
   const [overtime, setOvertime] = useState([]);
   const [department, setDepartment] = useState([]);
+  const [loading, setLoading] = useState(false);
+  const [isLoaded, setIsLoaded] = useState(false);
   const [orderBy, setOrderBy] = useState('name');
   const [filterName, setFilterName] = useState('');
   const [rowsPerPage, setRowsPerPage] = useState(5);
@@ -109,7 +112,12 @@ export default function Overtime() {
   const [timeEnd, setTimeEnd] = useState(null);
   const [date, setDate] = useState(new Date());
   const [open, setOpen] = useState(false);
-  const handleOpen = () => setOpen(true);
+  const handleOpen = () => {
+    getAllDepartments().then((res) => {
+      setDepartment(res);
+    });
+    setOpen(true);
+  };
   const handleClose = () => setOpen(false);
   const [openToast, setOpenToast] = useState({
     isOpen: false,
@@ -128,9 +136,7 @@ export default function Overtime() {
   useEffect(() => {
     getAllOvertimes().then((res) => {
       setOvertime(res);
-    });
-    getAllDepartments().then((res) => {
-      setDepartment(res);
+      setIsLoaded(true);
     });
   }, [overtime]);
   const handleRequestSort = (event, property) => {
@@ -228,14 +234,16 @@ export default function Overtime() {
               color: 'success'
             })();
             formik.resetForm();
+            setLoading(false);
           } else {
             handleOpenToast({
               isOpen: true,
               horizontal: 'right',
               vertical: 'top',
-              message: 'Fail added',
+              message: 'Fail updated',
               color: 'error'
             })();
+            setLoading(false);
           }
         })
         .catch((err) => {
@@ -250,7 +258,13 @@ export default function Overtime() {
   const filteredUsers = applySortFilter(overtime, getComparator(order, orderBy), filterName);
 
   const isUserNotFound = filteredUsers.length === 0;
-
+  if (!isLoaded) {
+    return (
+      <Box sx={{ display: 'flex' }}>
+        <CircularProgress />
+      </Box>
+    );
+  }
   return (
     <Page title="Overtime | ChamCongVN">
       {openToast.isOpen === true && <Toast open={openToast} handleCloseToast={handleCloseToast} />}
@@ -356,7 +370,13 @@ export default function Overtime() {
                     variant="outlined"
                   />
                 </Stack>
-                <LoadingButton fullWidth size="large" type="submit" variant="contained">
+                <LoadingButton
+                  loading={loading}
+                  fullWidth
+                  size="large"
+                  type="submit"
+                  variant="contained"
+                >
                   Add Overtime
                 </LoadingButton>
               </Stack>

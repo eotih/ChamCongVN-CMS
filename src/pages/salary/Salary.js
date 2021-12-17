@@ -1,6 +1,7 @@
 import * as React from 'react';
 import { filter } from 'lodash';
 import { Icon } from '@iconify/react';
+import CircularProgress from '@mui/material/CircularProgress';
 import { useState, useEffect } from 'react';
 import { useFormik, Form, FormikProvider } from 'formik';
 import plusFill from '@iconify/icons-eva/plus-fill';
@@ -19,20 +20,9 @@ import {
   Container,
   Typography,
   TableContainer,
-  TablePagination,
-  Modal,
-  Box,
-  TextField,
-  FormControl,
-  InputLabel,
-  Select,
-  MenuItem
+  TablePagination
 } from '@mui/material';
-import DatePicker from '@mui/lab/DatePicker';
-import AdapterDateFns from '@mui/lab/AdapterDateFns';
-import LocalizationProvider from '@mui/lab/LocalizationProvider';
 
-import { LoadingButton } from '@mui/lab';
 import axios from '../../functions/Axios';
 // components
 import Page from '../../components/Page';
@@ -95,11 +85,7 @@ export default function User() {
   const [filterName, setFilterName] = useState('');
   const [Salary, setSalary] = useState([]);
   const [employee, setEmployee] = useState([]);
-  const [employees, setEmployees] = useState([]);
   const [rowsPerPage, setRowsPerPage] = useState(5);
-  const [open, setOpen] = useState(false);
-  const handleOpen = () => setOpen(true);
-  const handleClose = () => setOpen(false);
 
   useEffect(() => {
     getAllSalarys().then((res) => {
@@ -187,12 +173,6 @@ export default function User() {
         });
     }
   });
-  const { handleSubmit, getFieldProps } = formik;
-
-  const handleChange = (event) => {
-    formik.setFieldValue('EmployeeID', event.target.value);
-    setEmployees(event.target.value);
-  };
 
   const emptyRows = page > 0 ? Math.max(0, (1 + page) * rowsPerPage - Salary.length) : 0;
 

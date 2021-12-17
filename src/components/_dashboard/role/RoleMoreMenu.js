@@ -68,6 +68,7 @@ export default function RoleMoreMenu({ dulieu, handleOpenToast }) {
               message: 'Fail updated',
               color: 'error'
             })();
+            setLoading(false);
           }
         })
         .catch((err) => {

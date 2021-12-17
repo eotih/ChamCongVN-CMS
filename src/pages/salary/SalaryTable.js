@@ -29,6 +29,7 @@ import {
   MenuItem
 } from '@mui/material';
 import AdapterDateFns from '@mui/lab/AdapterDateFns';
+import CircularProgress from '@mui/material/CircularProgress';
 import LocalizationProvider from '@mui/lab/LocalizationProvider';
 import DatePicker from '@mui/lab/DatePicker';
 
@@ -97,6 +98,8 @@ export default function User() {
   const [order, setOrder] = useState('asc');
   const [selected, setSelected] = useState([]);
   const [orderBy, setOrderBy] = useState('name');
+  const [loading, setLoading] = useState(false);
+  const [isLoaded, setIsLoaded] = useState(false);
   const [filterName, setFilterName] = useState('');
   const [salarytable, setSalaryTable] = useState([]);
   const [rowsPerPage, setRowsPerPage] = useState(5);
@@ -120,6 +123,7 @@ export default function User() {
   useEffect(() => {
     getAllSalaryTables().then((res) => {
       setSalaryTable(res);
+      setIsLoaded(true);
     });
   }, [salarytable]);
   const handleRequestSort = (event, property) => {
@@ -208,14 +212,16 @@ export default function User() {
               color: 'success'
             })();
             formik.resetForm();
+            setLoading(false);
           } else {
             handleOpenToast({
               isOpen: true,
               horizontal: 'right',
               vertical: 'top',
-              message: 'Fail added',
+              message: 'Fail updated',
               color: 'error'
             })();
+            setLoading(false);
           }
         })
         .catch((err) => {
@@ -234,7 +240,13 @@ export default function User() {
   const filteredUsers = applySortFilter(salarytable, getComparator(order, orderBy), filterName);
 
   const isUserNotFound = filteredUsers.length === 0;
-
+  if (!isLoaded) {
+    return (
+      <Box sx={{ display: 'flex' }}>
+        <CircularProgress />
+      </Box>
+    );
+  }
   return (
     <Page title="Salary Table | ChamCongVN">
       {openToast.isOpen === true && <Toast open={openToast} handleCloseToast={handleCloseToast} />}
@@ -314,7 +326,13 @@ export default function User() {
                     variant="outlined"
                   />
                 </Stack>
-                <LoadingButton fullWidth size="large" type="submit" variant="contained">
+                <LoadingButton
+                  loading={loading}
+                  fullWidth
+                  size="large"
+                  type="submit"
+                  variant="contained"
+                >
                   Add Salary Table
                 </LoadingButton>
               </Stack>

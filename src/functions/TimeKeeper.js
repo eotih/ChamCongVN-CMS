@@ -1,7 +1,7 @@
 import Axios from './Axios';
 
 async function GetAllTimeKeeping() {
-  const res = await Axios.get('TimeKeeper/GetAllTimeKeeping');
+  const res = await Axios.get('TimeKeeper/TimeKeeping');
   return res.data;
 }
 async function GetCountCheckedIn() {

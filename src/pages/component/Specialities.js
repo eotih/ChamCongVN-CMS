@@ -3,6 +3,7 @@ import { filter } from 'lodash';
 import { Icon } from '@iconify/react';
 import { useState, useEffect } from 'react';
 import { useFormik, Form, FormikProvider } from 'formik';
+import CircularProgress from '@mui/material/CircularProgress';
 import plusFill from '@iconify/icons-eva/plus-fill';
 import { Link as RouterLink } from 'react-router-dom';
 // material
@@ -83,6 +84,8 @@ export default function Specialty() {
   const [page, setPage] = useState(0);
   const [order, setOrder] = useState('asc');
   const [selected, setSelected] = useState([]);
+  const [loading, setLoading] = useState(false);
+  const [isLoaded, setIsLoaded] = useState(false);
   const [orderBy, setOrderBy] = useState('name');
   const [filterName, setFilterName] = useState('');
   const [specialities, setSpecialities] = useState([]);
@@ -107,6 +110,7 @@ export default function Specialty() {
   useEffect(() => {
     getAllSpecialities().then((res) => {
       setSpecialities(res);
+      setIsLoaded(true);
     });
   }, [specialities]);
   const handleRequestSort = (event, property) => {
@@ -182,14 +186,16 @@ export default function Specialty() {
               color: 'success'
             })();
             formik.resetForm();
+            setLoading(false);
           } else {
             handleOpenToast({
               isOpen: true,
               horizontal: 'right',
               vertical: 'top',
-              message: 'Fail added',
+              message: 'Fail updated',
               color: 'error'
             })();
+            setLoading(false);
           }
         })
         .catch((err) => {
@@ -204,7 +210,13 @@ export default function Specialty() {
   const filteredUsers = applySortFilter(specialities, getComparator(order, orderBy), filterName);
 
   const isUserNotFound = filteredUsers.length === 0;
-
+  if (!isLoaded) {
+    return (
+      <Box sx={{ display: 'flex' }}>
+        <CircularProgress />
+      </Box>
+    );
+  }
   return (
     <Page title="Specialty | ChamCongVN">
       {openToast.isOpen === true && <Toast open={openToast} handleCloseToast={handleCloseToast} />}
@@ -244,7 +256,13 @@ export default function Specialty() {
                     variant="outlined"
                   />
                 </Stack>
-                <LoadingButton fullWidth size="large" type="submit" variant="contained">
+                <LoadingButton
+                  loading={loading}
+                  fullWidth
+                  size="large"
+                  type="submit"
+                  variant="contained"
+                >
                   Add Specialty
                 </LoadingButton>
               </Stack>

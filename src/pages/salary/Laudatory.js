@@ -1,6 +1,7 @@
 import * as React from 'react';
 import { filter } from 'lodash';
 import { Icon } from '@iconify/react';
+import CircularProgress from '@mui/material/CircularProgress';
 import { useState, useEffect } from 'react';
 import { useFormik, Form, FormikProvider } from 'formik';
 import plusFill from '@iconify/icons-eva/plus-fill';
@@ -97,13 +98,20 @@ export default function User() {
   const [laudate, setLauDate] = React.useState(new Date());
   const [order, setOrder] = useState('asc');
   const [selected, setSelected] = useState([]);
+  const [loading, setLoading] = useState(false);
+  const [isLoaded, setIsLoaded] = useState(false);
   const [orderBy, setOrderBy] = useState('name');
   const [filterName, setFilterName] = useState('');
   const [laudatory, setLaudatory] = useState([]);
   const [employee, setEmployee] = useState([]);
   const [rowsPerPage, setRowsPerPage] = useState(5);
   const [open, setOpen] = useState(false);
-  const handleOpen = () => setOpen(true);
+  const handleOpen = () => {
+    getAllEmployees().then((res) => {
+      setEmployee(res);
+    });
+    setOpen(true);
+  };
   const handleClose = () => setOpen(false);
   const [openToast, setOpenToast] = useState({
     isOpen: false,
@@ -122,9 +130,7 @@ export default function User() {
   useEffect(() => {
     getAllLaudatorys().then((res) => {
       setLaudatory(res);
-    });
-    getAllEmployees().then((res) => {
-      setEmployee(res);
+      setIsLoaded(true);
     });
   }, [laudatory]);
   const handleRequestSort = (event, property) => {
@@ -210,14 +216,16 @@ export default function User() {
               color: 'success'
             })();
             formik.resetForm();
+            setLoading(false);
           } else {
             handleOpenToast({
               isOpen: true,
               horizontal: 'right',
               vertical: 'top',
-              message: 'Fail added',
+              message: 'Fail updated',
               color: 'error'
             })();
+            setLoading(false);
           }
         })
         .catch((err) => {
@@ -235,7 +243,13 @@ export default function User() {
   const filteredLaudatorys = applySortFilter(laudatory, getComparator(order, orderBy), filterName);
 
   const isLaudatoryNotFound = filteredLaudatorys.length === 0;
-
+  if (!isLoaded) {
+    return (
+      <Box sx={{ display: 'flex' }}>
+        <CircularProgress />
+      </Box>
+    );
+  }
   return (
     <Page title="Laudatory | ChamCongVN">
       {openToast.isOpen === true && <Toast open={openToast} handleCloseToast={handleCloseToast} />}
@@ -311,7 +325,13 @@ export default function User() {
                       variant="outlined"
                     />
                   </Stack>
-                  <LoadingButton fullWidth size="large" type="submit" variant="contained">
+                  <LoadingButton
+                    loading={loading}
+                    fullWidth
+                    size="large"
+                    type="submit"
+                    variant="contained"
+                  >
                     Add Laudatory
                   </LoadingButton>
                 </Stack>

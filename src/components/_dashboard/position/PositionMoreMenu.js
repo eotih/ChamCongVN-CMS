@@ -68,6 +68,7 @@ export default function PositionMoreMenu({ dulieu, handleOpenToast }) {
               message: 'Fail updated',
               color: 'error'
             })();
+            setLoading(false);
           }
         })
         .catch((err) => {
