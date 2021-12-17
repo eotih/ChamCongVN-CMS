@@ -48,6 +48,7 @@ export default function OvertimeMoreMenu({ dulieu, handleOpenToast }) {
   const [timeStart, setTimeStart] = useState([]);
   const [timeEnd, setTimeEnd] = useState([]);
   const [department, setDepartment] = useState([]);
+  const [isActive, setisActive] = useState([]);
   const [departments, setDepartments] = useState([]);
   const [date, setDate] = useState(new Date());
   const [open, setOpen] = useState(false);
@@ -114,6 +115,12 @@ export default function OvertimeMoreMenu({ dulieu, handleOpenToast }) {
         });
     }
   });
+  const convertIsActive = (isactive) => {
+    if (isactive === true) {
+      return 1;
+    }
+    return 0;
+  };
   const handleChangeIsActive = (event) => {
     formik.setFieldValue('IsActive', event.target.value);
   };
@@ -128,7 +135,7 @@ export default function OvertimeMoreMenu({ dulieu, handleOpenToast }) {
     formik.setFieldValue('StartTime', StartTime);
     formik.setFieldValue('EndTime', EndTime);
     formik.setFieldValue('Quantity', Quantity);
-    formik.setFieldValue('IsActive', IsActive); // Active chỗ này hình như không get được chưa liệu ra được
+    formik.setFieldValue('IsActive', convertIsActive(IsActive)); // Active chỗ này hình như không get được chưa liệu ra được
     formik.setFieldValue('DepartmentID', DepartmentID);
     setTimeStart(new Date(`12/12/2000 ${StartTime}`));
     setTimeEnd(new Date(`12/12/2000 ${EndTime}`));
@@ -282,6 +289,7 @@ export default function OvertimeMoreMenu({ dulieu, handleOpenToast }) {
                       <Select
                         labelId="select-label"
                         label="IsActive"
+                        value={isActive}
                         {...getFieldProps('IsActive')}
                         variant="outlined"
                         onChange={handleChangeIsActive}
