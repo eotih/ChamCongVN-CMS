@@ -31,6 +31,7 @@ import {
 } from '@mui/material';
 import TimePicker from '@mui/lab/TimePicker';
 import AdapterDateFns from '@mui/lab/AdapterDateFns';
+import CircularProgress from '@mui/material/CircularProgress';
 import LocalizationProvider from '@mui/lab/LocalizationProvider';
 
 import { LoadingButton } from '@mui/lab';
@@ -98,21 +99,26 @@ export default function User() {
   const [order, setOrder] = useState('asc');
   const [selected, setSelected] = useState([]);
   const [orderBy, setOrderBy] = useState('name');
+  const [loading, setLoading] = useState(false);
+  const [isLoaded, setIsLoaded] = useState(false);
   const [filterName, setFilterName] = useState('');
   const [Overtime, setOvertime] = useState([]);
   const [employee, setEmployee] = useState([]);
   const [employees, setEmployees] = useState([]);
   const [rowsPerPage, setRowsPerPage] = useState(5);
   const [open, setOpen] = useState(false);
-  const handleOpen = () => setOpen(true);
+  const handleOpen = () => {
+    getAllEmployees().then((res) => {
+      setEmployee(res);
+    });
+    setOpen(true);
+  };
   const handleClose = () => setOpen(false);
 
   useEffect(() => {
     getAllOvertimes().then((res) => {
       setOvertime(res);
-    });
-    getAllEmployees().then((res) => {
-      setEmployee(res);
+      setIsLoaded(true);
     });
   }, []);
   const handleRequestSort = (event, property) => {
@@ -204,7 +210,13 @@ export default function User() {
   const filteredOvertimes = applySortFilter(Overtime, getComparator(order, orderBy), filterName);
 
   const isOvertimeNotFound = filteredOvertimes.length === 0;
-
+  if (!isLoaded) {
+    return (
+      <Box sx={{ display: 'flex' }}>
+        <CircularProgress />
+      </Box>
+    );
+  }
   return (
     <Page title="Overtime | ChamCongVN">
       <Container>
@@ -266,7 +278,13 @@ export default function User() {
                       variant="outlined"
                     />
                   </Stack>
-                  <LoadingButton fullWidth size="large" type="submit" variant="contained">
+                  <LoadingButton
+                    loading={loading}
+                    fullWidth
+                    size="large"
+                    type="submit"
+                    variant="contained"
+                  >
                     Add Overtime
                   </LoadingButton>
                 </Stack>

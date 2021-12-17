@@ -68,6 +68,7 @@ export default function DepartMoreMenu({ dulieu, handleOpenToast }) {
               message: 'Fail updated',
               color: 'error'
             })();
+            setLoading(false);
           }
         })
         .catch((err) => {

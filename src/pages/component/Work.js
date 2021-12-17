@@ -25,6 +25,7 @@ import {
 } from '@mui/material';
 
 import { LoadingButton } from '@mui/lab';
+import CircularProgress from '@mui/material/CircularProgress';
 import axios from '../../functions/Axios';
 // components
 import Page from '../../components/Page';
@@ -79,6 +80,7 @@ export default function Work() {
   const [loading, setLoading] = useState(false);
   const [order, setOrder] = useState('asc');
   const [selected, setSelected] = useState([]);
+  const [isLoaded, setIsLoaded] = useState(false);
   const [orderBy, setOrderBy] = useState('name');
   const [filterName, setFilterName] = useState('');
   const [work, setWork] = useState([]);
@@ -102,6 +104,7 @@ export default function Work() {
   useEffect(() => {
     getAllWorks().then((res) => {
       setWork(res);
+      setIsLoaded(true);
     });
   }, [work]);
   const handleRequestSort = (event, property) => {
@@ -183,9 +186,10 @@ export default function Work() {
               isOpen: true,
               horizontal: 'right',
               vertical: 'top',
-              message: 'Fail added',
+              message: 'Fail updated',
               color: 'error'
             })();
+            setLoading(false);
           }
         })
         .catch((err) => {
@@ -200,7 +204,13 @@ export default function Work() {
   const filteredUsers = applySortFilter(work, getComparator(order, orderBy), filterName);
 
   const isUserNotFound = filteredUsers.length === 0;
-
+  if (!isLoaded) {
+    return (
+      <Box sx={{ display: 'flex' }}>
+        <CircularProgress />
+      </Box>
+    );
+  }
   return (
     <Page title="Work | ChamCongVN">
       {openToast.isOpen === true && <Toast open={openToast} handleCloseToast={handleCloseToast} />}

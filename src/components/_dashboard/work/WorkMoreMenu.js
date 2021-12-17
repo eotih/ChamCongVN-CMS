@@ -27,6 +27,7 @@ export default function WorkMoreMenu({ dulieu, handleOpenToast }) {
   const { WorkID, WorkName, Note } = dulieu;
   const ref = useRef(null);
   const [isOpen, setIsOpen] = useState(false);
+  const [loading, setLoading] = useState(false);
   const [open, setOpen] = useState(false);
   const handleClose = () => setOpen(false);
   const style = {
@@ -64,6 +65,7 @@ export default function WorkMoreMenu({ dulieu, handleOpenToast }) {
               message: 'Fail updated',
               color: 'error'
             })();
+            setLoading(false);
           }
         })
         .catch((err) => {
@@ -172,7 +174,13 @@ export default function WorkMoreMenu({ dulieu, handleOpenToast }) {
                       variant="outlined"
                     />
                   </Stack>
-                  <LoadingButton fullWidth size="large" type="submit" variant="contained">
+                  <LoadingButton
+                    loading={loading}
+                    fullWidth
+                    size="large"
+                    type="submit"
+                    variant="contained"
+                  >
                     Edit Work
                   </LoadingButton>
                 </Stack>

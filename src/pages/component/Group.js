@@ -3,6 +3,7 @@ import { filter } from 'lodash';
 import { Icon } from '@iconify/react';
 import { useState, useEffect } from 'react';
 import { useFormik, Form, FormikProvider } from 'formik';
+import CircularProgress from '@mui/material/CircularProgress';
 import plusFill from '@iconify/icons-eva/plus-fill';
 import { Link as RouterLink } from 'react-router-dom';
 // material
@@ -80,6 +81,7 @@ export default function Group() {
   const [loading, setLoading] = useState(false);
   const [order, setOrder] = useState('asc');
   const [selected, setSelected] = useState([]);
+  const [isLoaded, setIsLoaded] = useState(false);
   const [orderBy, setOrderBy] = useState('name');
   const [filterName, setFilterName] = useState('');
   const [rowsPerPage, setRowsPerPage] = useState(5);
@@ -104,6 +106,7 @@ export default function Group() {
   useEffect(() => {
     getAllGroups().then((res) => {
       setGroup(res);
+      setIsLoaded(true);
     });
   }, [group]);
 
@@ -186,9 +189,10 @@ export default function Group() {
               isOpen: true,
               horizontal: 'right',
               vertical: 'top',
-              message: 'Fail added',
+              message: 'Fail updated',
               color: 'error'
             })();
+            setLoading(false);
           }
         })
         .catch((err) => {
@@ -203,7 +207,13 @@ export default function Group() {
   const filteredUsers = applySortFilter(group, getComparator(order, orderBy), filterName);
 
   const isUserNotFound = filteredUsers.length === 0;
-
+  if (!isLoaded) {
+    return (
+      <Box sx={{ display: 'flex' }}>
+        <CircularProgress />
+      </Box>
+    );
+  }
   return (
     <Page title="Group | ChamCongVN">
       {openToast.isOpen === true && <Toast open={openToast} handleCloseToast={handleCloseToast} />}

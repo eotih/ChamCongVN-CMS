@@ -67,6 +67,7 @@ export default function StateMoreMenu({ dulieu, handleOpenToast }) {
               message: 'Fail updated',
               color: 'error'
             })();
+            setLoading(false);
           }
         })
         .catch((err) => {

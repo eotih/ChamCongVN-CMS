@@ -18,7 +18,7 @@ import { GetAllTimeKeeping } from '../functions/TimeKeeper';
 
 // ----------------------------------------------------------------------
 
-export default function EcommerceShop() {
+export default function TimeKeeper() {
   const [error, setError] = useState(null);
   const [isLoaded, setIsLoaded] = useState(false);
   const [openFilter, setOpenFilter] = useState(false);

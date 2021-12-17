@@ -3,7 +3,7 @@ import * as React from 'react';
 import { filter } from 'lodash';
 import { Icon } from '@iconify/react';
 import { useState, useEffect } from 'react';
-import { useFormik, Form, FormikProvider } from 'formik';
+import CircularProgress from '@mui/material/CircularProgress';
 import plusFill from '@iconify/icons-eva/plus-fill';
 import { Link as RouterLink } from 'react-router-dom';
 // material
@@ -11,8 +11,6 @@ import {
   Card,
   Table,
   Stack,
-  Avatar,
-  Button,
   Checkbox,
   TableRow,
   TableBody,
@@ -21,12 +19,10 @@ import {
   Typography,
   TableContainer,
   TablePagination,
-  Modal,
   Box
 } from '@mui/material';
 import axios from '../../functions/Axios';
 import UploadFile from '../UploadFile';
-import BasicInfor from './BasicInfor';
 // components
 import Page from '../../components/Page';
 import Scrollbar from '../../components/Scrollbar';
@@ -94,11 +90,9 @@ export default function Recruitment() {
   const [selected, setSelected] = useState([]);
   const [orderBy, setOrderBy] = useState('name');
   const [filterName, setFilterName] = useState('');
+  const [isLoaded, setIsLoaded] = useState(false);
   const [recruitment, setRecruitment] = useState([]);
   const [rowsPerPage, setRowsPerPage] = useState(5);
-  const [open, setOpen] = useState(false);
-  const handleOpen = () => setOpen(true);
-  const handleClose = () => setOpen(false);
   const [openToast, setOpenToast] = useState({
     isOpen: false,
     vertical: 'top',
@@ -116,6 +110,7 @@ export default function Recruitment() {
   useEffect(() => {
     getAllRecruitments().then((res) => {
       setRecruitment(res);
+      setIsLoaded(true);
     });
   }, [recruitment]);
   const handleRequestSort = (event, property) => {
@@ -162,85 +157,27 @@ export default function Recruitment() {
   const handleFilterByName = (event) => {
     setFilterName(event.target.value);
   };
-  const style = {
-    position: 'relative',
-    borderRadius: '10px',
-    bgcolor: 'background.paper',
-    boxShadow: 24,
-    p: 4
-  };
-  const formik = useFormik({
-    initialValues: {
-      EmployeeID: '',
-      RoleID: '',
-      Email: '',
-      Password: '',
-      CreatedBy: '',
-      remember: true
-    },
-    onSubmit: () => {
-      axios
-        .post(`Organization/Recruitment`, formik.values)
-        .then((res) => {
-          if (res.data.Status === 200) {
-            alert('Thêm thành công');
-            window.location.reload();
-          } else {
-            alert('Thêm thất bại');
-          }
-        })
-        .catch((err) => {
-          console.log(err);
-        });
-    }
-  });
 
   const emptyRows = page > 0 ? Math.max(0, (1 + page) * rowsPerPage - recruitment.length) : 0;
 
   const filteredUsers = applySortFilter(recruitment, getComparator(order, orderBy), filterName);
 
   const isUserNotFound = filteredUsers.length === 0;
-
+  if (!isLoaded) {
+    return (
+      <Box sx={{ display: 'flex' }}>
+        <CircularProgress />
+      </Box>
+    );
+  }
   return (
     <Page title="Recruitment | ChamCongVN">
       {openToast.isOpen === true && <Toast open={openToast} handleCloseToast={handleCloseToast} />}
-      <Modal
-        open={open}
-        sx={{
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'center'
-        }}
-        onClose={handleClose}
-        aria-labelledby="modal-modal-title"
-        aria-describedby="modal-modal-description"
-      >
-        <FormikProvider value={formik}>
-          <Form autoComplete="off" noValidate>
-            <Box sx={style}>
-              <Stack spacing={1}>
-                <Typography id="modal-modal-title" variant="h6" component="h2">
-                  Add Recruitment
-                </Typography>
-              </Stack>
-            </Box>
-          </Form>
-        </FormikProvider>
-      </Modal>
       <Container>
         <Stack direction="row" alignItems="center" justifyContent="space-between" mb={5}>
           <Typography variant="h4" gutterBottom>
             Recruitment
           </Typography>
-          {/* <Button
-            onClick={handleOpen}
-            variant="contained"
-            component={RouterLink}
-            to="#"
-            startIcon={<Icon icon={plusFill} />}
-          >
-            New Recruitment
-          </Button> */}
           <UploadFile />
         </Stack>
 
