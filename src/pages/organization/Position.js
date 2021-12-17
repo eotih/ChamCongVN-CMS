@@ -25,6 +25,7 @@ import {
 } from '@mui/material';
 
 import { LoadingButton } from '@mui/lab';
+import CircularProgress from '@mui/material/CircularProgress';
 import axios from '../../functions/Axios';
 // components
 import Page from '../../components/Page';
@@ -85,6 +86,8 @@ export default function Position() {
   const [selected, setSelected] = useState([]);
   const [orderBy, setOrderBy] = useState('name');
   const [filterName, setFilterName] = useState('');
+  const [loading, setLoading] = useState(false);
+  const [isLoaded, setIsLoaded] = useState(false);
   const [position, setPosition] = useState([]);
   const [rowsPerPage, setRowsPerPage] = useState(5);
   const [open, setOpen] = useState(false);
@@ -107,6 +110,7 @@ export default function Position() {
   useEffect(() => {
     getAllPosition().then((res) => {
       setPosition(res);
+      setIsLoaded(true);
     });
   }, [position]);
   const handleRequestSort = (event, property) => {
@@ -180,14 +184,16 @@ export default function Position() {
               color: 'success'
             })();
             formik.resetForm();
+            setLoading(false);
           } else {
             handleOpenToast({
               isOpen: true,
               horizontal: 'right',
               vertical: 'top',
-              message: 'Fail added',
+              message: 'Fail updated',
               color: 'error'
             })();
+            setLoading(false);
           }
         })
         .catch((err) => {
@@ -202,7 +208,13 @@ export default function Position() {
   const filteredUsers = applySortFilter(position, getComparator(order, orderBy), filterName);
 
   const isUserNotFound = filteredUsers.length === 0;
-
+  if (!isLoaded) {
+    return (
+      <Box sx={{ display: 'flex' }}>
+        <CircularProgress />
+      </Box>
+    );
+  }
   return (
     <Page title="Position | ChamCongVN">
       {openToast.isOpen === true && <Toast open={openToast} handleCloseToast={handleCloseToast} />}
@@ -242,7 +254,13 @@ export default function Position() {
                     variant="outlined"
                   />
                 </Stack>
-                <LoadingButton fullWidth size="large" type="submit" variant="contained">
+                <LoadingButton
+                  loading={loading}
+                  fullWidth
+                  size="large"
+                  type="submit"
+                  variant="contained"
+                >
                   Add Position
                 </LoadingButton>
               </Stack>

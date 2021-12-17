@@ -14,6 +14,7 @@ import axios from '../../../functions/Axios';
 
 export default function RecruitmentMoreMenu({ dulieu, handleOpenToast }) {
   const ref = useRef(null);
+  const [loading, setLoading] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
 
   const style = {

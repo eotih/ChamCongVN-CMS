@@ -1,6 +1,7 @@
 /* eslint-disable jsx-a11y/label-has-associated-control */
 import * as React from 'react';
 import { filter } from 'lodash';
+import CircularProgress from '@mui/material/CircularProgress';
 import { Icon } from '@iconify/react';
 import { useState, useEffect } from 'react';
 import { useFormik, Form, FormikProvider } from 'formik';
@@ -98,13 +99,20 @@ export default function User() {
   const [order, setOrder] = useState('asc');
   const [selected, setSelected] = useState([]);
   const [orderBy, setOrderBy] = useState('name');
+  const [loading, setLoading] = useState(false);
+  const [isLoaded, setIsLoaded] = useState(false);
   const [filterName, setFilterName] = useState('');
   const [salarydeduct, setSalaryDeduct] = useState([]);
   const [employee, setEmployee] = useState([]);
   const [employees, setEmployees] = useState([]);
   const [rowsPerPage, setRowsPerPage] = useState(5);
   const [open, setOpen] = useState(false);
-  const handleOpen = () => setOpen(true);
+  const handleOpen = () => {
+    getAllEmployees().then((res) => {
+      setEmployee(res);
+    });
+    setOpen(true);
+  };
   const handleClose = () => setOpen(false);
   const [openToast, setOpenToast] = useState({
     isOpen: false,
@@ -123,9 +131,7 @@ export default function User() {
   useEffect(() => {
     getAllDeductions().then((res) => {
       setSalaryDeduct(res);
-    });
-    getAllEmployees().then((res) => {
-      setEmployee(res);
+      setIsLoaded(true);
     });
   }, [salarydeduct]);
   const handleChange = (event) => {
@@ -214,14 +220,16 @@ export default function User() {
               color: 'success'
             })();
             formik.resetForm();
+            setLoading(false);
           } else {
             handleOpenToast({
               isOpen: true,
               horizontal: 'right',
               vertical: 'top',
-              message: 'Fail added',
+              message: 'Fail updated',
               color: 'error'
             })();
+            setLoading(false);
           }
         })
         .catch((err) => {
@@ -236,7 +244,13 @@ export default function User() {
   const filteredUsers = applySortFilter(salarydeduct, getComparator(order, orderBy), filterName);
 
   const isUserNotFound = filteredUsers.length === 0;
-
+  if (!isLoaded) {
+    return (
+      <Box sx={{ display: 'flex' }}>
+        <CircularProgress />
+      </Box>
+    );
+  }
   return (
     <Page title="Deduct | ChamCongVN">
       {openToast.isOpen === true && <Toast open={openToast} handleCloseToast={handleCloseToast} />}
@@ -312,7 +326,13 @@ export default function User() {
                     variant="outlined"
                   />
                 </Stack>
-                <LoadingButton fullWidth size="large" type="submit" variant="contained">
+                <LoadingButton
+                  loading={loading}
+                  fullWidth
+                  size="large"
+                  type="submit"
+                  variant="contained"
+                >
                   Add Deduct
                 </LoadingButton>
               </Stack>

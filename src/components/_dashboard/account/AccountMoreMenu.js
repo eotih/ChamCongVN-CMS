@@ -34,6 +34,7 @@ export default function AccountMoreMenu({ dulieu, handleOpenToast }) {
   const { AccountID, Email, StateID, EmployeeID, RoleID } = dulieu.Account;
   const { FullName } = dulieu.Employee;
   const ref = useRef(null);
+  const [loading, setLoading] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
   const [open, setOpen] = useState(false);
   const [role, setRole] = useState([]);
@@ -70,6 +71,7 @@ export default function AccountMoreMenu({ dulieu, handleOpenToast }) {
       remember: true
     },
     onSubmit: () => {
+      setLoading(true);
       axios
         .put(`Organization/Account/${AccountID}`, formik.values)
         .then((res) => {
@@ -83,6 +85,7 @@ export default function AccountMoreMenu({ dulieu, handleOpenToast }) {
               color: 'info'
             })();
             formik.resetForm();
+            setLoading(false);
           } else {
             handleOpenToast({
               isOpen: true,
@@ -91,6 +94,7 @@ export default function AccountMoreMenu({ dulieu, handleOpenToast }) {
               message: 'Fail updated',
               color: 'error'
             })();
+            setLoading(false);
           }
         })
         .catch((err) => {
@@ -260,7 +264,13 @@ export default function AccountMoreMenu({ dulieu, handleOpenToast }) {
                       </Select>
                     </FormControl>
                   </Stack>
-                  <LoadingButton fullWidth size="large" type="submit" variant="contained">
+                  <LoadingButton
+                    loading={loading}
+                    fullWidth
+                    size="large"
+                    type="submit"
+                    variant="contained"
+                  >
                     Edit Account
                   </LoadingButton>
                 </Stack>

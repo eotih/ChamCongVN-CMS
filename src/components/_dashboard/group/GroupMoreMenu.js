@@ -26,6 +26,7 @@ import axios from '../../../functions/Axios';
 export default function GroupMoreMenu({ dulieu, handleOpenToast }) {
   const { GroupID, GroupName, Note } = dulieu;
   const ref = useRef(null);
+  const [loading, setLoading] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
   const [open, setOpen] = useState(false);
   const handleClose = () => setOpen(false);
@@ -45,6 +46,7 @@ export default function GroupMoreMenu({ dulieu, handleOpenToast }) {
       remember: true
     },
     onSubmit: () => {
+      setLoading(true);
       axios
         .put(`Component/Group/${GroupID}`, formik.values)
         .then((res) => {
@@ -58,6 +60,7 @@ export default function GroupMoreMenu({ dulieu, handleOpenToast }) {
               color: 'info'
             })();
             formik.resetForm();
+            setLoading(false);
           } else {
             handleOpenToast({
               isOpen: true,
@@ -66,6 +69,7 @@ export default function GroupMoreMenu({ dulieu, handleOpenToast }) {
               message: 'Fail updated',
               color: 'error'
             })();
+            setLoading(false);
           }
         })
         .catch((err) => {
@@ -175,7 +179,13 @@ export default function GroupMoreMenu({ dulieu, handleOpenToast }) {
                       variant="outlined"
                     />
                   </Stack>
-                  <LoadingButton fullWidth size="large" type="submit" variant="contained">
+                  <LoadingButton
+                    loading={loading}
+                    fullWidth
+                    size="large"
+                    type="submit"
+                    variant="contained"
+                  >
                     Edit Group
                   </LoadingButton>
                 </Stack>

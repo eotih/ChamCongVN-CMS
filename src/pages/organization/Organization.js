@@ -6,6 +6,7 @@ import { useState, useEffect } from 'react';
 import { useFormik, Form, FormikProvider } from 'formik';
 import plusFill from '@iconify/icons-eva/plus-fill';
 import { Link as RouterLink } from 'react-router-dom';
+import CircularProgress from '@mui/material/CircularProgress';
 // material
 import {
   Card,
@@ -92,6 +93,8 @@ export default function Organization() {
   const [page, setPage] = useState(0);
   const [order, setOrder] = useState('asc');
   const [selected, setSelected] = useState([]);
+  const [loading, setLoading] = useState(false);
+  const [isLoaded, setIsLoaded] = useState(false);
   const [orderBy, setOrderBy] = useState('name');
   const [filterName, setFilterName] = useState('');
   const [organization, setOrganization] = useState([]);
@@ -116,6 +119,7 @@ export default function Organization() {
   useEffect(() => {
     getAllOrganization().then((res) => {
       setOrganization(res);
+      setIsLoaded(true);
     });
   }, [organization]);
   const handleRequestSort = (event, property) => {
@@ -196,14 +200,16 @@ export default function Organization() {
               color: 'success'
             })();
             formik.resetForm();
+            setLoading(false);
           } else {
             handleOpenToast({
               isOpen: true,
               horizontal: 'right',
               vertical: 'top',
-              message: 'Fail added',
+              message: 'Fail updated',
               color: 'error'
             })();
+            setLoading(false);
           }
         })
         .catch((err) => {
@@ -217,7 +223,13 @@ export default function Organization() {
   const filteredUsers = applySortFilter(organization, getComparator(order, orderBy), filterName);
 
   const isUserNotFound = filteredUsers.length === 0;
-
+  if (!isLoaded) {
+    return (
+      <Box sx={{ display: 'flex' }}>
+        <CircularProgress />
+      </Box>
+    );
+  }
   return (
     <Page title="Organization | ChamCongVN">
       {openToast.isOpen === true && <Toast open={openToast} handleCloseToast={handleCloseToast} />}
@@ -278,7 +290,13 @@ export default function Organization() {
                     </Button>
                   </label>
                 </Stack>
-                <LoadingButton fullWidth size="large" type="submit" variant="contained">
+                <LoadingButton
+                  loading={loading}
+                  fullWidth
+                  size="large"
+                  type="submit"
+                  variant="contained"
+                >
                   Add Organization
                 </LoadingButton>
               </Stack>

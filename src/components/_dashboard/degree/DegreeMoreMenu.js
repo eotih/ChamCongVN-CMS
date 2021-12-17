@@ -26,6 +26,7 @@ import axios from '../../../functions/Axios';
 export default function DegreeMoreMenu({ dulieu, handleOpenToast }) {
   const { DegreeID, DegreeName, Note } = dulieu;
   const ref = useRef(null);
+  const [loading, setLoading] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
   const [open, setOpen] = useState(false);
   const handleClose = () => setOpen(false);
@@ -44,6 +45,7 @@ export default function DegreeMoreMenu({ dulieu, handleOpenToast }) {
       remember: true
     },
     onSubmit: () => {
+      setLoading(true);
       axios
         .put(`Component/Degrees/${DegreeID}`, formik.values)
         .then((res) => {
@@ -57,6 +59,7 @@ export default function DegreeMoreMenu({ dulieu, handleOpenToast }) {
               color: 'info'
             })();
             formik.resetForm();
+            setLoading(false);
           } else {
             handleOpenToast({
               isOpen: true,
@@ -65,6 +68,7 @@ export default function DegreeMoreMenu({ dulieu, handleOpenToast }) {
               message: 'Fail updated',
               color: 'error'
             })();
+            setLoading(false);
           }
         })
         .catch((err) => {
@@ -176,7 +180,13 @@ export default function DegreeMoreMenu({ dulieu, handleOpenToast }) {
                       variant="outlined"
                     />
                   </Stack>
-                  <LoadingButton fullWidth size="large" type="submit" variant="contained">
+                  <LoadingButton
+                    loading={loading}
+                    fullWidth
+                    size="large"
+                    type="submit"
+                    variant="contained"
+                  >
                     Edit Degree
                   </LoadingButton>
                 </Stack>
