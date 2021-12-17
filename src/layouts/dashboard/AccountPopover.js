@@ -38,7 +38,7 @@ const MENU_OPTIONS = [
 export default function AccountPopover() {
   const anchorRef = useRef(null);
   const [open, setOpen] = useState(false);
-  const account = useContext(AccountContext);
+  // const account = useContext(AccountContext);
 
   const handleOpen = () => {
     setOpen(true);

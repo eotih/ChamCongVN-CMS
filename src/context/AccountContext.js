@@ -7,7 +7,7 @@ function AccountProvider({ children }) {
   const [account, setAccount] = useState({});
 
   useEffect(() => {
-    getAccountById().then((res) => setAccount(res));
+    getAccountById().then((res) => setAccount(res).catch((err) => console.log(err)));
   }, []);
 
   return <AccountContext.Provider value={account}>{children}</AccountContext.Provider>;
