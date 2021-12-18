@@ -14,6 +14,7 @@ import NotFound from './pages/Page404';
 import Recruitment from './pages/employee/Recruitment';
 import AddRecruit from './pages/employee/AddRecruit';
 import Employee from './pages/employee/Employee';
+import EmployeeEdit from './pages/employee/EmployeeEdit';
 import EmployeeDetails from './pages/employee/EmployeeDetails';
 // Organization
 import Account from './pages/organization/Account';
@@ -64,6 +65,7 @@ export default function Router() {
         { path: 'recruitments', element: <Recruitment /> },
         { path: 'recruitments/add_recruit/:id', element: <AddRecruit /> },
         { path: 'employeelist', element: <Employee /> },
+        { path: 'employeelist/editemployee', element: <EmployeeEdit /> },
         { path: 'employeelist/details/:id', element: <EmployeeDetails /> }
       ]
     },

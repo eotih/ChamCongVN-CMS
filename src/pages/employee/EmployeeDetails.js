@@ -92,7 +92,7 @@ export default function EmployeeDetails() {
               Dashboard
             </Link>
             <Link underline="hover" color="inherit" href="../">
-              Employees
+              Employeelist
             </Link>
             <Typography color="text.primary">Detail / {id}</Typography>
           </Breadcrumbs>

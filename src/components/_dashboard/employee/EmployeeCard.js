@@ -8,6 +8,7 @@ import { fCurrency } from '../../../utils/formatNumber';
 //
 import Label from '../../Label';
 import ColorPreview from '../../ColorPreview';
+import EmployeeMoreMenu from './EmployeeMoreMenu';
 
 // ----------------------------------------------------------------------
 
@@ -31,6 +32,18 @@ export default function EmployeeCard({ Employee }) {
   return (
     <Card>
       <Box sx={{ pt: '100%', position: 'relative' }}>
+        <Label
+          variant="filled"
+          sx={{
+            zIndex: 9,
+            top: 16,
+            left: 16,
+            position: 'absolute',
+            textTransform: 'uppercase'
+          }}
+        >
+          <EmployeeMoreMenu />
+        </Label>
         <Label
           variant="filled"
           color={(emp.FullName === 'sale' && 'error') || 'info'}
