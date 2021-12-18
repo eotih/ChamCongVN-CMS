@@ -8,7 +8,6 @@ function AccountProvider({ children, token }) {
   const [account, setAccount] = useState({});
   const decodeToken = jwtDecode(token);
   const accountID = decodeToken.nameid[0];
-  // const EmployeeID = decodeToken.nameid[2];
 
   useEffect(() => {
     getAccountById(accountID).then((res) => setAccount(res));
