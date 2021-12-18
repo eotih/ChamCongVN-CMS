@@ -213,7 +213,7 @@ export default function Account() {
               isOpen: true,
               horizontal: 'right',
               vertical: 'top',
-              message: 'Fail updated',
+              message: 'Fail added',
               color: 'error'
             })();
             setLoading(false);

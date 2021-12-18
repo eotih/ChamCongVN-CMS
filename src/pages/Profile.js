@@ -26,17 +26,33 @@ import md5 from 'md5';
 import { LoadingButton } from '@mui/lab';
 import axios from '../functions/Axios';
 import Page from '../components/Page';
+import { AccountContext } from '../context/AccountContext';
+import Toast from '../components/Toast';
 
 export default function EditAccount() {
-  const [Maritalstatus, setMaritalStatus] = useState('');
   const [oldPassword, setOldPassword] = useState('');
   const [newPassword, setNewPassword] = useState('');
   const [repeatNewPassword, setRepeatNewPassword] = useState('');
-  const [account, setAccount] = useState('');
+  const account = useContext(AccountContext);
+  const { Employee, Account } = account;
   const [open, setOpen] = useState(false);
+  const [loading, setLoading] = useState(false);
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
+  const [openToast, setOpenToast] = useState({
+    isOpen: false,
+    vertical: 'top',
+    message: '',
+    color: '',
+    horizontal: 'right'
+  });
 
+  const handleOpenToast = (newState) => () => {
+    setOpenToast({ isOpen: true, ...newState });
+  };
+  const handleCloseToast = () => {
+    setOpenToast({ ...openToast, isOpen: false });
+  };
   const Input = styled('input')({
     display: 'none'
   });
@@ -52,24 +68,37 @@ export default function EditAccount() {
   };
   const formik = useFormik({
     initialValues: {
-      AccountID: '',
-      FullName: '',
+      EmployeeID: '',
       Image: '',
       Phone: '',
-      Email: '',
-      RoleID: '',
-      Address: '',
+      TemporaryAddress: '',
       remember: true
     },
     onSubmit: () => {
+      setLoading(true);
       axios
-        .post(`Organization/Account`, formik.values)
+        .put(`Employee/Employee/${account.EmployeeID}`, formik.values)
         .then((res) => {
           if (res.data.Status === 200) {
-            alert('Account Edit Successfully');
+            setOpen(false);
+            handleOpenToast({
+              isOpen: true,
+              horizontal: 'right',
+              vertical: 'top',
+              message: 'Successfully updated',
+              color: 'success'
+            })();
+            setLoading(false);
             window.location.reload();
           } else {
-            alert('Edit Failed');
+            handleOpenToast({
+              isOpen: true,
+              horizontal: 'right',
+              vertical: 'top',
+              message: 'Fail updated',
+              color: 'error'
+            })();
+            setLoading(false);
           }
         })
         .catch((err) => {
@@ -77,9 +106,6 @@ export default function EditAccount() {
         });
     }
   });
-  const handleChangeMS = (event) => {
-    setMaritalStatus(event.target.value);
-  };
   const { handleSubmit, getFieldProps } = formik;
   const handleChangePassword = () => {
     const { Password } = formik.values;
@@ -88,19 +114,34 @@ export default function EditAccount() {
     } else if (newPassword !== repeatNewPassword) {
       alert('New Password and Repeat New Password do not match');
     } else if (Password !== md5(oldPassword)) {
-      alert('Old Password and New Password do not match');
+      alert('Old Password Invalid');
     } else {
+      setLoading(true);
       axios
-        .post(`Organization/ChangePassword`, {
+        .put(`Organization/Account/Password/${Account.AccountID}`, {
           AccountID: formik.values.AccountID,
           Password: newPassword
         })
         .then((res) => {
           if (res.data.Status === 200) {
-            alert('Thay đổi mật khẩu thành công');
-            window.location.reload();
+            setOpen(false);
+            handleOpenToast({
+              isOpen: true,
+              horizontal: 'right',
+              vertical: 'top',
+              message: 'Successfully updated',
+              color: 'success'
+            })();
+            setLoading(false);
           } else {
-            alert('Thay đổi mật khẩu thất bại');
+            handleOpenToast({
+              isOpen: true,
+              horizontal: 'right',
+              vertical: 'top',
+              message: 'Fail updated',
+              color: 'error'
+            })();
+            setLoading(false);
           }
         })
         .catch((err) => {
@@ -109,17 +150,17 @@ export default function EditAccount() {
     }
   };
   useEffect(() => {
-    formik.setFieldValue('AccountID', account.AccountID);
-    formik.setFieldValue('FullName', account.FullName);
-    formik.setFieldValue('Image', account.Image);
-    formik.setFieldValue('Phone', account.Phone);
-    formik.setFieldValue('Email', account.Email);
-    formik.setFieldValue('Password', account.Password);
-    formik.setFieldValue('Address', account.Address);
-    formik.setFieldValue('RoleID', account.RoleID);
-  }, [account]);
+    if (account && Employee) {
+      formik.setFieldValue('AccountID', account.AccountID);
+      formik.setFieldValue('Image', account.Image);
+      formik.setFieldValue('Password', Account.Password);
+      formik.setFieldValue('Phone', Employee.Phone);
+      formik.setFieldValue('TemporaryAddress', Employee.TemporaryAddress);
+    }
+  }, [account, Employee]);
   return (
     <Page title="Profile">
+      {openToast.isOpen === true && <Toast open={openToast} handleCloseToast={handleCloseToast} />}
       <Container>
         <Modal
           open={open}
@@ -171,136 +212,91 @@ export default function EditAccount() {
             </Breadcrumbs>
           </Typography>
         </Stack>
-
-        <FormikProvider value={formik}>
-          <Form autoComplete="off" noValidate onSubmit={handleSubmit}>
-            <Box sx={{ flexGrow: 1 }}>
-              <Grid container spacing={3}>
-                <Grid item xs={12} sm={6} md={4}>
-                  <Card sx={{ p: 5 }}>
-                    <Stack
-                      sx={{ mb: 3 }}
-                      direction={{ xs: 'column', sm: 'row' }}
-                      alignItems="center"
-                      justifyContent="center"
-                      spacing={2}
-                    >
-                      <Avatar src={formik.values.Image} sx={{ width: 100, height: 100 }} />
-                      <label htmlFor="contained-button-file">
-                        <Input
-                          id="contained-button-file"
-                          type="file"
-                          onChange={(e) => {
-                            const { files } = e.target;
-                            const reader = new FileReader();
-                            reader.readAsDataURL(files[0]);
-                            reader.onload = (e) => {
-                              formik.setFieldValue('Image', e.target.result);
-                            };
-                          }}
-                        />
-                        <Button fullWidth variant="contained" component="span">
-                          Upload Image
-                        </Button>
-                      </label>
-                    </Stack>
-                    <Typography variant="subtitle1">Tên nhân viên: </Typography>
-                    <Typography variant="subtitle1">Email: </Typography>
-                    <Typography variant="subtitle1">Giới tính: </Typography>
-                    <Typography variant="subtitle1">Ngày sinh: </Typography>
-                    <Button
+        {account && Employee && formik.values && (
+          <FormikProvider value={formik}>
+            <Form autoComplete="off" noValidate onSubmit={handleSubmit}>
+              <Box sx={{ flexGrow: 1 }}>
+                <Grid container spacing={3}>
+                  <Grid item xs={12} sm={6} md={4}>
+                    <Card sx={{ p: 5 }}>
+                      <Stack
+                        sx={{ mb: 3 }}
+                        direction={{ xs: 'column', sm: 'row' }}
+                        alignItems="center"
+                        justifyContent="center"
+                        spacing={2}
+                      >
+                        <Avatar src={formik.values.Image} sx={{ width: 100, height: 100 }} />
+                        <label htmlFor="contained-button-file">
+                          <Input
+                            id="contained-button-file"
+                            type="file"
+                            onChange={(e) => {
+                              const { files } = e.target;
+                              const reader = new FileReader();
+                              reader.readAsDataURL(files[0]);
+                              reader.onload = (e) => {
+                                formik.setFieldValue('Image', e.target.result);
+                              };
+                            }}
+                          />
+                          <Button fullWidth variant="contained" component="span">
+                            Upload Image
+                          </Button>
+                        </label>
+                      </Stack>
+                      <Typography variant="subtitle1">
+                        Tên nhân viên: {Employee.FullName}
+                      </Typography>
+                      <Typography variant="subtitle1">Email: {Account.Email}</Typography>
+                      <Typography variant="subtitle1">Nickname: {Employee.NickName}</Typography>
+                      <Button
+                        fullWidth
+                        sx={{ mt: 2 }}
+                        onClick={handleOpen}
+                        variant="contained"
+                        component="span"
+                      >
+                        Change Password
+                      </Button>
+                    </Card>
+                  </Grid>
+                  <Grid item xs={12} sm={8}>
+                    <Card sx={{ p: 5 }}>
+                      <Stack spacing={2}>
+                        <Stack direction={{ xs: 'row' }} spacing={2}>
+                          <TextField
+                            fullWidth
+                            label="Phone"
+                            {...getFieldProps('Phone')}
+                            variant="outlined"
+                          />
+                        </Stack>
+                        <Stack direction={{ xs: 'column', md: 'row' }} spacing={2}>
+                          <TextField
+                            fullWidth
+                            label="Address temporary"
+                            {...getFieldProps('TemporaryAddress')}
+                            variant="outlined"
+                          />
+                        </Stack>
+                      </Stack>
+                    </Card>
+                    <LoadingButton
+                      loading={loading}
                       fullWidth
-                      sx={{ mt: 2 }}
-                      onClick={handleOpen}
+                      size="large"
+                      type="submit"
                       variant="contained"
-                      component="span"
                     >
-                      Change Password
-                    </Button>
-                  </Card>
+                      Edit Profile
+                    </LoadingButton>
+                  </Grid>
                 </Grid>
-                <Grid item xs={12} sm={8}>
-                  <Card sx={{ p: 5 }}>
-                    <Stack spacing={2}>
-                      <Stack direction={{ xs: 'column', md: 'row' }} spacing={2}>
-                        <TextField
-                          fullWidth
-                          label="First Name"
-                          {...getFieldProps('First name')}
-                          variant="outlined"
-                        />
-                        <TextField
-                          fullWidth
-                          label="Last name"
-                          {...getFieldProps('Last name')}
-                          variant="outlined"
-                        />
-                        <TextField
-                          fullWidth
-                          label="Nickname"
-                          {...getFieldProps('Nickname')}
-                          variant="outlined"
-                        />
-                      </Stack>
-                      <Stack direction={{ xs: 'row' }} spacing={2}>
-                        <FormControl fullWidth>
-                          <InputLabel id="MS-select-label">Marital status</InputLabel>
-                          <Select
-                            labelId="demo-simple-select-label"
-                            id="demo-simple-select"
-                            value={Maritalstatus}
-                            label="Marital status"
-                            onChange={handleChangeMS}
-                          >
-                            <MenuItem value={1}>Yes</MenuItem>
-                            <MenuItem value={2}>No</MenuItem>
-                          </Select>
-                        </FormControl>
-                        <TextField
-                          fullWidth
-                          label="Phone"
-                          {...getFieldProps('Phone')}
-                          variant="outlined"
-                        />
-                      </Stack>
-                      <Stack direction={{ xs: 'column', md: 'row' }} spacing={2}>
-                        <TextField
-                          fullWidth
-                          label="Email"
-                          {...getFieldProps('Email')}
-                          variant="outlined"
-                        />
-                      </Stack>
-                      <Stack direction={{ xs: 'column', md: 'row' }} spacing={2}>
-                        <TextField
-                          fullWidth
-                          label="Address temporary"
-                          {...getFieldProps('Address temporary')}
-                          variant="outlined"
-                        />
-                        <TextField
-                          fullWidth
-                          label="Address"
-                          {...getFieldProps('Address')}
-                          variant="outlined"
-                        />
-                      </Stack>
-                    </Stack>
-                  </Card>
-                  <LoadingButton
-                    fullWidth
-                    sx={{ mt: 5 }}
-                    size="large"
-                    type="submit"
-                    variant="contained"
-                  >
-                    Edit Profile
-                  </LoadingButton>
-                </Grid>
-              </Grid>
-            </Box>
-          </Form>
-        </FormikProvider>
+              </Box>
+            </Form>
+          </FormikProvider>
+        )}
       </Container>
     </Page>
   );
