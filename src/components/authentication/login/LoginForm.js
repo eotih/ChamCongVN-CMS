@@ -43,8 +43,8 @@ export default function LoginForm({ setToken }) {
         .then((res) => {
           if (res.data.Status === 200) {
             alert('Đăng nhập thành công');
-            localStorage.setItem('token', res.data.Message);
-            navigate('/dashboard');
+            setToken(res.data.Message);
+            navigate('/');
           } else {
             alert('Đăng nhập thất bại, vui lòng thử lại sau');
           }
