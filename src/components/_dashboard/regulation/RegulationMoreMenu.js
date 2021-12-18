@@ -1,4 +1,5 @@
 /* eslint-disable no-restricted-globals */
+import * as React from 'react';
 import { Icon } from '@iconify/react';
 import { useRef, useState, useEffect } from 'react';
 import { useFormik, Form, FormikProvider } from 'formik';
@@ -16,47 +17,36 @@ import {
   Modal,
   Box,
   Stack,
+  Typography,
+  TextField,
   FormControl,
   InputLabel,
-  Select,
-  Typography,
-  TextField
+  Select
 } from '@mui/material';
-import { LoadingButton } from '@mui/lab';
+import DatePicker from '@mui/lab/DatePicker';
 import AdapterDateFns from '@mui/lab/AdapterDateFns';
 import LocalizationProvider from '@mui/lab/LocalizationProvider';
-import TimePicker from '@mui/lab/TimePicker';
-import DatePicker from '@mui/lab/DatePicker';
+import { LoadingButton } from '@mui/lab';
 import axios from '../../../functions/Axios';
-import { convertTime } from '../../../utils/formatDatetime';
-import { getAllDepartments } from '../../../functions/Component';
+import { getAllEmployees } from '../../../functions/Employee';
+// --------------------------------------------------
 // ----------------------------------------------------------------------
 
-export default function OvertimeMoreMenu({ dulieu, handleOpenToast }) {
-  const {
-    OverTimeID,
-    OverTimeDate,
-    OverTimeName,
-    StartTime,
-    EndTime,
-    Quantity,
-    IsActive,
-    DepartmentID
-  } = dulieu.Overtime;
+export default function RegulationMoreMenu({ dulieu, handleOpenToast }) {
+  const { RegulationEmployees, EmployeeID } = dulieu;
+  const { RegulationEmployeeID, RegulationName, RegulationDate, Reason, RegulationFormat } =
+    RegulationEmployees;
   const ref = useRef(null);
   const [loading, setLoading] = useState(false);
+  const [employee, setEmployee] = useState([]);
+  const [employees, setEmployees] = useState([]);
+  const [laudate, setLauDate] = useState([]);
   const [isOpen, setIsOpen] = useState(false);
-  const [timeStart, setTimeStart] = useState([]);
-  const [timeEnd, setTimeEnd] = useState([]);
-  const [department, setDepartment] = useState([]);
-  const [isActive, setisActive] = useState([]);
-  const [departments, setDepartments] = useState([]);
-  const [date, setDate] = useState(new Date());
   const [open, setOpen] = useState(false);
   const handleClose = () => setOpen(false);
   useEffect(() => {
-    getAllDepartments().then((res) => {
-      setDepartment(res);
+    getAllEmployees().then((res) => {
+      setEmployee(res);
     });
   }, []);
   const style = {
@@ -68,28 +58,26 @@ export default function OvertimeMoreMenu({ dulieu, handleOpenToast }) {
   };
   const formik = useFormik({
     initialValues: {
-      OverTimeID: '',
-      OvertimeName: '',
-      DepartmentID: '',
-      IsActive: '',
-      Quantity: '',
+      RegulationEmployeeID: '',
+      EmployeeID: '',
+      RegulationName: '',
+      RegulationDate: laudate,
+      Reason: '',
+      RegulationFormat: '',
       CreatedBy: '',
-      OverTimeDate: date,
-      StartTime: convertTime(timeStart),
-      EndTime: convertTime(timeEnd)
+      remember: true
     },
     onSubmit: () => {
       setLoading(true);
       axios
-        .put(`Organization/Overtime/${OverTimeID}`, {
-          OverTimeID: formik.values.OverTimeID,
-          OvertimeName: formik.values.OvertimeName,
-          DepartmentID: formik.values.DepartmentID,
-          IsActive: formik.values.IsActive,
-          Quantity: formik.values.Quantity,
-          OverTimeDate: date,
-          StartTime: convertTime(timeStart),
-          EndTime: convertTime(timeEnd)
+        .put(`Principle/RegulationEmployees/${RegulationEmployeeID}`, {
+          RegulationEmployeeID: formik.values.RegulationEmployeeID,
+          EmployeeID: formik.values.EmployeeID,
+          RegulationName: formik.values.RegulationName,
+          Reason: formik.values.Reason,
+          RegulationFormat: formik.values.RegulationFormat,
+          UpdatedBy: formik.values.UpdatedBy,
+          RegulationDate: laudate
         })
         .then((res) => {
           if (res.data.Status === 200) {
@@ -119,33 +107,21 @@ export default function OvertimeMoreMenu({ dulieu, handleOpenToast }) {
         });
     }
   });
-  const convertIsActive = (isactive) => {
-    if (isactive === true) {
-      return 1;
-    }
-    return 0;
-  };
-  const handleChangeIsActive = (event) => {
-    formik.setFieldValue('IsActive', event.target.value);
-  };
-  const handleChangeDepartment = (event) => {
-    setDepartments(event.target.value);
-  };
-
   const handleOpen = () => {
-    formik.setFieldValue('OverTimeID', OverTimeID);
-    formik.setFieldValue('OvertimeName', OverTimeName);
-    formik.setFieldValue('OverTimeDate', OverTimeDate);
-    formik.setFieldValue('StartTime', StartTime);
-    formik.setFieldValue('EndTime', EndTime);
-    formik.setFieldValue('Quantity', Quantity);
-    formik.setFieldValue('IsActive', convertIsActive(IsActive)); // Active chỗ này hình như không get được chưa liệu ra được
-    formik.setFieldValue('DepartmentID', DepartmentID);
-    setTimeStart(new Date(`12/12/2000 ${StartTime}`));
-    setTimeEnd(new Date(`12/12/2000 ${EndTime}`));
+    formik.setFieldValue('RegulationEmployeeID', RegulationEmployeeID);
+    formik.setFieldValue('RegulationName', RegulationName);
+    formik.setFieldValue('Reason', Reason);
+    formik.setFieldValue('RegulationFormat', RegulationFormat);
+    formik.setFieldValue('EmployeeID', EmployeeID);
+    setLauDate(new Date(`${RegulationDate}`));
     setOpen(true);
   };
   const { handleSubmit, getFieldProps } = formik;
+  const handleChange = (event) => {
+    formik.setFieldValue('EmployeeID', event.target.value);
+    setEmployees(event.target.value);
+  };
+
   return (
     <>
       <IconButton ref={ref} onClick={() => setIsOpen(true)}>
@@ -164,8 +140,8 @@ export default function OvertimeMoreMenu({ dulieu, handleOpenToast }) {
       >
         <MenuItem
           onClick={() => {
-            if (confirm('Are you sure you want to delete this Overtime?')) {
-              axios.delete(`Organization/Overtime/${OverTimeID}`).then((res) => {
+            if (confirm('Are you sure you want to delete this Regulation?')) {
+              axios.delete(`Principle/RegulationEmployee/${RegulationEmployeeID}`).then((res) => {
                 if (res.data.Status === 200) {
                   handleOpenToast({
                     isOpen: true,
@@ -221,91 +197,59 @@ export default function OvertimeMoreMenu({ dulieu, handleOpenToast }) {
               <Box sx={style}>
                 <Stack spacing={1}>
                   <Typography id="modal-modal-title" variant="h6" component="h2">
-                    Edit Overtime
+                    Edit Regulation
                   </Typography>
                   <Stack direction={{ xs: 'column', sm: 'row' }} spacing={2}>
                     <TextField
                       fullWidth
-                      label="Overtime Name"
-                      {...getFieldProps('OvertimeName')}
+                      label="Regulation Name"
+                      {...getFieldProps('RegulationName')}
                       variant="outlined"
                     />
-                  </Stack>
-                  <Stack direction={{ xs: 'column', sm: 'row' }} spacing={2}>
                     <FormControl fullWidth>
-                      <InputLabel id="demo-simple-select-label">Department</InputLabel>
+                      <InputLabel id="demo-simple-select-label">Employee Name</InputLabel>
                       <Select
                         labelId="select-label"
                         label="Employee"
-                        values={departments}
-                        {...getFieldProps('DepartmentID')}
+                        value={employees}
+                        {...getFieldProps('EmployeeID')}
                         variant="outlined"
-                        onChange={handleChangeDepartment}
+                        onChange={handleChange}
                       >
-                        {department.map((item) => (
-                          <MenuItem key={item.DepartmentID} value={item.DepartmentID}>
-                            {item.DepartmentName}
+                        {employee.map((item) => (
+                          <MenuItem key={item.emp.EmployeeID} value={item.emp.EmployeeID}>
+                            {item.emp.FullName}
                           </MenuItem>
                         ))}
                       </Select>
                     </FormControl>
+                  </Stack>
+                  <Stack direction={{ xs: 'column', sm: 'row' }} spacing={2}>
                     <LocalizationProvider dateAdapter={AdapterDateFns}>
                       <DatePicker
-                        label="OverTime Date"
+                        label="Regulation Date"
                         views={['day', 'month', 'year']}
-                        value={date}
+                        value={laudate}
                         onChange={(newValue) => {
-                          setDate(newValue);
+                          setLauDate(newValue);
                         }}
                         renderInput={(params) => <TextField {...params} />}
                       />
                     </LocalizationProvider>
-                  </Stack>
-                  <Stack direction={{ xs: 'column', sm: 'row' }} spacing={2}>
-                    <LocalizationProvider dateAdapter={AdapterDateFns}>
-                      <TimePicker
-                        label="Time Start"
-                        views={['hours', 'minutes', 'seconds']}
-                        inputFormat="HH:mm:ss"
-                        value={timeStart}
-                        onChange={(newValue) => {
-                          setTimeStart(newValue);
-                        }}
-                        renderInput={(params) => <TextField {...params} />}
-                      />
-                    </LocalizationProvider>
-                    <LocalizationProvider dateAdapter={AdapterDateFns}>
-                      <TimePicker
-                        label="Time End"
-                        value={timeEnd}
-                        views={['hours', 'minutes', 'seconds']}
-                        inputFormat="HH:mm:ss"
-                        onChange={(newValue) => {
-                          setTimeEnd(newValue);
-                        }}
-                        renderInput={(params) => <TextField {...params} />}
-                      />
-                    </LocalizationProvider>
-                  </Stack>
-                  <Stack direction={{ xs: 'column', sm: 'row' }} spacing={2}>
-                    <FormControl fullWidth>
-                      <InputLabel id="demo-simple-select-label">IsActive</InputLabel>
-                      <Select
-                        labelId="select-label"
-                        label="IsActive"
-                        value={isActive}
-                        {...getFieldProps('IsActive')}
-                        variant="outlined"
-                        onChange={handleChangeIsActive}
-                      >
-                        <MenuItem value={1}>Active</MenuItem>
-                        <MenuItem value={0}>No Active</MenuItem>
-                      </Select>
-                    </FormControl>
                     <TextField
                       fullWidth
-                      label="Quantity"
-                      {...getFieldProps('Quantity')}
+                      label="Regulation Format"
+                      {...getFieldProps('RegulationFormat')}
+                      variant="outlined"
+                    />
+                  </Stack>
+                  <Stack direction={{ xs: 'column', sm: 'row' }} spacing={2}>
+                    <TextField
+                      fullWidth
+                      multiline
+                      rows={4}
+                      label="Reason"
+                      {...getFieldProps('Reason')}
                       variant="outlined"
                     />
                   </Stack>
@@ -316,7 +260,7 @@ export default function OvertimeMoreMenu({ dulieu, handleOpenToast }) {
                     type="submit"
                     variant="contained"
                   >
-                    Edit Overtime
+                    Edit Regulation
                   </LoadingButton>
                 </Stack>
               </Box>

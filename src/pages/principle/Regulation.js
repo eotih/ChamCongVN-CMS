@@ -40,11 +40,11 @@ import Page from '../../components/Page';
 import Scrollbar from '../../components/Scrollbar';
 import SearchNotFound from '../../components/SearchNotFound';
 import {
-  LaudatoryListHead,
-  LaudatoryListToolbar,
-  LaudatoryMoreMenu
-} from '../../components/_dashboard/laudatory';
-import { getAllLaudatorys } from '../../functions/Salary';
+  RegulationListHead,
+  RegulationListToolbar,
+  RegulationMoreMenu
+} from '../../components/_dashboard/regulation';
+import { getAllRegulations } from '../../functions/Principle';
 import { getAllEmployees } from '../../functions/Employee';
 import { convertDate } from '../../utils/formatDatetime';
 import Toast from '../../components/Toast';
@@ -53,12 +53,12 @@ import Toast from '../../components/Toast';
 // ----------------------------------------------------------------------
 
 const TABLE_HEAD = [
-  { id: 'LaudatoryEmployeeID', label: 'LaudatoryEmployeeID', alignRight: false },
+  { id: 'RegulationEmployeeID', label: 'RegulationEmployeeID', alignRight: false },
   { id: 'Employee', label: 'Employee', alignRight: false },
-  { id: 'LaudatoryName', label: 'Laudatory Name', alignRight: false },
-  { id: 'LaudatoryDate', label: 'Laudatory Date', alignRight: false },
+  { id: 'RegulationName', label: 'Regulation Name', alignRight: false },
+  { id: 'RegulationDate', label: 'Regulation Date', alignRight: false },
+  { id: 'RegulationFormat', label: 'Regulation Format', alignRight: false },
   { id: 'Reason', label: 'Reason', alignRight: false },
-  { id: 'Amount', label: 'Amount', alignRight: false },
   { id: '' }
 ];
 
@@ -93,16 +93,16 @@ function applySortFilter(array, comparator, query) {
   return stabilizedThis.map((el) => el[0]);
 }
 
-export default function User() {
+export default function Regulation() {
   const [page, setPage] = useState(0);
-  const [laudate, setLauDate] = React.useState(new Date());
+  const [date, setDate] = React.useState(new Date());
   const [order, setOrder] = useState('asc');
   const [selected, setSelected] = useState([]);
   const [loading, setLoading] = useState(false);
   const [isLoaded, setIsLoaded] = useState(false);
   const [orderBy, setOrderBy] = useState('name');
   const [filterName, setFilterName] = useState('');
-  const [laudatory, setLaudatory] = useState([]);
+  const [regulation, setRegulation] = useState([]);
   const [employee, setEmployee] = useState([]);
   const [rowsPerPage, setRowsPerPage] = useState(5);
   const [open, setOpen] = useState(false);
@@ -128,11 +128,11 @@ export default function User() {
     setOpenToast({ ...openToast, isOpen: false });
   };
   useEffect(() => {
-    getAllLaudatorys().then((res) => {
-      setLaudatory(res);
+    getAllRegulations().then((res) => {
+      setRegulation(res);
       setIsLoaded(true);
     });
-  }, [laudatory]);
+  }, [regulation]);
   const handleRequestSort = (event, property) => {
     const isAsc = orderBy === property && order === 'asc';
     setOrder(isAsc ? 'desc' : 'asc');
@@ -141,7 +141,7 @@ export default function User() {
 
   const handleSelectAllClick = (event) => {
     if (event.target.checked) {
-      const newSelecteds = laudatory.map((n) => n.name);
+      const newSelecteds = regulation.map((n) => n.name);
       setSelected(newSelecteds);
       return;
     }
@@ -188,23 +188,22 @@ export default function User() {
   const formik = useFormik({
     initialValues: {
       EmployeeID: '',
-      LaudatoryName: '',
-      LaudatoryDate: laudate,
+      RegulationName: '',
+      RegulationDate: date,
+      RegulationFormat: '',
       Reason: '',
-      Amount: '',
       CreatedBy: '',
       remember: true
     },
     onSubmit: () => {
-      setLoading(true);
       axios
-        .post(`Salary/LaudatoryEmployee`, {
+        .post(`Principle/RegulationEmployees`, {
           EmployeeID: formik.values.EmployeeID,
-          LaudatoryName: formik.values.LaudatoryName,
+          RegulationName: formik.values.RegulationName,
           Reason: formik.values.Reason,
-          Amount: formik.values.Amount,
+          RegulationFormat: formik.values.RegulationFormat,
           CreatedBy: formik.values.CreatedBy,
-          LaudatoryDate: laudate
+          RegulationDate: date
         })
         .then((res) => {
           if (res.data.Status === 200) {
@@ -223,7 +222,7 @@ export default function User() {
               isOpen: true,
               horizontal: 'right',
               vertical: 'top',
-              message: 'Fail updated',
+              message: 'Fail added',
               color: 'error'
             })();
             setLoading(false);
@@ -239,11 +238,15 @@ export default function User() {
   const handleChange = (event) => {
     formik.setFieldValue('EmployeeID', event.target.value);
   };
-  const emptyRows = page > 0 ? Math.max(0, (1 + page) * rowsPerPage - laudatory.length) : 0;
+  const emptyRows = page > 0 ? Math.max(0, (1 + page) * rowsPerPage - regulation.length) : 0;
 
-  const filteredLaudatorys = applySortFilter(laudatory, getComparator(order, orderBy), filterName);
+  const filteredregulations = applySortFilter(
+    regulation,
+    getComparator(order, orderBy),
+    filterName
+  );
 
-  const isLaudatoryNotFound = filteredLaudatorys.length === 0;
+  const isregulationNotFound = filteredregulations.length === 0;
   if (!isLoaded) {
     return (
       <Box sx={{ display: 'flex' }}>
@@ -252,7 +255,7 @@ export default function User() {
     );
   }
   return (
-    <Page title="Laudatory | ChamCongVN">
+    <Page title="Regulation | ChamCongVN">
       {openToast.isOpen === true && <Toast open={openToast} handleCloseToast={handleCloseToast} />}
       <Container>
         <Modal
@@ -271,13 +274,13 @@ export default function User() {
               <Box sx={style}>
                 <Stack spacing={1}>
                   <Typography id="modal-modal-title" variant="h6" component="h2">
-                    Add Laudatory
+                    Add Regulation
                   </Typography>
                   <Stack direction={{ xs: 'column', sm: 'row' }} spacing={2}>
                     <TextField
                       fullWidth
-                      label="Laudatory Name"
-                      {...getFieldProps('LaudatoryName')}
+                      label="Regulation Name"
+                      {...getFieldProps('RegulationName')}
                       variant="outlined"
                     />
                     <FormControl fullWidth>
@@ -300,19 +303,19 @@ export default function User() {
                   <Stack direction={{ xs: 'column', sm: 'row' }} spacing={2}>
                     <LocalizationProvider dateAdapter={AdapterDateFns}>
                       <DatePicker
-                        label="Laudatory Date"
+                        label="Regulation Date"
                         views={['day', 'month', 'year']}
-                        value={laudate}
+                        value={date}
                         onChange={(newValue) => {
-                          setLauDate(newValue);
+                          setDate(newValue);
                         }}
                         renderInput={(params) => <TextField {...params} />}
                       />
                     </LocalizationProvider>
                     <TextField
                       fullWidth
-                      label="Amount"
-                      {...getFieldProps('Amount')}
+                      label="Regulation Format"
+                      {...getFieldProps('RegulationFormat')}
                       variant="outlined"
                     />
                   </Stack>
@@ -333,7 +336,7 @@ export default function User() {
                     type="submit"
                     variant="contained"
                   >
-                    Add Laudatory
+                    Add Regulation
                   </LoadingButton>
                 </Stack>
               </Box>
@@ -342,7 +345,7 @@ export default function User() {
         </Modal>
         <Stack direction="row" alignItems="center" justifyContent="space-between" mb={5}>
           <Typography variant="h4" gutterBottom>
-            Laudatory
+            Regulation
           </Typography>
           <Button
             onClick={handleOpen}
@@ -351,12 +354,12 @@ export default function User() {
             to="#"
             startIcon={<Icon icon={plusFill} />}
           >
-            New Laudatory
+            New Regulation
           </Button>
         </Stack>
 
         <Card>
-          <LaudatoryListToolbar
+          <RegulationListToolbar
             numSelected={selected.length}
             filterName={filterName}
             onFilterName={handleFilterByName}
@@ -365,28 +368,33 @@ export default function User() {
           <Scrollbar>
             <TableContainer sx={{ minWidth: 800 }}>
               <Table>
-                <LaudatoryListHead
+                <RegulationListHead
                   order={order}
                   orderBy={orderBy}
                   headLabel={TABLE_HEAD}
-                  rowCount={laudatory.length}
+                  rowCount={regulation.length}
                   numSelected={selected.length}
                   onRequestSort={handleRequestSort}
                   onSelectAllClick={handleSelectAllClick}
                 />
                 <TableBody>
-                  {laudatory
+                  {regulation
                     .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                     .map((row) => {
-                      const { LaudatoryEmployeeID, LaudatoryName, LaudatoryDate, Reason, Amount } =
-                        row.LaudatoryEmployee;
+                      const {
+                        RegulationEmployeeID,
+                        RegulationName,
+                        RegulationDate,
+                        Reason,
+                        RegulationFormat
+                      } = row.RegulationEmployees;
                       const { FullName, Image } = row;
                       const isItemSelected = selected.indexOf(FullName) !== -1;
 
                       return (
                         <TableRow
                           hover
-                          key={LaudatoryEmployeeID}
+                          key={RegulationEmployeeID}
                           tabIndex={-1}
                           role="checkbox"
                           selected={isItemSelected}
@@ -398,7 +406,7 @@ export default function User() {
                               onChange={(event) => handleClick(event, FullName)}
                             />
                           </TableCell>
-                          <TableCell align="left">{LaudatoryEmployeeID}</TableCell>
+                          <TableCell align="left">{RegulationEmployeeID}</TableCell>
                           <TableCell component="th" scope="row" padding="none">
                             <Stack direction="row" alignItems="center" spacing={2}>
                               <Avatar alt={FullName} src={Image} />
@@ -407,12 +415,12 @@ export default function User() {
                               </Typography>
                             </Stack>
                           </TableCell>
-                          <TableCell align="left">{LaudatoryName}</TableCell>
-                          <TableCell align="left">{convertDate(LaudatoryDate)}</TableCell>
+                          <TableCell align="left">{RegulationName}</TableCell>
+                          <TableCell align="left">{convertDate(RegulationDate)}</TableCell>
+                          <TableCell align="left">{RegulationFormat}</TableCell>
                           <TableCell align="left">{Reason}</TableCell>
-                          <TableCell align="left">{Amount}</TableCell>
                           <TableCell align="right">
-                            <LaudatoryMoreMenu dulieu={row} handleOpenToast={handleOpenToast} />
+                            <RegulationMoreMenu dulieu={row} handleOpenToast={handleOpenToast} />
                           </TableCell>
                         </TableRow>
                       );
@@ -423,7 +431,7 @@ export default function User() {
                     </TableRow>
                   )}
                 </TableBody>
-                {isLaudatoryNotFound && (
+                {isregulationNotFound && (
                   <TableBody>
                     <TableRow>
                       <TableCell align="center" colSpan={6} sx={{ py: 3 }}>
@@ -439,7 +447,7 @@ export default function User() {
           <TablePagination
             rowsPerPageOptions={[5, 10, 25]}
             component="div"
-            count={laudatory.length}
+            count={regulation.length}
             rowsPerPage={rowsPerPage}
             page={page}
             onPageChange={handleChangePage}

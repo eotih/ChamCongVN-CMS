@@ -36,10 +36,12 @@ import Specialty from './pages/component/Specialities';
 import Salary from './pages/salary/Salary';
 import SalaryTable from './pages/salary/SalaryTable';
 import SalaryDeduct from './pages/salary/SalaryDeduct';
-import Laudatory from './pages/salary/Laudatory';
+import Advance from './pages/salary/Advance';
 import OvertimeSalary from './pages/salary/OvertimeSalary';
 import TimeKeeper from './pages/TimeKeeper';
-
+// Principle
+import Laudatory from './pages/principle/Laudatory';
+import Regulation from './pages/principle/Regulation';
 // ----------------------------------------------------------------------
 
 export default function Router() {
@@ -102,8 +104,16 @@ export default function Router() {
         { path: 'salaries', element: <Salary /> },
         { path: 'salarytable', element: <SalaryTable /> },
         { path: 'salarydeduct', element: <SalaryDeduct /> },
-        { path: 'laudatory', element: <Laudatory /> },
+        { path: 'advance', element: <Advance /> },
         { path: 'overtimesalary', element: <OvertimeSalary /> }
+      ]
+    },
+    {
+      path: '/principle',
+      element: <DashboardLayout />,
+      children: [
+        { path: 'laudatory', element: <Laudatory /> },
+        { path: 'regulation', element: <Regulation /> }
       ]
     },
     {

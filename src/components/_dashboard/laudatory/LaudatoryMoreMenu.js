@@ -69,7 +69,7 @@ export default function LaudatoryMoreMenu({ dulieu, handleOpenToast }) {
     onSubmit: () => {
       setLoading(true);
       axios
-        .put(`Salary/LaudatoryEmployee/${LaudatoryEmployeeID}`, {
+        .put(`Principle/LaudatoryEmployee/${LaudatoryEmployeeID}`, {
           LaudatoryEmployeeID: formik.values.LaudatoryEmployeeID,
           EmployeeID: formik.values.EmployeeID,
           LaudatoryName: formik.values.LaudatoryName,
@@ -140,7 +140,7 @@ export default function LaudatoryMoreMenu({ dulieu, handleOpenToast }) {
         <MenuItem
           onClick={() => {
             if (confirm('Are you sure you want to delete this laudatory?')) {
-              axios.delete(`Salary/LaudatoryEmployee/${LaudatoryEmployeeID}`).then((res) => {
+              axios.delete(`Principle/LaudatoryEmployee/${LaudatoryEmployeeID}`).then((res) => {
                 if (res.data.Status === 200) {
                   handleOpenToast({
                     isOpen: true,

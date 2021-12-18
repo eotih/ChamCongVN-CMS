@@ -4,6 +4,10 @@ async function getAllAccount() {
   const res = await Axios.get('Organization/Account');
   return res.data;
 }
+async function getAccountById(id) {
+  const res = await Axios.get(`Organization/Account/${id}`);
+  return res.data;
+}
 async function GetEmployeeForAccount() {
   const res = await Axios.get('Organization/EmployeeForAccount');
   return res.data;
@@ -35,6 +39,7 @@ async function getAllLevels() {
 export {
   getAllRole,
   getAllShift,
+  getAccountById,
   getAllOvertimes,
   getAllPosition,
   getAllAccount,
