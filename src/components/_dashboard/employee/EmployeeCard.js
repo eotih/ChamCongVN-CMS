@@ -42,7 +42,7 @@ export default function EmployeeCard({ Employee }) {
             textTransform: 'uppercase'
           }}
         >
-          <EmployeeMoreMenu />
+          <EmployeeMoreMenu dulieu={Employee} />
         </Label>
         <Label
           variant="filled"

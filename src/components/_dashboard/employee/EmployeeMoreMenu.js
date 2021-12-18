@@ -21,7 +21,8 @@ import {
 import { LoadingButton } from '@mui/lab';
 import axios from '../../../functions/Axios';
 
-export default function DegreeMoreMenu() {
+export default function EmployeeMoreMenu({ dulieu }) {
+  const { EmployeeID } = dulieu.emp;
   const ref = useRef(null);
   const [loading, setLoading] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
@@ -51,7 +52,11 @@ export default function DegreeMoreMenu() {
           <ListItemText primary="Delete" primaryTypographyProps={{ variant: 'body2' }} />
         </MenuItem>
 
-        <MenuItem component={RouterLink} to="./editemployee" sx={{ color: 'text.secondary' }}>
+        <MenuItem
+          component={RouterLink}
+          to={`./editemployee/${EmployeeID}`}
+          sx={{ color: 'text.secondary' }}
+        >
           {' '}
           <ListItemIcon>
             <Icon icon={editFill} width={24} height={24} />
