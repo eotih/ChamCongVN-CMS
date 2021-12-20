@@ -15,6 +15,7 @@ import {
 } from '../../components/_dashboard/employee';
 //
 import { getAllEmployees } from '../../functions/Employee';
+import Toast from '../../components/Toast';
 
 // ----------------------------------------------------------------------
 
@@ -23,6 +24,20 @@ export default function Employee() {
   const [isLoaded, setIsLoaded] = useState(false);
   const [openFilter, setOpenFilter] = useState(false);
   const [Employee, setEmployee] = useState([]);
+  const [openToast, setOpenToast] = useState({
+    isOpen: false,
+    vertical: 'top',
+    message: '',
+    color: '',
+    horizontal: 'right'
+  });
+
+  const handleOpenToast = (newState) => () => {
+    setOpenToast({ isOpen: true, ...newState });
+  };
+  const handleCloseToast = () => {
+    setOpenToast({ ...openToast, isOpen: false });
+  };
   useEffect(() => {
     getAllEmployees().then((res) => {
       setEmployee(res);
@@ -69,6 +84,7 @@ export default function Employee() {
   }
   return (
     <Page title="Dashboard: Employee | ChamCongVN">
+      {openToast.isOpen === true && <Toast open={openToast} handleCloseToast={handleCloseToast} />}
       <Container>
         <Typography variant="h4" sx={{ mb: 5 }}>
           Employee
@@ -92,7 +108,7 @@ export default function Employee() {
           </Stack>
         </Stack>
 
-        <EmployeeList Employees={Employee} />
+        <EmployeeList Employees={Employee} handleOpenToast={handleOpenToast} />
         <EmployeeWidget />
       </Container>
     </Page>

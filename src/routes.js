@@ -42,6 +42,9 @@ import TimeKeeper from './pages/TimeKeeper';
 // Principle
 import Laudatory from './pages/principle/Laudatory';
 import Regulation from './pages/principle/Regulation';
+// Application
+import AsbentApp from './pages/application/AsbentApp';
+import OvertimeApp from './pages/application/OvertimeApp';
 // ----------------------------------------------------------------------
 
 export default function Router() {
@@ -114,6 +117,14 @@ export default function Router() {
       children: [
         { path: 'laudatory', element: <Laudatory /> },
         { path: 'regulation', element: <Regulation /> }
+      ]
+    },
+    {
+      path: '/application',
+      element: <DashboardLayout />,
+      children: [
+        { path: 'asbent_application', element: <AsbentApp /> },
+        { path: 'overtime_application', element: <OvertimeApp /> }
       ]
     },
     {
