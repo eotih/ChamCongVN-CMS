@@ -6,12 +6,15 @@ const AccountContext = createContext();
 
 function AccountProvider({ children, token }) {
   const [account, setAccount] = useState({});
-  const decodeToken = jwtDecode(token);
-  const accountID = decodeToken.nameid[0];
-
+  // check invalid token jwt
   useEffect(() => {
-    getAccountById(accountID).then((res) => setAccount(res));
-  }, []);
+    if (token) {
+      const decoded = jwtDecode(token);
+      getAccountById(decoded.nameid[0]).then((res) => {
+        setAccount(res);
+      });
+    }
+  }, [token]);
 
   return <AccountContext.Provider value={account}>{children}</AccountContext.Provider>;
 }
