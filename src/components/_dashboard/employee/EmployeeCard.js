@@ -26,7 +26,7 @@ EmployeeCard.propTypes = {
   Employee: PropTypes.object
 };
 
-export default function EmployeeCard({ Employee }) {
+export default function EmployeeCard({ Employee, handleOpenToast }) {
   const { DepartmentName, GroupName, ListDegree, ListSpeciality, PositionName, WorkName, emp } =
     Employee;
   return (
@@ -42,7 +42,7 @@ export default function EmployeeCard({ Employee }) {
             textTransform: 'uppercase'
           }}
         >
-          <EmployeeMoreMenu dulieu={Employee} />
+          <EmployeeMoreMenu dulieu={Employee} handleOpenToast={handleOpenToast} />
         </Label>
         <Label
           variant="filled"

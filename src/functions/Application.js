@@ -1,7 +1,7 @@
 import Axios from './Axios';
 
 async function getAllAbsentApplication() {
-  const res = await Axios.get('Application/Application/AbsentApplication');
+  const res = await Axios.get('Application/AbsentApplication');
   return res.data;
 }
 async function getAllOverTimeApplication() {

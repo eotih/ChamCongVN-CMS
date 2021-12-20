@@ -1,3 +1,4 @@
+/* eslint-disable no-restricted-globals */
 import { Icon } from '@iconify/react';
 import { useRef, useState } from 'react';
 import { useFormik, Form, FormikProvider } from 'formik';
@@ -21,7 +22,7 @@ import {
 import { LoadingButton } from '@mui/lab';
 import axios from '../../../functions/Axios';
 
-export default function EmployeeMoreMenu({ dulieu }) {
+export default function EmployeeMoreMenu({ dulieu, handleOpenToast }) {
   const { EmployeeID } = dulieu.emp;
   const ref = useRef(null);
   const [loading, setLoading] = useState(false);
@@ -45,7 +46,33 @@ export default function EmployeeMoreMenu({ dulieu }) {
         anchorOrigin={{ vertical: 'bottom', horizontal: 'left' }}
         transformOrigin={{ vertical: 'top', horizontal: 'left' }}
       >
-        <MenuItem sx={{ color: 'text.secondary' }}>
+        <MenuItem
+          onClick={() => {
+            if (confirm('Are you sure you want to delete this employee?')) {
+              axios.delete(`Employee/Employee/${EmployeeID}`).then((res) => {
+                if (res.data.Status === 200) {
+                  handleOpenToast({
+                    isOpen: true,
+                    horizontal: 'right',
+                    vertical: 'top',
+                    message: 'Successfully deleted',
+                    color: 'warning'
+                  })();
+                  window.location.reload();
+                } else {
+                  handleOpenToast({
+                    isOpen: true,
+                    horizontal: 'right',
+                    vertical: 'top',
+                    message: 'Fail deleted',
+                    color: 'error'
+                  })();
+                }
+              });
+            }
+          }}
+          sx={{ color: 'text.secondary' }}
+        >
           <ListItemIcon>
             <Icon icon={trash2Outline} width={24} height={24} />
           </ListItemIcon>

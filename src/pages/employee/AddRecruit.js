@@ -10,12 +10,15 @@ import PersonalInfor from './PersonalInfor';
 import Utilities from './Utilities';
 import { getRecruitmentByID } from '../../functions/Employee';
 import axios from '../../functions/Axios';
+import Toast from '../../components/Toast';
 
 const steps = ['Basic Information', 'Personal Information', 'Utilities'];
 export default function AddRecruit() {
   const { id } = useParams();
   const [activeStep, setActiveStep] = useState(0);
+  const [open, setOpen] = useState(false);
   const [isLoaded, setIsLoaded] = useState(false);
+  const [loading, setLoading] = useState(false);
   const [skipped, setSkipped] = useState(new Set());
   useEffect(() => {
     getRecruitmentByID(id).then((res) => {
@@ -48,6 +51,20 @@ export default function AddRecruit() {
       formik.setFieldValue('SalaryTableID', res.SalaryTableID);
     });
   }, []);
+  const [openToast, setOpenToast] = useState({
+    isOpen: false,
+    vertical: 'top',
+    message: '',
+    color: '',
+    horizontal: 'right'
+  });
+
+  const handleOpenToast = (newState) => () => {
+    setOpenToast({ isOpen: true, ...newState });
+  };
+  const handleCloseToast = () => {
+    setOpenToast({ ...openToast, isOpen: false });
+  };
   const formik = useFormik({
     initialValues: {
       FullName: '',
@@ -77,20 +94,34 @@ export default function AddRecruit() {
       CreatedBy: ''
     },
     onSubmit: () => {
+      setLoading(true);
       axios
         .post(`Employee/Employee`, formik.values)
         .then((res) => {
           if (res.data.Status === 200) {
             axios.delete(`Employee/Recruitment/${id}`).then((res) => {
               if (res.data.Status === 200) {
-                alert('Thêm thành công');
+                setOpen(false);
+                handleOpenToast({
+                  isOpen: true,
+                  horizontal: 'right',
+                  vertical: 'top',
+                  message: 'Successfully added',
+                  color: 'success'
+                })();
+                setLoading(false);
                 window.location.href = 'http://localhost:3000/employee/recruitments';
-              } else {
-                alert('Recruitment Not Deleted');
               }
             });
           } else {
-            alert('Thêm thất bại');
+            handleOpenToast({
+              isOpen: true,
+              horizontal: 'right',
+              vertical: 'top',
+              message: 'Fail added',
+              color: 'error'
+            })();
+            setLoading(false);
           }
         })
         .catch((err) => {
@@ -154,6 +185,7 @@ export default function AddRecruit() {
     DepartmentID,
     PositionID,
     WorkID,
+    LevelID,
     GroupID,
     SocialInsurance,
     HealthInsurance,
@@ -215,6 +247,7 @@ export default function AddRecruit() {
   const { handleSubmit, getFieldProps } = formik;
   return (
     <Page title="Add Recruit">
+      {openToast.isOpen === true && <Toast open={openToast} handleCloseToast={handleCloseToast} />}
       <Container maxWidth="md">
         <Box mt={2}>
           <Typography variant="h4" gutterBottom>

@@ -110,6 +110,15 @@ const sidebarConfig = [
     ]
   },
   {
+    title: 'Application',
+    path: '/application',
+    icon: getIcon(roundAttachMoney),
+    children: [
+      { title: 'Asbent Application', path: '/application/asbent_application' },
+      { title: 'Overtime Application', path: '/application/overtime_application' }
+    ]
+  },
+  {
     title: 'TimeKeeper',
     path: '/dashboard/timekeeper',
     icon: getIcon(lockFill)
