@@ -173,6 +173,7 @@ export default function EditAccount() {
               <Typography variant="h5">Change Password</Typography>
               <TextField
                 fullWidth
+                type="password"
                 onChange={(e) => {
                   setOldPassword(e.target.value);
                 }}
@@ -181,6 +182,7 @@ export default function EditAccount() {
               />
               <TextField
                 fullWidth
+                type="password"
                 onChange={(e) => {
                   setNewPassword(e.target.value);
                 }}
@@ -189,6 +191,7 @@ export default function EditAccount() {
               />
               <TextField
                 fullWidth
+                type="password"
                 onChange={(e) => {
                   setRepeatNewPassword(e.target.value);
                 }}

@@ -46,7 +46,10 @@ export default function AccountPopover() {
   const handleClose = () => {
     setOpen(false);
   };
-
+  const handleLogout = () => {
+    localStorage.removeItem('token');
+    window.location.reload();
+  };
   return (
     <>
       <IconButton
@@ -112,12 +115,7 @@ export default function AccountPopover() {
           ))}
 
           <Box sx={{ p: 2, pt: 1.5 }}>
-            <Button
-              onClick={() => localStorage.removeItem('token')}
-              fullWidth
-              color="inherit"
-              variant="outlined"
-            >
+            <Button onClick={handleLogout} fullWidth color="inherit" variant="outlined">
               Logout
             </Button>
           </Box>
