@@ -5,6 +5,8 @@ import peopleOutline from '@iconify/icons-eva/people-outline';
 import lockFill from '@iconify/icons-eva/lock-fill';
 import roundAttachMoney from '@iconify/icons-ic/round-attach-money';
 import briefcaseFill from '@iconify/icons-eva/briefcase-fill';
+import archiveFill from '@iconify/icons-eva/archive-fill';
+import bookOpenFill from '@iconify/icons-eva/book-open-fill';
 
 // ----------------------------------------------------------------------
 
@@ -103,7 +105,7 @@ const sidebarConfig = [
   {
     title: 'Principle',
     path: '/principle',
-    icon: getIcon(roundAttachMoney),
+    icon: getIcon(bookOpenFill),
     children: [
       { title: 'Laudatory', path: '/principle/laudatory' },
       { title: 'Regulation', path: '/principle/regulation' }
@@ -112,7 +114,7 @@ const sidebarConfig = [
   {
     title: 'Application',
     path: '/application',
-    icon: getIcon(roundAttachMoney),
+    icon: getIcon(archiveFill),
     children: [
       { title: 'Asbent Application', path: '/application/asbent_application' },
       { title: 'Overtime Application', path: '/application/overtime_application' }

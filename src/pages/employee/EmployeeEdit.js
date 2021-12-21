@@ -187,8 +187,8 @@ export default function EmployeeEdit() {
           <Form autoComplete="off" noValidate onSubmit={handleSubmit}>
             <Box sx={{ flexGrow: 1 }}>
               <Grid container spacing={3}>
-                <Grid item xs={12} sm={6} md={4}>
-                  <Card sx={{ p: 5 }}>
+                <Grid item xs={12} md={4}>
+                  <Card fullWidth sx={{ p: 5 }}>
                     <Stack
                       sx={{ mb: 3 }}
                       direction={{ xs: 'column', sm: 'row' }}
@@ -196,55 +196,19 @@ export default function EmployeeEdit() {
                       justifyContent="center"
                       spacing={2}
                     >
-                      <Avatar src={formik.values.Image} sx={{ width: 100, height: 100 }} />
+                      <Avatar src={formik.values.Image} sx={{ width: 200, height: 200 }} />
                     </Stack>
-                    <Typography variant="h6" component="h2">
-                      Full Name : {formik.values.FullName}
-                    </Typography>
+                    <Grid container justifyContent="center">
+                      <Typography variant="h5" component="h2">
+                        {formik.values.FullName}
+                      </Typography>
+                    </Grid>
                   </Card>
                 </Grid>
-                <Grid item xs={12} sm={8}>
+                <Grid item xs={12} md={8}>
                   <Card sx={{ p: 5 }}>
                     <Stack spacing={2}>
-                      <Stack direction={{ xs: 'row' }} spacing={2}>
-                        <FormControl fullWidth>
-                          <InputLabel id="demo-simple-select-label">Position</InputLabel>
-                          <Select
-                            labelId="demo-simple-select-label"
-                            id="demo-simple-select"
-                            value={positions}
-                            {...getFieldProps('PositionID')}
-                            label="Position"
-                            onChange={handleChangePosition}
-                          >
-                            {position.map((item) => (
-                              <MenuItem key={item.PositionID} value={item.PositionID}>
-                                {item.PositionName}
-                              </MenuItem>
-                            ))}
-                          </Select>
-                        </FormControl>
-                      </Stack>
-                      <Stack direction={{ xs: 'row' }} spacing={2}>
-                        <FormControl fullWidth>
-                          <InputLabel id="demo-simple-select-label">Salary Table</InputLabel>
-                          <Select
-                            labelId="demo-simple-select-label"
-                            id="demo-simple-select"
-                            value={salarytables}
-                            {...getFieldProps('SalaryTableID')}
-                            label="Salary Table"
-                            onChange={handleChangeSalaryTable}
-                          >
-                            {salarytable.map((item) => (
-                              <MenuItem key={item.SalaryTableID} value={item.SalaryTableID}>
-                                {item.SalaryTableName}
-                              </MenuItem>
-                            ))}
-                          </Select>
-                        </FormControl>
-                      </Stack>
-                      <Stack direction={{ xs: 'row' }} spacing={2}>
+                      <Stack direction={{ xs: 'column', sm: 'row' }} spacing={2}>
                         <FormControl fullWidth>
                           <InputLabel id="demo-simple-select-label">Level</InputLabel>
                           <Select
@@ -263,8 +227,43 @@ export default function EmployeeEdit() {
                             ))}
                           </Select>
                         </FormControl>
+
+                        <FormControl fullWidth>
+                          <InputLabel id="demo-simple-select-label">Salary Table</InputLabel>
+                          <Select
+                            labelId="demo-simple-select-label"
+                            id="demo-simple-select"
+                            value={salarytables}
+                            {...getFieldProps('SalaryTableID')}
+                            label="Salary Table"
+                            onChange={handleChangeSalaryTable}
+                          >
+                            {salarytable.map((item) => (
+                              <MenuItem key={item.SalaryTableID} value={item.SalaryTableID}>
+                                {item.SalaryTableName}
+                              </MenuItem>
+                            ))}
+                          </Select>
+                        </FormControl>
                       </Stack>
-                      <Stack direction={{ xs: 'row' }} spacing={2}>
+                      <Stack direction={{ xs: 'column', sm: 'row' }} spacing={2}>
+                        <FormControl fullWidth>
+                          <InputLabel id="demo-simple-select-label">Position</InputLabel>
+                          <Select
+                            labelId="demo-simple-select-label"
+                            id="demo-simple-select"
+                            value={positions}
+                            {...getFieldProps('PositionID')}
+                            label="Position"
+                            onChange={handleChangePosition}
+                          >
+                            {position.map((item) => (
+                              <MenuItem key={item.PositionID} value={item.PositionID}>
+                                {item.PositionName}
+                              </MenuItem>
+                            ))}
+                          </Select>
+                        </FormControl>
                         <FormControl fullWidth>
                           <InputLabel id="demo-simple-select-label">Group</InputLabel>
                           <Select
@@ -283,7 +282,7 @@ export default function EmployeeEdit() {
                           </Select>
                         </FormControl>
                       </Stack>
-                      <Stack direction={{ xs: 'row' }} spacing={2}>
+                      <Stack direction={{ xs: 'column', sm: 'row' }} spacing={2}>
                         <FormControl fullWidth>
                           <InputLabel id="demo-simple-select-label">Work</InputLabel>
                           <Select
@@ -301,8 +300,6 @@ export default function EmployeeEdit() {
                             ))}
                           </Select>
                         </FormControl>
-                      </Stack>
-                      <Stack direction={{ xs: 'row' }} spacing={2}>
                         <FormControl fullWidth>
                           <InputLabel id="demo-simple-select-label">Department</InputLabel>
                           <Select
@@ -324,6 +321,7 @@ export default function EmployeeEdit() {
                     </Stack>
                   </Card>
                   <LoadingButton
+                    sx={{ mt: 2 }}
                     loading={loading}
                     fullWidth
                     size="large"
