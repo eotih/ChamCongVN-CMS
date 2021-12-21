@@ -1,7 +1,7 @@
 /* eslint-disable jsx-a11y/label-has-associated-control */
 /* eslint-disable array-callback-return */
 /* eslint-disable import/no-unresolved */
-import { useState, useEffect, useContext } from 'react';
+import { useState, useEffect } from 'react';
 import { useFormik, Form, FormikProvider } from 'formik';
 import {
   Stack,
@@ -26,14 +26,14 @@ import md5 from 'md5';
 import { LoadingButton } from '@mui/lab';
 import axios from '../functions/Axios';
 import Page from '../components/Page';
-import { AccountContext } from '../context/AccountContext';
+import { accountContext } from '../context/Hooks';
 import Toast from '../components/Toast';
 
 export default function EditAccount() {
   const [oldPassword, setOldPassword] = useState('');
   const [newPassword, setNewPassword] = useState('');
   const [repeatNewPassword, setRepeatNewPassword] = useState('');
-  const account = useContext(AccountContext);
+  const account = accountContext();
   const { Employee, Account } = account;
   const [open, setOpen] = useState(false);
   const [loading, setLoading] = useState(false);

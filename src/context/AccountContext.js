@@ -5,7 +5,7 @@ import { getAccountById } from '../functions/Organization';
 const AccountContext = createContext();
 
 function AccountProvider({ children, token }) {
-  const [account, setAccount] = useState({});
+  const [account, setAccount] = useState([]);
   // check invalid token jwt
   useEffect(() => {
     if (token) {
