@@ -131,7 +131,7 @@ export default function Router() {
       path: '/timekeeper',
       element: <DashboardLayout />,
       children: [
-        { path: 'timekeeper', element: <TimeKeeper /> },
+        { path: '', element: <TimeKeeper /> },
         { path: 'ottimekeeper', element: <OTTimeKeeper /> }
       ]
     },
