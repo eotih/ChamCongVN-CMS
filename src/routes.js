@@ -38,8 +38,8 @@ import SalaryTable from './pages/salary/SalaryTable';
 import SalaryDeduct from './pages/salary/SalaryDeduct';
 import Advance from './pages/salary/Advance';
 import OvertimeSalary from './pages/salary/OvertimeSalary';
-import TimeKeeper from './pages/TimeKeeper';
-import OTTimeKeeper from './pages/OTTimekeeper';
+import TimeKeeper from './pages/timekeeper/TimeKeeper';
+import OTTimeKeeper from './pages/timekeeper/OTTimekeeper';
 // Principle
 import Laudatory from './pages/principle/Laudatory';
 import Regulation from './pages/principle/Regulation';

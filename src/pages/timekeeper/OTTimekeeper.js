@@ -6,15 +6,15 @@ import { Container, Stack, Typography } from '@mui/material';
 import CircularProgress from '@mui/material/CircularProgress';
 import Box from '@mui/material/Box';
 // components
-import Page from '../components/Page';
+import Page from '../../components/Page';
 import {
   TimeKeeperSort,
   TimeKeeperList,
   TimeKeeperWidget,
   TimeKeeperFilterSidebar
-} from '../components/_dashboard/timekeepertest';
+} from '../../components/_dashboard/ottimekeeper';
 //
-import { GetAllTimeKeeping } from '../functions/TimeKeeper';
+import { GetAllTimeKeeping } from '../../functions/TimeKeeper';
 
 // ----------------------------------------------------------------------
 
