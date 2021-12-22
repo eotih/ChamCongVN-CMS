@@ -122,8 +122,12 @@ const sidebarConfig = [
   },
   {
     title: 'TimeKeeper',
-    path: '/dashboard/timekeeper',
-    icon: getIcon(lockFill)
+    path: '/timekeeper',
+    icon: getIcon(lockFill),
+    children: [
+      { title: 'TimeKeeper', path: '/timekeeper/timekeeper' },
+      { title: 'Overtime TimeKeeper', path: '/timekeeper/ottimekeeper' }
+    ]
   }
 ];
 

@@ -39,7 +39,7 @@ import SalaryDeduct from './pages/salary/SalaryDeduct';
 import Advance from './pages/salary/Advance';
 import OvertimeSalary from './pages/salary/OvertimeSalary';
 import TimeKeeper from './pages/TimeKeeper';
-import TimeKeeperTest from './pages/Timekeepertest';
+import OTTimeKeeper from './pages/OTTimekeeper';
 // Principle
 import Laudatory from './pages/principle/Laudatory';
 import Regulation from './pages/principle/Regulation';
@@ -59,8 +59,6 @@ export default function Router() {
         { path: 'user', element: <User /> },
         { path: 'profile', element: <Profile /> },
         { path: 'products', element: <Products /> },
-        { path: 'timekeeper', element: <TimeKeeper /> },
-        { path: 'timekeepertest', element: <TimeKeeperTest /> },
         { path: 'blog', element: <Blog /> }
       ]
     },
@@ -127,6 +125,14 @@ export default function Router() {
       children: [
         { path: 'asbent_application', element: <AsbentApp /> },
         { path: 'overtime_application', element: <OvertimeApp /> }
+      ]
+    },
+    {
+      path: '/timekeeper',
+      element: <DashboardLayout />,
+      children: [
+        { path: 'timekeeper', element: <TimeKeeper /> },
+        { path: 'ottimekeeper', element: <OTTimeKeeper /> }
       ]
     },
     {
