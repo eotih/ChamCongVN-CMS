@@ -42,11 +42,13 @@ export default function LoginForm({ setToken }) {
         .post(`Organization/Login`, formik.values)
         .then((res) => {
           if (res.data.Status === 200) {
-            alert('Đăng nhập thành công');
+            alert('Login Successful');
             setToken(res.data.Message);
             navigate('/');
           } else {
-            alert('Đăng nhập thất bại, vui lòng thử lại sau');
+            alert('Login failed');
+            formik.resetForm();
+            formik.setSubmitting(false);
           }
         })
         .catch((err) => {

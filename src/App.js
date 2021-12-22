@@ -13,7 +13,7 @@ import { AccountProvider } from './context/AccountContext';
 // ----------------------------------------------------------------------
 
 export default function App() {
-  const { token, setToken } = useToken();
+  const { token, setToken, removeToken } = useToken();
   if (!token) {
     return (
       <ThemeConfig>
@@ -23,7 +23,7 @@ export default function App() {
   }
   return (
     <ThemeConfig>
-      <AccountProvider token={token}>
+      <AccountProvider removeToken={removeToken} token={token}>
         <ScrollToTop />
         <GlobalStyles />
         <BaseOptionChartStyle />

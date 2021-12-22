@@ -1,5 +1,5 @@
 import PropTypes from 'prop-types';
-import { useEffect, useContext } from 'react';
+import { useEffect } from 'react';
 import { Link as RouterLink, useLocation } from 'react-router-dom';
 // material
 import { styled } from '@mui/material/styles';
@@ -9,7 +9,7 @@ import Logo from '../../components/Logo';
 import Scrollbar from '../../components/Scrollbar';
 import NavSection from '../../components/NavSection';
 import { MHidden } from '../../components/@material-extend';
-import { AccountContext } from '../../context/AccountContext';
+import { accountContext } from '../../context/Hooks';
 //
 import sidebarConfig from './SidebarConfig';
 
@@ -41,7 +41,7 @@ DashboardSidebar.propTypes = {
 
 export default function DashboardSidebar({ isOpenSidebar, onCloseSidebar }) {
   const { pathname } = useLocation();
-  const account = useContext(AccountContext);
+  const account = accountContext();
   const { Employee } = account;
   useEffect(() => {
     if (isOpenSidebar) {

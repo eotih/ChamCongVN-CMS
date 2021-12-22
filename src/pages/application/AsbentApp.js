@@ -201,8 +201,7 @@ export default function Asbent() {
                       NumberOfDays,
                       Reason
                     } = row.AbsentApplications;
-                    const { FullName, Image } = row.Employee;
-                    const { StateName } = row;
+                    const { StateName, FullName, Image } = row;
                     const isItemSelected = selected.indexOf(FullName) !== -1;
 
                     return (
