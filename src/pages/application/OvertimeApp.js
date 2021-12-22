@@ -53,7 +53,7 @@ export default function OvertimeApp() {
   const [isLoaded, setIsLoaded] = useState(false);
   const [orderBy, setOrderBy] = useState('name');
   const [filterName, setFilterName] = useState('');
-  const [overtimeapp, setOvertimeApp] = useState([]);
+  const [overTimeApp, setOvertimeApp] = useState([]);
   const [rowsPerPage, setRowsPerPage] = useState(5);
   const [openToast, setOpenToast] = useState({
     isOpen: false,
@@ -74,7 +74,7 @@ export default function OvertimeApp() {
       setOvertimeApp(res);
       setIsLoaded(true);
     });
-  }, [overtimeapp]);
+  }, [overTimeApp]);
   const handleRequestSort = (event, property) => {
     const isAsc = orderBy === property && order === 'asc';
     setOrder(isAsc ? 'desc' : 'asc');
@@ -120,7 +120,7 @@ export default function OvertimeApp() {
   const handleFilterByName = (event) => {
     setFilterName(event.target.value);
   };
-  const emptyRows = page > 0 ? Math.max(0, (1 + page) * rowsPerPage - overtimeapp.length) : 0;
+  const emptyRows = page > 0 ? Math.max(0, (1 + page) * rowsPerPage - overTimeApp.length) : 0;
   if (!isLoaded) {
     return (
       <Box sx={{ display: 'flex' }}>
@@ -157,7 +157,7 @@ export default function OvertimeApp() {
                   onSelectAllClick={handleSelectAllClick}
                 />
                 <TableBody>
-                  {overtimeapp
+                  {overTimeApp
                     .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                     .map((row) => {
                       const { OverTimeApplicationID, Note } = row.OverTimeApplications;
