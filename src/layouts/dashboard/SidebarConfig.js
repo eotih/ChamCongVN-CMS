@@ -98,7 +98,7 @@ const sidebarConfig = [
       { title: 'Salary Table', path: '/salary/salarytable' },
       { title: 'Salary Deduct', path: '/salary/salarydeduct' },
       { title: 'Advance', path: '/salary/advance' },
-      { title: 'Overtime Salary', path: '/salary/overtimesalary' },
+      { title: 'Overtime Salary', path: '/salary/overtime' },
       { title: 'Salary', path: '/salary/salaries' }
     ]
   },
@@ -125,8 +125,8 @@ const sidebarConfig = [
     path: '/timekeeper',
     icon: getIcon(lockFill),
     children: [
-      { title: 'Standard', path: '/timekeeper/' },
-      { title: 'Overtime', path: '/timekeeper/ottimekeeper' }
+      { title: 'Standard', path: '/timekeeper/standard' },
+      { title: 'Overtime', path: '/timekeeper/overtime' }
     ]
   }
 ];

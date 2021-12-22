@@ -108,7 +108,7 @@ export default function Router() {
         { path: 'salarytable', element: <SalaryTable /> },
         { path: 'salarydeduct', element: <SalaryDeduct /> },
         { path: 'advance', element: <Advance /> },
-        { path: 'overtimesalary', element: <OvertimeSalary /> }
+        { path: 'overtime', element: <OvertimeSalary /> }
       ]
     },
     {
@@ -131,8 +131,8 @@ export default function Router() {
       path: '/timekeeper',
       element: <DashboardLayout />,
       children: [
-        { path: '', element: <TimeKeeper /> },
-        { path: 'ottimekeeper', element: <OTTimeKeeper /> }
+        { path: 'standard', element: <TimeKeeper /> },
+        { path: 'overtime', element: <OTTimeKeeper /> }
       ]
     },
     {
