@@ -1,5 +1,8 @@
+/* eslint-disable jsx-a11y/label-has-associated-control */
 /* eslint-disable react/sort-comp */
 import React from 'react';
+import { Button } from '@mui/material';
+import { styled } from '@mui/material/styles';
 import axios from '../functions/Axios';
 
 class UploadFile extends React.Component {
@@ -35,13 +38,18 @@ class UploadFile extends React.Component {
   }
 
   render() {
+    const Input = styled('input')({
+      display: 'none'
+    });
     return (
       <div className="container">
         <form onSubmit={(e) => this.submit(e)}>
-          <input type="file" onChange={(e) => this.setFile(e)} />
-          <button className="btn btn-primary" type="submit">
-            Upload
-          </button>
+          <label htmlFor="contained-button-file">
+            <Input type="file" id="contained-button-file" onChange={(e) => this.setFile(e)} />
+            <Button variant="contained" component="span">
+              Upload Logo
+            </Button>
+          </label>
         </form>
       </div>
     );

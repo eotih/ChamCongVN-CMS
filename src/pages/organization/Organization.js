@@ -29,6 +29,7 @@ import {
   FormControl
 } from '@mui/material';
 
+import { styled } from '@mui/material/styles';
 import { LoadingButton } from '@mui/lab';
 import axios from '../../functions/Axios';
 // components
@@ -167,6 +168,9 @@ export default function Organization() {
   const handleFilterByName = (event) => {
     setFilterName(event.target.value);
   };
+  const Input = styled('input')({
+    display: 'none'
+  });
   const style = {
     position: 'relative',
     borderRadius: '10px',
@@ -253,19 +257,49 @@ export default function Organization() {
                   Add Organization
                 </Typography>
                 <Stack direction={{ xs: 'column', sm: 'row' }} spacing={2}>
-                  <TextField label="Name" {...getFieldProps('Name')} variant="outlined" />
-                  <TextField label="Website" {...getFieldProps('Website')} variant="outlined" />
+                  <TextField fullWidth label="Name" {...getFieldProps('Name')} variant="outlined" />
+                  <TextField
+                    fullWidth
+                    label="Website"
+                    {...getFieldProps('Website')}
+                    variant="outlined"
+                  />
                 </Stack>
                 <Stack direction={{ xs: 'column', sm: 'row' }} spacing={2}>
-                  <TextField label="PublicIP" {...getFieldProps('PublicIP')} variant="outlined" />
-                  <TextField label="PythonIP" {...getFieldProps('PythonIP')} variant="outlined" />
+                  <TextField
+                    fullWidth
+                    label="PublicIP"
+                    {...getFieldProps('PublicIP')}
+                    variant="outlined"
+                  />
+                  <TextField
+                    fullWidth
+                    label="PythonIP"
+                    {...getFieldProps('PythonIP')}
+                    variant="outlined"
+                  />
                 </Stack>
                 <Stack direction={{ xs: 'column', sm: 'row' }} spacing={2}>
-                  <TextField label="Latitude" {...getFieldProps('Latitude')} variant="outlined" />
-                  <TextField label="Longitude" {...getFieldProps('Longitude')} variant="outlined" />
+                  <TextField
+                    fullWidth
+                    label="Latitude"
+                    {...getFieldProps('Latitude')}
+                    variant="outlined"
+                  />
+                  <TextField
+                    fullWidth
+                    label="Longitude"
+                    {...getFieldProps('Longitude')}
+                    variant="outlined"
+                  />
                 </Stack>
                 <Stack direction={{ xs: 'column', sm: 'row' }} spacing={2}>
-                  <TextField label="Email" {...getFieldProps('Email')} variant="outlined" />
+                  <TextField
+                    fullWidth
+                    label="Email"
+                    {...getFieldProps('Email')}
+                    variant="outlined"
+                  />
                 </Stack>
                 <Stack
                   direction={{ xs: 'column', sm: 'row' }}
