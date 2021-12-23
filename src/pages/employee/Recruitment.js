@@ -18,7 +18,7 @@ import {
   TablePagination,
   Box
 } from '@mui/material';
-import UploadFile from '../uploadFile';
+import UploadFile from '../uploadRecuirtmentFile';
 // components
 import Page from '../../components/Page';
 import Scrollbar from '../../components/Scrollbar';

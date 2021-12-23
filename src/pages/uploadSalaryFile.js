@@ -15,7 +15,7 @@ class UploadFile extends React.Component {
 
   async submit(e) {
     e.preventDefault();
-    const url = `Employee/Recruitment`;
+    const url = `Salary/TotalSalaryPerMonths`;
     const formData = new FormData();
     formData.append('body', this.state.file);
     const config = {
@@ -24,7 +24,7 @@ class UploadFile extends React.Component {
       }
     };
     return axios.post(url, formData, config).then((json) => {
-      if (json.data === 'The Excel file has been successfully uploaded.') {
+      if (json.data.Status === 200) {
         alert('Upload file Thành Công');
         window.location.reload();
       } else {

@@ -24,12 +24,13 @@ import SearchNotFound from '../../components/SearchNotFound';
 import { SalaryListHead, SalaryListToolbar } from '../../components/_dashboard/salary';
 import { getAllSalaries, getAllTotalSalary } from '../../functions/Salary';
 import { ExportExcel } from '../exportExcel';
+import UploadFile from '../uploadSalaryFile';
 //
 
 // ----------------------------------------------------------------------
 
 const TABLE_HEAD = [
-  { id: 'TotalSalaryID', label: 'TotalSalaryID', alignRight: false },
+  { id: 'TotalSalaryID', label: 'ID', alignRight: false },
   { id: 'FullName', label: 'FullName', alignRight: false },
   { id: 'Month', label: 'Month', alignRight: false },
   { id: 'Year', label: 'Year', alignRight: false },
@@ -38,6 +39,7 @@ const TABLE_HEAD = [
   { id: 'TotalAdvance', label: 'Total Advance', alignRight: false },
   { id: 'TotalDeduction', label: 'Total Deduction', alignRight: false },
   { id: 'TotalLaudatory', label: 'Total Laudatory', alignRight: false },
+  { id: 'TotalOvertime', label: 'Total Overtime', alignRight: false },
   { id: 'TotalOvertimeSalary', label: 'Total Overtime Salary', alignRight: false },
   { id: 'TotalSalary', label: 'Total Salary', alignRight: false },
   { id: '' }
@@ -151,15 +153,10 @@ export default function User() {
           <Typography variant="h4" gutterBottom>
             Salary
           </Typography>
-          {/* <Button
-            variant="contained"
-            component={RouterLink}
-            to="#"
-            startIcon={<Icon icon={plusFill} />}
-          >
-            Export Excel
-          </Button> */}
+        </Stack>
+        <Stack direction="row" alignItems="right" justifyContent="space-between" mb={5}>
           <ExportExcel apiData={totalSalary} fileName="Bảng lương công ty" />
+          <UploadFile />
         </Stack>
 
         <Card>
@@ -193,6 +190,7 @@ export default function User() {
                       TotalAdvance,
                       TotalDeduction,
                       TotalLaudatory,
+                      TotalOvertime,
                       TotalOvertimeSalary,
                       TotalSalary
                     } = row.TotalSalary;
@@ -230,6 +228,7 @@ export default function User() {
                         <TableCell align="left">{TotalAdvance}</TableCell>
                         <TableCell align="left">{TotalDeduction}</TableCell>
                         <TableCell align="left">{TotalLaudatory}</TableCell>
+                        <TableCell align="left">{TotalOvertime}</TableCell>
                         <TableCell align="left">{TotalOvertimeSalary}</TableCell>
                         <TableCell align="left">{TotalSalary}</TableCell>
                       </TableRow>
