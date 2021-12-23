@@ -1,11 +1,8 @@
 /* eslint-disable jsx-a11y/label-has-associated-control */
 import * as React from 'react';
 import { filter } from 'lodash';
-import { Icon } from '@iconify/react';
 import { useState, useEffect } from 'react';
 import CircularProgress from '@mui/material/CircularProgress';
-import plusFill from '@iconify/icons-eva/plus-fill';
-import { Link as RouterLink } from 'react-router-dom';
 // material
 import {
   Card,
@@ -21,8 +18,7 @@ import {
   TablePagination,
   Box
 } from '@mui/material';
-import axios from '../../functions/Axios';
-import UploadFile from '../UploadFile';
+import UploadFile from '../uploadFile';
 // components
 import Page from '../../components/Page';
 import Scrollbar from '../../components/Scrollbar';

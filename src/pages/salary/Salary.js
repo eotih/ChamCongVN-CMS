@@ -1,18 +1,12 @@
 import * as React from 'react';
 import { filter } from 'lodash';
-import { Icon } from '@iconify/react';
-import CircularProgress from '@mui/material/CircularProgress';
 import { useState, useEffect } from 'react';
-import { useFormik, Form, FormikProvider } from 'formik';
-import plusFill from '@iconify/icons-eva/plus-fill';
-import { Link as RouterLink } from 'react-router-dom';
 // material
 import {
   Card,
   Table,
   Stack,
   Avatar,
-  Button,
   Checkbox,
   TableRow,
   TableBody,
@@ -23,25 +17,29 @@ import {
   TablePagination
 } from '@mui/material';
 
-import axios from '../../functions/Axios';
 // components
 import Page from '../../components/Page';
 import Scrollbar from '../../components/Scrollbar';
 import SearchNotFound from '../../components/SearchNotFound';
 import { SalaryListHead, SalaryListToolbar } from '../../components/_dashboard/salary';
-import { getAllSalarys } from '../../functions/Salary';
-import { getAllEmployees } from '../../functions/Employee';
-import { convertDate } from '../../utils/formatDatetime';
+import { getAllSalaries, getAllTotalSalary } from '../../functions/Salary';
+import { ExportExcel } from '../exportExcel';
 //
 
 // ----------------------------------------------------------------------
 
 const TABLE_HEAD = [
-  { id: 'CoefficientSalary', label: 'Co-efficient Salary', alignRight: false },
-  { id: 'TotalWorkTime', label: 'Total Work Time', alignRight: false },
-  { id: 'TotalAbsentApplications', label: 'Total Absent Applications', alignRight: false },
-  { id: 'TotalAdvances', label: 'Total Advances', alignRight: false },
+  { id: 'TotalSalaryID', label: 'TotalSalaryID', alignRight: false },
+  { id: 'FullName', label: 'FullName', alignRight: false },
+  { id: 'Month', label: 'Month', alignRight: false },
+  { id: 'Year', label: 'Year', alignRight: false },
+  { id: 'TotalTime', label: 'Total Time', alignRight: false },
+  { id: 'Salary', label: 'Salary', alignRight: false },
+  { id: 'TotalAdvance', label: 'Total Advance', alignRight: false },
+  { id: 'TotalDeduction', label: 'Total Deduction', alignRight: false },
+  { id: 'TotalLaudatory', label: 'Total Laudatory', alignRight: false },
   { id: 'TotalOvertimeSalary', label: 'Total Overtime Salary', alignRight: false },
+  { id: 'TotalSalary', label: 'Total Salary', alignRight: false },
   { id: '' }
 ];
 
@@ -78,21 +76,20 @@ function applySortFilter(array, comparator, query) {
 
 export default function User() {
   const [page, setPage] = useState(0);
-  const [laudate, setLauDate] = React.useState(new Date());
   const [order, setOrder] = useState('asc');
   const [selected, setSelected] = useState([]);
   const [orderBy, setOrderBy] = useState('name');
   const [filterName, setFilterName] = useState('');
-  const [Salary, setSalary] = useState([]);
-  const [employee, setEmployee] = useState([]);
   const [rowsPerPage, setRowsPerPage] = useState(5);
+  const [salary, setSalary] = useState([]);
+  const [totalSalary, setTotalSalary] = useState([]);
 
   useEffect(() => {
-    getAllSalarys().then((res) => {
+    getAllSalaries().then((res) => {
       setSalary(res);
     });
-    getAllEmployees().then((res) => {
-      setEmployee(res);
+    getAllTotalSalary().then((res) => {
+      setTotalSalary(res);
     });
   }, []);
   const handleRequestSort = (event, property) => {
@@ -103,7 +100,7 @@ export default function User() {
 
   const handleSelectAllClick = (event) => {
     if (event.target.checked) {
-      const newSelecteds = Salary.map((n) => n.name);
+      const newSelecteds = salary.map((n) => n.name);
       setSelected(newSelecteds);
       return;
     }
@@ -140,43 +137,10 @@ export default function User() {
   const handleFilterByName = (event) => {
     setFilterName(event.target.value);
   };
-  const formik = useFormik({
-    initialValues: {
-      EmployeeID: '',
-      SalaryName: '',
-      SalaryDate: laudate,
-      Reason: '',
-      Amount: '',
-      CreatedBy: '',
-      remember: true
-    },
-    onSubmit: () => {
-      axios
-        .post(``, {
-          EmployeeID: formik.values.EmployeeID,
-          SalaryName: formik.values.SalaryName,
-          Reason: formik.values.Reason,
-          Amount: formik.values.Amount,
-          CreatedBy: formik.values.CreatedBy,
-          SalaryDate: laudate
-        })
-        .then((res) => {
-          if (res.data.Status === 200) {
-            alert('Thêm thành công');
-            window.location.reload();
-          } else {
-            alert('Thêm thất bại');
-          }
-        })
-        .catch((err) => {
-          console.log(err);
-        });
-    }
-  });
 
-  const emptyRows = page > 0 ? Math.max(0, (1 + page) * rowsPerPage - Salary.length) : 0;
+  const emptyRows = page > 0 ? Math.max(0, (1 + page) * rowsPerPage - salary.length) : 0;
 
-  const filteredSalarys = applySortFilter(Salary, getComparator(order, orderBy), filterName);
+  const filteredSalarys = applySortFilter(salary, getComparator(order, orderBy), filterName);
 
   const isSalaryNotFound = filteredSalarys.length === 0;
 
@@ -187,14 +151,15 @@ export default function User() {
           <Typography variant="h4" gutterBottom>
             Salary
           </Typography>
-          <Button
+          {/* <Button
             variant="contained"
             component={RouterLink}
             to="#"
             startIcon={<Icon icon={plusFill} />}
           >
             Export Excel
-          </Button>
+          </Button> */}
+          <ExportExcel apiData={totalSalary} fileName="Bảng lương công ty" />
         </Stack>
 
         <Card>
@@ -211,22 +176,33 @@ export default function User() {
                   order={order}
                   orderBy={orderBy}
                   headLabel={TABLE_HEAD}
-                  rowCount={Salary.length}
+                  rowCount={salary.length}
                   numSelected={selected.length}
                   onRequestSort={handleRequestSort}
                   onSelectAllClick={handleSelectAllClick}
                 />
                 <TableBody>
-                  {Salary.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((row) => {
-                    const { SalaryEmployeeID, SalaryName, SalaryDate, Reason, Amount } =
-                      row.SalaryEmployee;
-                    const { FullName, Image } = row;
+                  {salary.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((row) => {
+                    const {
+                      TotalSalaryID,
+                      FullName,
+                      Month,
+                      Year,
+                      TotalTime,
+                      Salary,
+                      TotalAdvance,
+                      TotalDeduction,
+                      TotalLaudatory,
+                      TotalOvertimeSalary,
+                      TotalSalary
+                    } = row.TotalSalary;
+                    const { Image } = row;
                     const isItemSelected = selected.indexOf(FullName) !== -1;
 
                     return (
                       <TableRow
                         hover
-                        key={SalaryEmployeeID}
+                        key={TotalSalaryID}
                         tabIndex={-1}
                         role="checkbox"
                         selected={isItemSelected}
@@ -238,7 +214,7 @@ export default function User() {
                             onChange={(event) => handleClick(event, FullName)}
                           />
                         </TableCell>
-                        <TableCell align="left">{SalaryEmployeeID}</TableCell>
+                        <TableCell align="left">{TotalSalaryID}</TableCell>
                         <TableCell component="th" scope="row" padding="none">
                           <Stack direction="row" alignItems="center" spacing={2}>
                             <Avatar alt={FullName} src={Image} />
@@ -247,10 +223,15 @@ export default function User() {
                             </Typography>
                           </Stack>
                         </TableCell>
-                        <TableCell align="left">{SalaryName}</TableCell>
-                        <TableCell align="left">{convertDate(SalaryDate)}</TableCell>
-                        <TableCell align="left">{Reason}</TableCell>
-                        <TableCell align="left">{Amount}</TableCell>
+                        <TableCell align="left">{Month}</TableCell>
+                        <TableCell align="left">{Year}</TableCell>
+                        <TableCell align="left">{TotalTime}</TableCell>
+                        <TableCell align="left">{Salary}</TableCell>
+                        <TableCell align="left">{TotalAdvance}</TableCell>
+                        <TableCell align="left">{TotalDeduction}</TableCell>
+                        <TableCell align="left">{TotalLaudatory}</TableCell>
+                        <TableCell align="left">{TotalOvertimeSalary}</TableCell>
+                        <TableCell align="left">{TotalSalary}</TableCell>
                       </TableRow>
                     );
                   })}
@@ -276,7 +257,7 @@ export default function User() {
           <TablePagination
             rowsPerPageOptions={[5, 10, 25]}
             component="div"
-            count={Salary.length}
+            count={salary.length}
             rowsPerPage={rowsPerPage}
             page={page}
             onPageChange={handleChangePage}

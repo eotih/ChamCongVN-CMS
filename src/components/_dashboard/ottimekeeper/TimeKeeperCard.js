@@ -21,13 +21,13 @@ export default function TimeKeeperCards({ time }) {
   const {
     EmployeeName,
     Department,
-    CheckInImage,
-    CheckOutImage,
-    CheckInCreatedAt,
-    CheckOutCreatedAt,
-    CheckInStatus,
+    OTCheckInImage,
+    OTCheckOutImage,
+    OTCheckInCreatedAt,
+    OTCheckOutCreatedAt,
+    OTCheckInStatus,
     EmployeeID,
-    CheckOutStatus
+    OTCheckOutStatus
   } = time;
   const convertCIStatus = (status) => {
     if (status === 'Đúng giờ') {
@@ -45,7 +45,7 @@ export default function TimeKeeperCards({ time }) {
               Đúng giờ
             </Typography>
             <Typography variant="subtitle1" sx={{ color: 'white', p: 2, pt: 1 }}>
-              {convertDate(CheckInCreatedAt)}
+              {convertDate(OTCheckInCreatedAt)}
             </Typography>
           </Grid>
         </>
@@ -66,7 +66,7 @@ export default function TimeKeeperCards({ time }) {
               Đi muộn
             </Typography>
             <Typography variant="subtitle1" sx={{ color: 'white', p: 2, pt: 1 }}>
-              {convertDate(CheckInCreatedAt)}
+              {convertDate(OTCheckInCreatedAt)}
             </Typography>
           </Grid>
         </>
@@ -89,7 +89,7 @@ export default function TimeKeeperCards({ time }) {
               Đúng giờ
             </Typography>
             <Typography variant="subtitle1" sx={{ color: 'white', p: 2, pt: 1 }}>
-              {convertDate(CheckOutCreatedAt)}
+              {convertDate(OTCheckOutCreatedAt)}
             </Typography>
           </Grid>
         </>
@@ -110,7 +110,7 @@ export default function TimeKeeperCards({ time }) {
               Về sớm
             </Typography>
             <Typography variant="subtitle1" sx={{ color: 'white', p: 2, pt: 1 }}>
-              {convertDate(CheckOutCreatedAt)}
+              {convertDate(OTCheckOutCreatedAt)}
             </Typography>
           </Grid>
         </>
@@ -138,15 +138,15 @@ export default function TimeKeeperCards({ time }) {
       <Card>
         <Box sx={{ position: 'relative' }}>
           <Stack direction="row" spacing={1}>
-            <TimeKeeperCard alt={EmployeeName} src={`data:image/jpeg;base64,${CheckInImage}`} />
-            <TimeKeeperCard alt={EmployeeName} src={`data:image/jpeg;base64,${CheckOutImage}`} />
+            <TimeKeeperCard alt={EmployeeName} src={`data:image/jpeg;base64,${OTCheckInImage}`} />
+            <TimeKeeperCard alt={EmployeeName} src={`data:image/jpeg;base64,${OTCheckOutImage}`} />
           </Stack>
         </Box>
 
         <Stack spacing={2} sx={{ p: 3 }}>
           <Stack direction={{ xs: 'column', md: 'row' }} spacing={1}>
-            {convertCIStatus(CheckInStatus)}
-            {convertCOStatus(CheckOutStatus)}
+            {convertCIStatus(OTCheckInStatus)}
+            {convertCOStatus(OTCheckOutStatus)}
           </Stack>
           <Link to="#" color="inherit" underline="hover" component={RouterLink}>
             <Typography variant="h4" noWrap>
