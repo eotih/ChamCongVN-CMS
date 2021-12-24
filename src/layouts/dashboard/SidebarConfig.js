@@ -91,15 +91,15 @@ const sidebarConfig = [
     ]
   },
   {
-    title: 'Salary Management',
+    title: 'Salary',
     path: '/salary',
     icon: getIcon(roundAttachMoney),
     children: [
       { title: 'Salary Table', path: '/salary/salarytable' },
-      { title: 'Salary Deduct', path: '/salary/salarydeduct' },
+      { title: 'Deduct', path: '/salary/deduct' },
       { title: 'Advance', path: '/salary/advance' },
-      { title: 'Overtime Salary', path: '/salary/overtimesalary' },
-      { title: 'Salary', path: '/salary/salaries' }
+      { title: 'Overtime', path: '/salary/overtime' },
+      { title: 'Standard', path: '/salary/standard' }
     ]
   },
   {
@@ -116,8 +116,8 @@ const sidebarConfig = [
     path: '/application',
     icon: getIcon(archiveFill),
     children: [
-      { title: 'Asbent Application', path: '/application/asbent_application' },
-      { title: 'Overtime Application', path: '/application/overtime_application' }
+      { title: 'Asbent', path: '/application/asbent' },
+      { title: 'Overtime', path: '/application/overtime' }
     ]
   },
   {
@@ -125,8 +125,8 @@ const sidebarConfig = [
     path: '/timekeeper',
     icon: getIcon(lockFill),
     children: [
-      { title: 'Standard', path: '/timekeeper/' },
-      { title: 'Overtime', path: '/timekeeper/ottimekeeper' }
+      { title: 'Standard', path: '/timekeeper/standard' },
+      { title: 'Overtime', path: '/timekeeper/overtime' }
     ]
   }
 ];

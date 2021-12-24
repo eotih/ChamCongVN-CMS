@@ -104,11 +104,11 @@ export default function Router() {
       path: '/salary',
       element: <DashboardLayout />,
       children: [
-        { path: 'salaries', element: <Salary /> },
+        { path: 'standard', element: <Salary /> },
         { path: 'salarytable', element: <SalaryTable /> },
-        { path: 'salarydeduct', element: <SalaryDeduct /> },
+        { path: 'deduct', element: <SalaryDeduct /> },
         { path: 'advance', element: <Advance /> },
-        { path: 'overtimesalary', element: <OvertimeSalary /> }
+        { path: 'overtime', element: <OvertimeSalary /> }
       ]
     },
     {
@@ -123,16 +123,16 @@ export default function Router() {
       path: '/application',
       element: <DashboardLayout />,
       children: [
-        { path: 'asbent_application', element: <AsbentApp /> },
-        { path: 'overtime_application', element: <OvertimeApp /> }
+        { path: 'asbent', element: <AsbentApp /> },
+        { path: 'overtime', element: <OvertimeApp /> }
       ]
     },
     {
       path: '/timekeeper',
       element: <DashboardLayout />,
       children: [
-        { path: '', element: <TimeKeeper /> },
-        { path: 'ottimekeeper', element: <OTTimeKeeper /> }
+        { path: 'standard', element: <TimeKeeper /> },
+        { path: 'overtime', element: <OTTimeKeeper /> }
       ]
     },
     {
