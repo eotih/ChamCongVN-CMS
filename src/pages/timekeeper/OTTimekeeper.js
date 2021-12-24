@@ -14,7 +14,7 @@ import {
   TimeKeeperFilterSidebar
 } from '../../components/_dashboard/ottimekeeper';
 //
-import { GetAllTimeKeeping } from '../../functions/TimeKeeper';
+import { GetAllOTTimeKeeping } from '../../functions/TimeKeeper';
 
 // ----------------------------------------------------------------------
 
@@ -22,10 +22,10 @@ export default function TimeKeeper() {
   const [error, setError] = useState(null);
   const [isLoaded, setIsLoaded] = useState(false);
   const [openFilter, setOpenFilter] = useState(false);
-  const [timeKeeper, setTimeKeeper] = useState([]);
+  const [overTime, setOverTime] = useState([]);
   useEffect(() => {
-    GetAllTimeKeeping().then((res) => {
-      setTimeKeeper(res);
+    GetAllOTTimeKeeping().then((res) => {
+      setOverTime(res);
       setIsLoaded(true);
     });
   }, []);
@@ -71,7 +71,7 @@ export default function TimeKeeper() {
     <Page title="Dashboard: TimeKeeper | ChamCongVN">
       <Container>
         <Typography variant="h4" sx={{ mb: 5 }}>
-          TimeKeeper
+          Overtime
         </Typography>
         <Stack
           direction="row"
@@ -92,7 +92,7 @@ export default function TimeKeeper() {
           </Stack>
         </Stack>
 
-        <TimeKeeperList time={timeKeeper} />
+        <TimeKeeperList time={overTime} />
         <TimeKeeperWidget />
       </Container>
     </Page>

@@ -71,7 +71,7 @@ export default function TimeKeeper() {
     <Page title="Dashboard: TimeKeeper | ChamCongVN">
       <Container>
         <Typography variant="h4" sx={{ mb: 5 }}>
-          TimeKeeper
+          Standard
         </Typography>
         <Stack
           direction="row"
