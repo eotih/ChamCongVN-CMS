@@ -1,7 +1,6 @@
 import * as React from 'react';
 import { filter } from 'lodash';
 import { Icon } from '@iconify/react';
-import { sentenceCase } from 'change-case';
 import { useState, useEffect } from 'react';
 import { useFormik, Form, FormikProvider } from 'formik';
 import plusFill from '@iconify/icons-eva/plus-fill';
@@ -38,7 +37,6 @@ import { LoadingButton } from '@mui/lab';
 import axios from '../../functions/Axios';
 // components
 import Page from '../../components/Page';
-import Label from '../../components/Label';
 import Scrollbar from '../../components/Scrollbar';
 import SearchNotFound from '../../components/SearchNotFound';
 import {
@@ -94,8 +92,7 @@ function applySortFilter(array, comparator, query) {
 
 export default function User() {
   const [page, setPage] = useState(0);
-  const [EmployeeName, setEmployeeName] = React.useState('');
-  const [value, setValue] = React.useState(new Date());
+  const [value, setValue] = useState(new Date());
   const [order, setOrder] = useState('asc');
   const [selected, setSelected] = useState([]);
   const [orderBy, setOrderBy] = useState('name');
@@ -183,14 +180,17 @@ export default function User() {
       remember: true
     },
     onSubmit: () => {
+      setLoading(true);
       axios
         .post(`Salary/OvertimeEmployee`, formik.values)
         .then((res) => {
           if (res.data.Status === 200) {
             alert('Thêm thành công');
+            setLoading(false);
             window.location.reload();
           } else {
             alert('Thêm thất bại');
+            setLoading(false);
           }
         })
         .catch((err) => {

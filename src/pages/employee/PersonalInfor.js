@@ -1,32 +1,34 @@
-/* eslint-disable array-callback-return */
-/* eslint-disable jsx-a11y/label-has-associated-control */
 import {
   Stack,
   TextField,
-  Typography,
   Grid,
   Card,
-  Button,
-  Avatar,
   FormControl,
   InputLabel,
   Select,
   MenuItem
 } from '@mui/material';
 import { useFormik, Form, FormikProvider } from 'formik';
-import React, { useState, useEffect, memo, useContext } from 'react';
-import { styled } from '@mui/material/styles';
 import AdapterDateFns from '@mui/lab/AdapterDateFns';
 import LocalizationProvider from '@mui/lab/LocalizationProvider';
 import DatePicker from '@mui/lab/DatePicker';
-import axios from '../../functions/Axios';
 //----------------------------------
 export default function PersonalInfor({ values, handleChange, onChangeDate }) {
+  const {
+    IdentityCard,
+    DateRange,
+    IssuedBy,
+    StartDate,
+    Health,
+    SocialInsurance,
+    UnemploymentInsurance,
+    HealthInsurance
+  } = values;
   const formik = useFormik({
     initialValues: {},
     onSubmit: () => {}
   });
-  const { handleSubmit, getFieldProps } = formik;
+  const { handleSubmit } = formik;
   return (
     <>
       <FormikProvider value={formik}>
@@ -40,7 +42,7 @@ export default function PersonalInfor({ values, handleChange, onChangeDate }) {
                       fullWidth
                       label="Identity Card"
                       onChange={handleChange('IdentityCard')}
-                      value={values.IdentityCard}
+                      value={IdentityCard}
                       sx={{ bgcolor: '#ffffff', borderRadius: 1 }}
                       variant="outlined"
                     />
@@ -49,7 +51,7 @@ export default function PersonalInfor({ values, handleChange, onChangeDate }) {
                         fullWidth
                         views={['day', 'month', 'year']}
                         label="Date Range"
-                        value={values.DateRange}
+                        value={DateRange}
                         onChange={(date) => {
                           onChangeDate('DateRange', date);
                         }}
@@ -62,7 +64,7 @@ export default function PersonalInfor({ values, handleChange, onChangeDate }) {
                       fullWidth
                       label="Issued By"
                       onChange={handleChange('IssuedBy')}
-                      value={values.IssuedBy}
+                      value={IssuedBy}
                       sx={{ bgcolor: '#ffffff', borderRadius: 1 }}
                       variant="outlined"
                     />
@@ -71,7 +73,7 @@ export default function PersonalInfor({ values, handleChange, onChangeDate }) {
                         fullWidth
                         views={['day', 'month', 'year']}
                         label="First date of work"
-                        value={values.StartDate}
+                        value={StartDate}
                         onChange={(date) => {
                           onChangeDate('StartDate', date);
                         }}
@@ -90,7 +92,7 @@ export default function PersonalInfor({ values, handleChange, onChangeDate }) {
                       <InputLabel id="demo-simple-select-label1">Health</InputLabel>
                       <Select
                         onChange={handleChange('Health')}
-                        defaultValue={values.Health}
+                        defaultValue={Health}
                         label="Health"
                       >
                         <MenuItem value="Tốt">Well</MenuItem>
@@ -102,7 +104,7 @@ export default function PersonalInfor({ values, handleChange, onChangeDate }) {
                       <Select
                         label="Social Insurance"
                         onChange={handleChange('SocialInsurance')}
-                        defaultValue={values.SocialInsurance}
+                        defaultValue={SocialInsurance}
                       >
                         <MenuItem value="Có">Yes</MenuItem>
                         <MenuItem value="Không">No</MenuItem>
@@ -116,7 +118,7 @@ export default function PersonalInfor({ values, handleChange, onChangeDate }) {
                         id="demo-simple-select"
                         label="Health Insurance"
                         onChange={handleChange('HealthInsurance')}
-                        defaultValue={values.HealthInsurance}
+                        defaultValue={HealthInsurance}
                       >
                         <MenuItem value="Có">Yes</MenuItem>
                         <MenuItem value="Không">No</MenuItem>
@@ -128,7 +130,7 @@ export default function PersonalInfor({ values, handleChange, onChangeDate }) {
                         id="demo-simple-select"
                         label="Unemployment Insurance"
                         onChange={handleChange('UnemploymentInsurance')}
-                        defaultValue={values.UnemploymentInsurance}
+                        defaultValue={UnemploymentInsurance}
                       >
                         <MenuItem value="Có">Yes</MenuItem>
                         <MenuItem value="Không">No</MenuItem>

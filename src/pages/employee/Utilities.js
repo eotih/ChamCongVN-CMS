@@ -1,20 +1,6 @@
 /* eslint-disable array-callback-return */
 /* eslint-disable jsx-a11y/label-has-associated-control */
-import {
-  Stack,
-  TextField,
-  Typography,
-  Grid,
-  Card,
-  Button,
-  OutlinedInput,
-  FormControl,
-  InputLabel,
-  Select,
-  MenuItem,
-  ListItemText,
-  Checkbox
-} from '@mui/material';
+import { Stack, Grid, Card, FormControl, InputLabel, Select, MenuItem } from '@mui/material';
 import { useFormik, Form, FormikProvider } from 'formik';
 import React, { useState, useEffect } from 'react';
 import { getAllWorks, getAllGroups, getAllDepartments } from '../../functions/Component';
@@ -22,18 +8,9 @@ import { getAllSalaryTables } from '../../functions/Salary';
 import { getAllPosition, getAllLevels } from '../../functions/Organization';
 //----------------------------------
 
-const ITEM_HEIGHT = 48;
-const ITEM_PADDING_TOP = 8;
-const MenuProps = {
-  PaperProps: {
-    style: {
-      maxHeight: ITEM_HEIGHT * 4.5 + ITEM_PADDING_TOP
-    }
-  }
-};
 export default function Utilities({ values, handleChange, handleSubmit }) {
   const [level, setLevel] = useState([]);
-  const [salarytable, setSalaryTable] = useState([]);
+  const [salaryTable, setSalaryTable] = useState([]);
   const [group, setGroup] = useState([]);
   const [position, setPosition] = useState([]);
   const [department, setDepartment] = useState([]);
@@ -84,7 +61,7 @@ export default function Utilities({ values, handleChange, handleSubmit }) {
                       label="Salary Table"
                       onChange={handleChange('SalaryTableID')}
                     >
-                      {salarytable.map((item) => (
+                      {salaryTable.map((item) => (
                         <MenuItem key={item.SalaryTableID} value={item.SalaryTableID}>
                           {item.SalaryTableName}
                         </MenuItem>

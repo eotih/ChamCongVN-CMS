@@ -2,7 +2,6 @@
 /* eslint-disable react/sort-comp */
 import React from 'react';
 import { Button, Input } from '@mui/material';
-import { styled } from '@mui/material/styles';
 import axios from '../functions/Axios';
 
 class UploadFile extends React.Component {
@@ -38,9 +37,6 @@ class UploadFile extends React.Component {
   }
 
   render() {
-    // const Input = styled('input')({
-    //   display: 'none'
-    // });
     return (
       <div className="container">
         <form onSubmit={(e) => this.submit(e)}>

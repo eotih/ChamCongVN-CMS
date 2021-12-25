@@ -20,7 +20,6 @@ import Toast from '../../components/Toast';
 // ----------------------------------------------------------------------
 
 export default function Employee() {
-  const [error, setError] = useState(null);
   const [isLoaded, setIsLoaded] = useState(false);
   const [openFilter, setOpenFilter] = useState(false);
   const [Employee, setEmployee] = useState([]);
@@ -72,9 +71,6 @@ export default function Employee() {
     resetForm();
   };
 
-  if (error) {
-    return <div>Error: {error.message}</div>;
-  }
   if (!isLoaded) {
     return (
       <Box sx={{ display: 'flex' }}>

@@ -19,7 +19,6 @@ import { GetAllTimeKeeping } from '../../functions/TimeKeeper';
 // ----------------------------------------------------------------------
 
 export default function TimeKeeper() {
-  const [error, setError] = useState(null);
   const [isLoaded, setIsLoaded] = useState(false);
   const [openFilter, setOpenFilter] = useState(false);
   const [timeKeeper, setTimeKeeper] = useState([]);
@@ -57,9 +56,6 @@ export default function TimeKeeper() {
     resetForm();
   };
 
-  if (error) {
-    return <div>Error: {error.message}</div>;
-  }
   if (!isLoaded) {
     return (
       <Box sx={{ display: 'flex' }}>

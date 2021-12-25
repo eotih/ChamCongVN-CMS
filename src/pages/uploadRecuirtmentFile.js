@@ -2,7 +2,6 @@
 /* eslint-disable react/sort-comp */
 import React from 'react';
 import { Button, Input } from '@mui/material';
-import { styled } from '@mui/material/styles';
 import axios from '../functions/Axios';
 
 class UploadFile extends React.Component {
