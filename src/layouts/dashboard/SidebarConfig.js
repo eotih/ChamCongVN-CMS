@@ -98,7 +98,6 @@ const sidebarConfig = [
       { title: 'Salary Table', path: '/salary/salarytable' },
       { title: 'Deduct', path: '/salary/deduct' },
       { title: 'Advance', path: '/salary/advance' },
-      { title: 'Overtime', path: '/salary/overtime' },
       { title: 'Standard', path: '/salary/standard' }
     ]
   },

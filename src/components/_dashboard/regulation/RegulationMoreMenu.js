@@ -40,7 +40,7 @@ export default function RegulationMoreMenu({ dulieu, handleOpenToast }) {
   const [loading, setLoading] = useState(false);
   const [employee, setEmployee] = useState([]);
   const [employees, setEmployees] = useState([]);
-  const [laudate, setLauDate] = useState([]);
+  const [date, setDate] = useState([]);
   const [isOpen, setIsOpen] = useState(false);
   const [open, setOpen] = useState(false);
   const handleClose = () => setOpen(false);
@@ -61,7 +61,7 @@ export default function RegulationMoreMenu({ dulieu, handleOpenToast }) {
       RegulationEmployeeID: '',
       EmployeeID: '',
       RegulationName: '',
-      RegulationDate: laudate,
+      RegulationDate: date,
       Reason: '',
       RegulationFormat: '',
       CreatedBy: '',
@@ -77,7 +77,7 @@ export default function RegulationMoreMenu({ dulieu, handleOpenToast }) {
           Reason: formik.values.Reason,
           RegulationFormat: formik.values.RegulationFormat,
           UpdatedBy: formik.values.UpdatedBy,
-          RegulationDate: laudate
+          RegulationDate: date
         })
         .then((res) => {
           if (res.data.Status === 200) {
@@ -113,7 +113,7 @@ export default function RegulationMoreMenu({ dulieu, handleOpenToast }) {
     formik.setFieldValue('Reason', Reason);
     formik.setFieldValue('RegulationFormat', RegulationFormat);
     formik.setFieldValue('EmployeeID', EmployeeID);
-    setLauDate(new Date(`${RegulationDate}`));
+    setDate(new Date(`${RegulationDate}`));
     setOpen(true);
   };
   const { handleSubmit, getFieldProps } = formik;
@@ -229,9 +229,9 @@ export default function RegulationMoreMenu({ dulieu, handleOpenToast }) {
                       <DatePicker
                         label="Regulation Date"
                         views={['day', 'month', 'year']}
-                        value={laudate}
+                        value={date}
                         onChange={(newValue) => {
-                          setLauDate(newValue);
+                          setDate(new Date(newValue));
                         }}
                         renderInput={(params) => <TextField {...params} />}
                       />

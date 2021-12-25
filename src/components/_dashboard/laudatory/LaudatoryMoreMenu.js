@@ -230,7 +230,7 @@ export default function LaudatoryMoreMenu({ dulieu, handleOpenToast }) {
                         views={['day', 'month', 'year']}
                         value={laudate}
                         onChange={(newValue) => {
-                          setLauDate(newValue);
+                          setLauDate(new Date(newValue));
                         }}
                         renderInput={(params) => <TextField {...params} />}
                       />

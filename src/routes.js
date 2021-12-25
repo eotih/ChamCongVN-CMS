@@ -37,7 +37,6 @@ import Salary from './pages/salary/Salary';
 import SalaryTable from './pages/salary/SalaryTable';
 import SalaryDeduct from './pages/salary/SalaryDeduct';
 import Advance from './pages/salary/Advance';
-import OvertimeSalary from './pages/salary/OvertimeSalary';
 import TimeKeeper from './pages/timekeeper/TimeKeeper';
 import OTTimeKeeper from './pages/timekeeper/OTTimekeeper';
 // Principle
@@ -107,8 +106,7 @@ export default function Router() {
         { path: 'standard', element: <Salary /> },
         { path: 'salarytable', element: <SalaryTable /> },
         { path: 'deduct', element: <SalaryDeduct /> },
-        { path: 'advance', element: <Advance /> },
-        { path: 'overtime', element: <OvertimeSalary /> }
+        { path: 'advance', element: <Advance /> }
       ]
     },
     {

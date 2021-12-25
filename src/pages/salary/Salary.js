@@ -151,7 +151,7 @@ export default function User() {
       <Container>
         <Stack direction="row" alignItems="center" justifyContent="space-between" mb={5}>
           <Typography variant="h4" gutterBottom>
-            Salary
+            Standard
           </Typography>
         </Stack>
         <Stack direction="row" alignItems="right" justifyContent="space-between" mb={5}>

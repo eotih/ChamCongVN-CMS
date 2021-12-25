@@ -221,7 +221,7 @@ export default function AdvanceMoreMenu({ dulieu, handleOpenToast }) {
                         views={['day', 'month', 'year']}
                         value={date}
                         onChange={(newValue) => {
-                          setDate(newValue);
+                          setDate(new Date(newValue));
                         }}
                         renderInput={(params) => <TextField {...params} />}
                       />

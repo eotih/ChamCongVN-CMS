@@ -228,7 +228,7 @@ export default function DeductMoreMenu({ dulieu, handleOpenToast }) {
                         views={['day', 'month', 'year']}
                         value={deductdate}
                         onChange={(newValue) => {
-                          setDeductDate(newValue);
+                          setDeductDate(new Date(newValue));
                         }}
                         renderInput={(params) => <TextField {...params} />}
                       />
