@@ -1,6 +1,6 @@
 /* eslint-disable no-restricted-globals */
 import { Icon } from '@iconify/react';
-import React, { useRef, useState } from 'react';
+import React, { useRef, useState, useEffect } from 'react';
 import { useFormik, Form, FormikProvider } from 'formik';
 import editFill from '@iconify/icons-eva/edit-fill';
 import { Link as RouterLink } from 'react-router-dom';
@@ -25,6 +25,7 @@ import {
 } from '@mui/material';
 import { LoadingButton } from '@mui/lab';
 import axios from '../../../functions/Axios';
+import { getAllSpecialities, getAllDegrees } from '../../../functions/Component';
 
 const ITEM_HEIGHT = 48;
 const ITEM_PADDING_TOP = 8;
@@ -36,27 +37,32 @@ const MenuProps = {
     }
   }
 };
-const names = [
-  'Oliver Hansen',
-  'Van Henry',
-  'April Tucker',
-  'Ralph Hubbard',
-  'Omar Alexander',
-  'Carlos Abbott',
-  'Miriam Wagner',
-  'Bradley Wilkerson',
-  'Virginia Andrews',
-  'Kelly Snyder'
-];
+
 export default function EmployeeMoreMenu({ dulieu, handleOpenToast }) {
   const { EmployeeID } = dulieu.emp;
   const ref = useRef(null);
   const [loading, setLoading] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
   const [open, setOpen] = useState(false);
-  const handleOpen = () => setOpen(true);
+  const [openDegrees, setOpenDegrees] = useState(false);
+  const handleOpenSpecialities = () => {
+    setOpen(true);
+    getAllSpecialities().then((res) => {
+      setSpecialty(res);
+    });
+    setPersonName(dulieu.ListSpeciality);
+  };
+  const handleOpenDegrees = () => {
+    setOpenDegrees(true);
+    getAllDegrees().then((res) => {
+      setSpecialty(res);
+      console.log(res);
+    });
+    setPersonName(dulieu.ListDegree);
+  };
   const handleClose = () => setOpen(false);
-  const [personName, setPersonName] = React.useState([]);
+  const [personName, setPersonName] = useState([]);
+  const [specialty, setSpecialty] = useState([]);
   const handleChange = (event) => {
     const {
       target: { value }
@@ -66,6 +72,9 @@ export default function EmployeeMoreMenu({ dulieu, handleOpenToast }) {
       typeof value === 'string' ? value.split(',') : value
     );
   };
+  useEffect(() => {
+    formik.setFieldValue('EmployeeID', EmployeeID);
+  }, []);
   const style = {
     position: 'relative',
     borderRadius: '10px',
@@ -75,7 +84,41 @@ export default function EmployeeMoreMenu({ dulieu, handleOpenToast }) {
   };
   const formik = useFormik({
     initialValues: {
-      ShiftName: ''
+      EmployeeID: '',
+      SpecialtyID: ''
+    },
+    onSubmit: () => {
+      const array = {
+        EmployeeID: '',
+        SpecialtyID: ''
+      };
+      personName.forEach((item) => {
+        array.EmployeeID = formik.values.EmployeeID;
+        array.SpecialtyID = item.SpecialtyID;
+        axios.post('Component/SpecialityDetail', array).then((res) => {
+          if (res.data.Status === 200) {
+            setOpen(false);
+            handleOpenToast({
+              isOpen: true,
+              horizontal: 'right',
+              vertical: 'top',
+              message: 'Successfully updated',
+              color: 'info'
+            })();
+            formik.resetForm();
+            setLoading(false);
+          } else {
+            handleOpenToast({
+              isOpen: true,
+              horizontal: 'right',
+              vertical: 'top',
+              message: 'Something went wrong',
+              color: 'error'
+            })();
+            setLoading(false);
+          }
+        });
+      });
     }
   });
   const { handleSubmit, getFieldProps } = formik;
@@ -140,14 +183,14 @@ export default function EmployeeMoreMenu({ dulieu, handleOpenToast }) {
           </ListItemIcon>
           <ListItemText primary="Edit" primaryTypographyProps={{ variant: 'body2' }} />
         </MenuItem>
-        <MenuItem onClick={handleOpen} sx={{ color: 'text.secondary' }}>
+        <MenuItem onClick={handleOpenSpecialities} sx={{ color: 'text.secondary' }}>
           {' '}
           <ListItemIcon>
             <Icon icon={editFill} width={24} height={24} />
           </ListItemIcon>
           <ListItemText primary="Specialities" primaryTypographyProps={{ variant: 'body2' }} />
         </MenuItem>
-        <MenuItem sx={{ color: 'text.secondary' }}>
+        <MenuItem onClick={handleOpenDegrees} sx={{ color: 'text.secondary' }}>
           {' '}
           <ListItemIcon>
             <Icon icon={editFill} width={24} height={24} />
@@ -181,25 +224,89 @@ export default function EmployeeMoreMenu({ dulieu, handleOpenToast }) {
                       value={personName}
                       onChange={handleChange}
                       input={<OutlinedInput label="Specialities" />}
-                      renderValue={(selected) => selected.join(', ')}
+                      renderValue={(selected) =>
+                        selected.map((res) => res.SpecialtyName).join(', ')
+                      }
                       MenuProps={MenuProps}
                     >
-                      {names.map((name) => (
-                        <MenuItem key={name} value={name}>
-                          <Checkbox checked={personName.indexOf(name) > -1} />
-                          <ListItemText primary={name} />
+                      {specialty.map((name) => (
+                        <MenuItem key={name.SpecialtyID} value={name}>
+                          <Checkbox
+                            checked={personName
+                              .map((res) => res.SpecialtyName)
+                              .includes(name.SpecialtyName)}
+                          />
+                          <ListItemText primary={name.SpecialtyName} />
                         </MenuItem>
                       ))}
                     </Select>
                   </FormControl>
                   <LoadingButton
                     loading={loading}
+                    onClick={() => formik.setFieldValue('SpecialtyID', personName)}
                     fullWidth
                     size="large"
                     type="submit"
                     variant="contained"
                   >
                     Add Specialities
+                  </LoadingButton>
+                </Stack>
+              </Box>
+            </Form>
+          </FormikProvider>
+        </Modal>
+        <Modal
+          open={openDegrees}
+          sx={{
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center'
+          }}
+          onClose={handleClose}
+          aria-labelledby="modal-modal-title"
+          aria-describedby="modal-modal-description"
+        >
+          <FormikProvider value={formik}>
+            <Form autoComplete="off" noValidate onSubmit={handleSubmit}>
+              <Box sx={style}>
+                <Stack spacing={1}>
+                  <Typography id="modal-modal-title" variant="h6" component="h2">
+                    Add Degree
+                  </Typography>
+                  <FormControl sx={{ m: 1, width: 300 }}>
+                    <InputLabel id="demo-multiple-checkbox-label">Degree</InputLabel>
+                    <Select
+                      labelId="demo-multiple-checkbox-label"
+                      id="demo-multiple-checkbox"
+                      multiple
+                      value={personName}
+                      onChange={handleChange}
+                      input={<OutlinedInput label="Degree" />}
+                      renderValue={(selected) => selected.map((res) => res.DegreeName).join(', ')}
+                      MenuProps={MenuProps}
+                    >
+                      {specialty.map((name) => (
+                        <MenuItem key={name.DegreeID} value={name}>
+                          <Checkbox
+                            checked={personName
+                              .map((res) => res.DegreeName)
+                              .includes(name.DegreeName)}
+                          />
+                          <ListItemText primary={name.DegreeName} />
+                        </MenuItem>
+                      ))}
+                    </Select>
+                  </FormControl>
+                  <LoadingButton
+                    loading={loading}
+                    onClick={() => formik.setFieldValue('DegreeID', personName)}
+                    fullWidth
+                    size="large"
+                    type="submit"
+                    variant="contained"
+                  >
+                    Add Degree
                   </LoadingButton>
                 </Stack>
               </Box>

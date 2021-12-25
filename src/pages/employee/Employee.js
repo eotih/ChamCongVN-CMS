@@ -10,7 +10,6 @@ import Page from '../../components/Page';
 import {
   EmployeeSort,
   EmployeeList,
-  EmployeeWidget,
   EmployeeFilterSidebar
 } from '../../components/_dashboard/employee';
 //
@@ -105,7 +104,6 @@ export default function Employee() {
         </Stack>
 
         <EmployeeList Employees={Employee} handleOpenToast={handleOpenToast} />
-        <EmployeeWidget />
       </Container>
     </Page>
   );
