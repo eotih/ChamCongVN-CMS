@@ -61,6 +61,7 @@ export default function EmployeeMoreMenu({ dulieu, handleOpenToast }) {
     setPersonName(dulieu.ListDegree);
   };
   const handleClose = () => setOpen(false);
+  const handleCloseDegrees = () => setOpenDegrees(false);
   const [personName, setPersonName] = useState([]);
   const [specialty, setSpecialty] = useState([]);
   const handleChange = (event) => {
@@ -263,7 +264,7 @@ export default function EmployeeMoreMenu({ dulieu, handleOpenToast }) {
             alignItems: 'center',
             justifyContent: 'center'
           }}
-          onClose={handleClose}
+          onClose={handleCloseDegrees}
           aria-labelledby="modal-modal-title"
           aria-describedby="modal-modal-description"
         >
