@@ -41,7 +41,7 @@ export default function Employee() {
       setEmployee(res);
       setIsLoaded(true);
     });
-  }, []);
+  }, [Employee]);
   const formik = useFormik({
     initialValues: {
       gender: '',

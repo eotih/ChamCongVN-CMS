@@ -56,7 +56,6 @@ export default function EmployeeMoreMenu({ dulieu, handleOpenToast }) {
     setOpenDegrees(true);
     getAllDegrees().then((res) => {
       setSpecialty(res);
-      console.log(res);
     });
     setPersonName(dulieu.ListDegree);
   };
@@ -85,9 +84,11 @@ export default function EmployeeMoreMenu({ dulieu, handleOpenToast }) {
   const formik = useFormik({
     initialValues: {
       EmployeeID: '',
-      SpecialtyID: ''
+      SpecialtyID: '',
+      DegreeID: ''
     },
     onSubmit: () => {
+      console.log(1);
       const array = {
         EmployeeID: '',
         SpecialtyID: ''
@@ -122,7 +123,38 @@ export default function EmployeeMoreMenu({ dulieu, handleOpenToast }) {
     }
   });
   const { handleSubmit, getFieldProps } = formik;
-
+  const Submit = () => {
+    const array = {
+      EmployeeID: '',
+      DegreeID: ''
+    };
+    personName.forEach((item) => {
+      array.EmployeeID = formik.values.EmployeeID;
+      array.DegreeID = item.DegreeID;
+      axios.post('Component/DegreeDetail', array).then((res) => {
+        if (res.data.Status === 200) {
+          setOpen(false);
+          handleOpenToast({
+            isOpen: true,
+            horizontal: 'right',
+            vertical: 'top',
+            message: 'Successfully updated',
+            color: 'info'
+          })();
+          setLoading(false);
+        } else {
+          handleOpenToast({
+            isOpen: true,
+            horizontal: 'right',
+            vertical: 'top',
+            message: 'Something went wrong',
+            color: 'error'
+          })();
+          setLoading(false);
+        }
+      });
+    });
+  };
   return (
     <>
       <IconButton ref={ref} onClick={() => setIsOpen(true)}>
@@ -268,7 +300,7 @@ export default function EmployeeMoreMenu({ dulieu, handleOpenToast }) {
           aria-describedby="modal-modal-description"
         >
           <FormikProvider value={formik}>
-            <Form autoComplete="off" noValidate onSubmit={handleSubmit}>
+            <Form autoComplete="off" noValidate>
               <Box sx={style}>
                 <Stack spacing={1}>
                   <Typography id="modal-modal-title" variant="h6" component="h2">
@@ -300,7 +332,7 @@ export default function EmployeeMoreMenu({ dulieu, handleOpenToast }) {
                   </FormControl>
                   <LoadingButton
                     loading={loading}
-                    onClick={() => formik.setFieldValue('DegreeID', personName)}
+                    onClick={Submit}
                     fullWidth
                     size="large"
                     type="submit"
