@@ -1,3 +1,5 @@
+/* eslint-disable array-callback-return */
+/* eslint-disable no-restricted-globals */
 /* eslint-disable jsx-a11y/label-has-associated-control */
 import { filter } from 'lodash';
 import { Icon } from '@iconify/react';
@@ -75,7 +77,10 @@ function applySortFilter(array, comparator, query) {
     return a[1] - b[1];
   });
   if (query) {
-    return filter(array, (_user) => _user.name.toLowerCase().indexOf(query.toLowerCase()) !== -1);
+    return filter(
+      array,
+      (_user) => _user.DepartmentName.toLowerCase().indexOf(query.toLowerCase()) !== -1
+    );
   }
   return stabilizedThis.map((el) => el[0]);
 }
@@ -122,7 +127,7 @@ export default function Department() {
 
   const handleSelectAllClick = (event) => {
     if (event.target.checked) {
-      const newSelecteds = department.map((n) => n.name);
+      const newSelecteds = filteredDepartment.map((n) => n.DepartmentID);
       setSelected(newSelecteds);
       return;
     }
@@ -204,13 +209,44 @@ export default function Department() {
         });
     }
   });
+  const handleDelete = (data) => {
+    if (confirm(`Are you sure you want to delete ${selected.length} departments?`)) {
+      const list = selected.map((item) => {
+        if (item.headline === data.headline) {
+          axios.delete(`Component/Department/${item}`).then((res) => {
+            if (res.data.Status === 200) {
+              setOpen(false);
+              handleOpenToast({
+                isOpen: true,
+                horizontal: 'right',
+                vertical: 'top',
+                message: 'Successfully deleted',
+                color: 'info'
+              })();
+              setLoading(false);
+              setSelected([]);
+            } else {
+              handleOpenToast({
+                isOpen: true,
+                horizontal: 'right',
+                vertical: 'top',
+                message: 'Fail deleted',
+                color: 'error'
+              })();
+              setLoading(false);
+            }
+          });
+        }
+      });
+    }
+  };
   const { handleSubmit, getFieldProps } = formik;
 
   const emptyRows = page > 0 ? Math.max(0, (1 + page) * rowsPerPage - department.length) : 0;
 
-  const filteredUsers = applySortFilter(department, getComparator(order, orderBy), filterName);
+  const filteredDepartment = applySortFilter(department, getComparator(order, orderBy), filterName);
 
-  const isUserNotFound = filteredUsers.length === 0;
+  const isUserNotFound = filteredDepartment.length === 0;
   if (!isLoaded) {
     return (
       <Box sx={{ display: 'flex' }}>
@@ -298,6 +334,7 @@ export default function Department() {
             numSelected={selected.length}
             filterName={filterName}
             onFilterName={handleFilterByName}
+            handleDelete={handleDelete}
           />
 
           <Scrollbar>
@@ -307,17 +344,17 @@ export default function Department() {
                   order={order}
                   orderBy={orderBy}
                   headLabel={TABLE_HEAD}
-                  rowCount={department.length}
+                  rowCount={filteredDepartment.length}
                   numSelected={selected.length}
                   onRequestSort={handleRequestSort}
                   onSelectAllClick={handleSelectAllClick}
                 />
                 <TableBody>
-                  {filteredUsers
+                  {filteredDepartment
                     .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                     .map((row) => {
                       const { DepartmentID, DepartmentName, Note, Phone } = row;
-                      const isItemSelected = selected.indexOf(DepartmentName) !== -1;
+                      const isItemSelected = selected.indexOf(DepartmentID) !== -1;
 
                       return (
                         <TableRow
@@ -331,7 +368,7 @@ export default function Department() {
                           <TableCell padding="checkbox">
                             <Checkbox
                               checked={isItemSelected}
-                              onChange={(event) => handleClick(event, DepartmentName)}
+                              onChange={(event) => handleClick(event, DepartmentID)}
                             />
                           </TableCell>
                           <TableCell align="left">{DepartmentID}</TableCell>
@@ -366,7 +403,7 @@ export default function Department() {
           <TablePagination
             rowsPerPageOptions={[5, 10, 25]}
             component="div"
-            count={department.length}
+            count={filteredDepartment.length}
             rowsPerPage={rowsPerPage}
             page={page}
             onPageChange={handleChangePage}

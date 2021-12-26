@@ -1,3 +1,5 @@
+/* eslint-disable array-callback-return */
+/* eslint-disable no-restricted-globals */
 /* eslint-disable jsx-a11y/label-has-associated-control */
 import { filter } from 'lodash';
 import { Icon } from '@iconify/react';
@@ -200,6 +202,37 @@ export default function Role() {
         });
     }
   });
+  const handleDelete = (data) => {
+    if (confirm(`Are you sure you want to delete ${selected.length} roles?`)) {
+      const list = selected.map((item) => {
+        if (item.headline === data.headline) {
+          axios.delete(`Organization/Role/${item}`).then((res) => {
+            if (res.data.Status === 200) {
+              setOpen(false);
+              handleOpenToast({
+                isOpen: true,
+                horizontal: 'right',
+                vertical: 'top',
+                message: 'Successfully deleted',
+                color: 'info'
+              })();
+              setLoading(false);
+              setSelected([]);
+            } else {
+              handleOpenToast({
+                isOpen: true,
+                horizontal: 'right',
+                vertical: 'top',
+                message: 'Fail deleted',
+                color: 'error'
+              })();
+              setLoading(false);
+            }
+          });
+        }
+      });
+    }
+  };
   const { handleSubmit, getFieldProps } = formik;
 
   const emptyRows = page > 0 ? Math.max(0, (1 + page) * rowsPerPage - role.length) : 0;
@@ -278,6 +311,7 @@ export default function Role() {
             numSelected={selected.length}
             filterName={filterName}
             onFilterName={handleFilterByName}
+            handleDelete={handleDelete}
           />
 
           <Scrollbar>
@@ -344,7 +378,7 @@ export default function Role() {
           <TablePagination
             rowsPerPageOptions={[5, 10, 25]}
             component="div"
-            count={role.length}
+            count={filteredRoles.length}
             rowsPerPage={rowsPerPage}
             page={page}
             onPageChange={handleChangePage}

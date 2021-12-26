@@ -423,7 +423,7 @@ export default function Level() {
           <TablePagination
             rowsPerPageOptions={[5, 10, 25]}
             component="div"
-            count={level.length}
+            count={filteredLevels.length}
             rowsPerPage={rowsPerPage}
             page={page}
             onPageChange={handleChangePage}

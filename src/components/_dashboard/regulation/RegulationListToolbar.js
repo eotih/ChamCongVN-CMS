@@ -42,9 +42,15 @@ const SearchStyle = styled(OutlinedInput)(({ theme }) => ({
 LaudatoryListToolbar.propTypes = {
   numSelected: PropTypes.number,
   filterName: PropTypes.string,
-  onFilterName: PropTypes.func
+  onFilterName: PropTypes.func,
+  handleDelete: PropTypes.func
 };
-export default function LaudatoryListToolbar({ numSelected, filterName, onFilterName }) {
+export default function LaudatoryListToolbar({
+  numSelected,
+  filterName,
+  onFilterName,
+  handleDelete
+}) {
   return (
     <RootStyle
       sx={{
@@ -62,7 +68,7 @@ export default function LaudatoryListToolbar({ numSelected, filterName, onFilter
         <SearchStyle
           value={filterName}
           onChange={onFilterName}
-          placeholder="Search Laudatory..."
+          placeholder="Search Employees..."
           startAdornment={
             <InputAdornment position="start">
               <Box component={Icon} icon={searchFill} sx={{ color: 'text.disabled' }} />
@@ -73,7 +79,7 @@ export default function LaudatoryListToolbar({ numSelected, filterName, onFilter
 
       {numSelected > 0 ? (
         <Tooltip title="Delete">
-          <IconButton>
+          <IconButton onClick={handleDelete}>
             <Icon icon={trash2Fill} />
           </IconButton>
         </Tooltip>

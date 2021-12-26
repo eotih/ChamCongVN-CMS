@@ -1,3 +1,6 @@
+/* eslint-disable no-restricted-globals */
+/* eslint-disable array-callback-return */
+/* eslint-disable no-unused-vars */
 import * as React from 'react';
 import { filter } from 'lodash';
 import CircularProgress from '@mui/material/CircularProgress';
@@ -31,6 +34,7 @@ import {
 import { getAllOverTimeApplication } from '../../functions/Application';
 import { convertDate } from '../../utils/formatDatetime';
 import Toast from '../../components/Toast';
+import axios from '../../functions/Axios';
 //
 
 // ----------------------------------------------------------------------
@@ -46,6 +50,38 @@ const TABLE_HEAD = [
 
 // ----------------------------------------------------------------------
 
+function descendingComparator(a, b, orderBy) {
+  if (b[orderBy] < a[orderBy]) {
+    return -1;
+  }
+  if (b[orderBy] > a[orderBy]) {
+    return 1;
+  }
+  return 0;
+}
+
+function getComparator(order, orderBy) {
+  return order === 'desc'
+    ? (a, b) => descendingComparator(a, b, orderBy)
+    : (a, b) => -descendingComparator(a, b, orderBy);
+}
+
+function applySortFilter(array, comparator, query) {
+  const stabilizedThis = array.map((el, index) => [el, index]);
+  stabilizedThis.sort((a, b) => {
+    const order = comparator(a[0], b[0]);
+    if (order !== 0) return order;
+    return a[1] - b[1];
+  });
+  if (query) {
+    return filter(
+      array,
+      (_user) => _user.FullName.toLowerCase().indexOf(query.toLowerCase()) !== -1
+    );
+  }
+  return stabilizedThis.map((el) => el[0]);
+}
+
 export default function OvertimeApp() {
   const [page, setPage] = useState(0);
   const [order, setOrder] = useState('asc');
@@ -54,6 +90,8 @@ export default function OvertimeApp() {
   const [orderBy, setOrderBy] = useState('name');
   const [filterName, setFilterName] = useState('');
   const [overTimeApp, setOvertimeApp] = useState([]);
+  const [loading, setLoading] = useState(false);
+  const [open, setOpen] = useState(false);
   const [rowsPerPage, setRowsPerPage] = useState(5);
   const [openToast, setOpenToast] = useState({
     isOpen: false,
@@ -83,7 +121,9 @@ export default function OvertimeApp() {
 
   const handleSelectAllClick = (event) => {
     if (event.target.checked) {
-      const newSelecteds = OvertimeApp.map((n) => n.name);
+      const newSelecteds = filteredoverTimeAplications.map(
+        (n) => n.OverTimeApplications.OverTimeApplicationID
+      );
       setSelected(newSelecteds);
       return;
     }
@@ -116,11 +156,50 @@ export default function OvertimeApp() {
     setRowsPerPage(parseInt(event.target.value, 10));
     setPage(0);
   };
-
+  const handleDelete = (data) => {
+    if (confirm(`Are you sure you want to delete ${selected.length} overtime application?`)) {
+      const list = selected.map((item) => {
+        if (item.headline === data.headline) {
+          axios.delete(`Application/OverTimeApplication/${item}`).then((res) => {
+            if (res.data.Status === 200) {
+              setOpen(false);
+              handleOpenToast({
+                isOpen: true,
+                horizontal: 'right',
+                vertical: 'top',
+                message: 'Successfully deleted',
+                color: 'info'
+              })();
+              setLoading(false);
+              setSelected([]);
+            } else {
+              handleOpenToast({
+                isOpen: true,
+                horizontal: 'right',
+                vertical: 'top',
+                message: 'Fail deleted',
+                color: 'error'
+              })();
+              setLoading(false);
+            }
+          });
+        }
+      });
+    }
+  };
   const handleFilterByName = (event) => {
     setFilterName(event.target.value);
   };
+
   const emptyRows = page > 0 ? Math.max(0, (1 + page) * rowsPerPage - overTimeApp.length) : 0;
+
+  const filteredoverTimeAplications = applySortFilter(
+    overTimeApp,
+    getComparator(order, orderBy),
+    filterName
+  );
+
+  const isoverTimeAplicationNotFound = filteredoverTimeAplications.length === 0;
   if (!isLoaded) {
     return (
       <Box sx={{ display: 'flex' }}>
@@ -143,6 +222,7 @@ export default function OvertimeApp() {
             numSelected={selected.length}
             filterName={filterName}
             onFilterName={handleFilterByName}
+            handleDelete={handleDelete}
           />
           <Scrollbar>
             <TableContainer sx={{ minWidth: 800 }}>
@@ -151,19 +231,19 @@ export default function OvertimeApp() {
                   order={order}
                   orderBy={orderBy}
                   headLabel={TABLE_HEAD}
-                  rowCount={OvertimeApp.length}
+                  rowCount={filteredoverTimeAplications.length}
                   numSelected={selected.length}
                   onRequestSort={handleRequestSort}
                   onSelectAllClick={handleSelectAllClick}
                 />
                 <TableBody>
-                  {overTimeApp
+                  {filteredoverTimeAplications
                     .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                     .map((row) => {
                       const { OverTimeApplicationID, Note } = row.OverTimeApplications;
                       const { OverTimeDate } = row.OverTime;
                       const { FullName, Image, StateName } = row;
-                      const isItemSelected = selected.indexOf(FullName) !== -1;
+                      const isItemSelected = selected.indexOf(OverTimeApplicationID) !== -1;
 
                       return (
                         <TableRow
@@ -177,7 +257,7 @@ export default function OvertimeApp() {
                           <TableCell padding="checkbox">
                             <Checkbox
                               checked={isItemSelected}
-                              onChange={(event) => handleClick(event, FullName)}
+                              onChange={(event) => handleClick(event, OverTimeApplicationID)}
                             />
                           </TableCell>
                           <TableCell align="left">{OverTimeApplicationID}</TableCell>
@@ -204,13 +284,15 @@ export default function OvertimeApp() {
                     </TableRow>
                   )}
                 </TableBody>
-                <TableBody>
-                  <TableRow>
-                    <TableCell align="center" colSpan={6} sx={{ py: 3 }}>
-                      <SearchNotFound searchQuery={filterName} />
-                    </TableCell>
-                  </TableRow>
-                </TableBody>
+                {isoverTimeAplicationNotFound && (
+                  <TableBody>
+                    <TableRow>
+                      <TableCell align="center" colSpan={6} sx={{ py: 3 }}>
+                        <SearchNotFound searchQuery={filterName} />
+                      </TableCell>
+                    </TableRow>
+                  </TableBody>
+                )}
               </Table>
             </TableContainer>
           </Scrollbar>
@@ -218,7 +300,7 @@ export default function OvertimeApp() {
           <TablePagination
             rowsPerPageOptions={[5, 10, 25]}
             component="div"
-            count={OvertimeApp.length}
+            count={filteredoverTimeAplications.length}
             rowsPerPage={rowsPerPage}
             page={page}
             onPageChange={handleChangePage}

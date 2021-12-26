@@ -1,3 +1,5 @@
+/* eslint-disable array-callback-return */
+/* eslint-disable no-restricted-globals */
 /* eslint-disable jsx-a11y/label-has-associated-control */
 import * as React from 'react';
 import { filter } from 'lodash';
@@ -55,8 +57,8 @@ const TABLE_HEAD = [
   { id: 'SalaryTableName', label: 'SalaryTable Name', alignRight: false },
   { id: 'Month', label: 'Month', alignRight: false },
   { id: 'Year', label: 'Year', alignRight: false },
-  { id: 'MinSalary', label: 'Min Salary', alignRight: false },
-  { id: 'TotalTimeRegulation', label: 'Total Time Regulation', alignRight: false },
+  { id: 'SalaryPerHour', label: 'Salary/Hour', alignRight: false },
+  { id: 'OTCoefficient', label: 'OTCoefficient', alignRight: false },
   { id: '' }
 ];
 
@@ -86,7 +88,7 @@ function applySortFilter(array, comparator, query) {
     return a[1] - b[1];
   });
   if (query) {
-    return filter(array, (_user) => _user.name.toLowerCase().indexOf(query.toLowerCase()) !== -1);
+    return filter(array, (_user) => _user.Month.toLowerCase().indexOf(query.toLowerCase()) !== -1);
   }
   return stabilizedThis.map((el) => el[0]);
 }
@@ -134,7 +136,7 @@ export default function User() {
 
   const handleSelectAllClick = (event) => {
     if (event.target.checked) {
-      const newSelecteds = salarytable.map((n) => n.name);
+      const newSelecteds = filteredUsers.map((n) => n.SalaryTableID);
       setSelected(newSelecteds);
       return;
     }
@@ -187,8 +189,8 @@ export default function User() {
       SalaryTableName: '',
       Month: '',
       Year: convertDate(year),
-      MinSalary: '',
-      TotalTimeRegulation: '',
+      SalaryPerHour: '',
+      OTCoefficient: '',
       CreatedBy: '',
       remember: true
     },
@@ -198,8 +200,8 @@ export default function User() {
         .post(`Salary/SalaryTable`, {
           SalaryTableName: formik.values.SalaryTableName,
           Month: formik.values.SalaryTableName,
-          MinSalary: formik.values.SalaryTableName,
-          TotalTimeRegulation: formik.values.SalaryTableName,
+          SalaryPerHour: formik.values.SalaryTableName,
+          OTCoefficient: formik.values.SalaryTableName,
           Year: convertDate(year)
         })
         .then((res) => {
@@ -230,6 +232,37 @@ export default function User() {
         });
     }
   });
+  const handleDelete = (data) => {
+    if (confirm(`Are you sure you want to delete ${selected.length} salary table?`)) {
+      const list = selected.map((item) => {
+        if (item.headline === data.headline) {
+          axios.delete(`salary/SalaryTable/${item}`).then((res) => {
+            if (res.data.Status === 200) {
+              setOpen(false);
+              handleOpenToast({
+                isOpen: true,
+                horizontal: 'right',
+                vertical: 'top',
+                message: 'Successfully deleted',
+                color: 'info'
+              })();
+              setLoading(false);
+              setSelected([]);
+            } else {
+              handleOpenToast({
+                isOpen: true,
+                horizontal: 'right',
+                vertical: 'top',
+                message: 'Fail deleted',
+                color: 'error'
+              })();
+              setLoading(false);
+            }
+          });
+        }
+      });
+    }
+  };
   const handleChange = (event) => {
     formik.setFieldValue('Month', event.target.value);
     setMonth(event.target.value);
@@ -317,13 +350,13 @@ export default function User() {
                   <TextField
                     fullWidth
                     label="Min Salary"
-                    {...getFieldProps('MinSalary')}
+                    {...getFieldProps('SalaryPerHour')}
                     variant="outlined"
                   />
                   <TextField
                     fullWidth
                     label="Total Time Regulation"
-                    {...getFieldProps('TotalTimeRegulation')}
+                    {...getFieldProps('OTCoefficient')}
                     variant="outlined"
                   />
                 </Stack>
@@ -362,6 +395,7 @@ export default function User() {
             numSelected={selected.length}
             filterName={filterName}
             onFilterName={handleFilterByName}
+            handleDelete={handleDelete}
           />
 
           <Scrollbar>
@@ -371,13 +405,13 @@ export default function User() {
                   order={order}
                   orderBy={orderBy}
                   headLabel={TABLE_HEAD}
-                  rowCount={salarytable.length}
+                  rowCount={filteredUsers.length}
                   numSelected={selected.length}
                   onRequestSort={handleRequestSort}
                   onSelectAllClick={handleSelectAllClick}
                 />
                 <TableBody>
-                  {salarytable
+                  {filteredUsers
                     .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                     .map((row) => {
                       const {
@@ -385,10 +419,10 @@ export default function User() {
                         SalaryTableName,
                         Month,
                         Year,
-                        MinSalary,
-                        TotalTimeRegulation
+                        SalaryPerHour,
+                        OTCoefficient
                       } = row;
-                      const isItemSelected = selected.indexOf(SalaryTableName) !== -1;
+                      const isItemSelected = selected.indexOf(SalaryTableID) !== -1;
 
                       return (
                         <TableRow
@@ -402,15 +436,15 @@ export default function User() {
                           <TableCell padding="checkbox">
                             <Checkbox
                               checked={isItemSelected}
-                              onChange={(event) => handleClick(event, SalaryTableName)}
+                              onChange={(event) => handleClick(event, SalaryTableID)}
                             />
                           </TableCell>
                           <TableCell align="left">{SalaryTableID}</TableCell>
                           <TableCell align="left">{SalaryTableName}</TableCell>
                           <TableCell align="left">{Month}</TableCell>
                           <TableCell align="left">{Year}</TableCell>
-                          <TableCell align="left">{MinSalary}</TableCell>
-                          <TableCell align="left">{TotalTimeRegulation}</TableCell>
+                          <TableCell align="left">{SalaryPerHour}</TableCell>
+                          <TableCell align="left">{OTCoefficient}</TableCell>
                           <TableCell align="right">
                             <SalarytbMoreMenu dulieu={row} handleOpenToast={handleOpenToast} />
                           </TableCell>
@@ -439,7 +473,7 @@ export default function User() {
           <TablePagination
             rowsPerPageOptions={[5, 10, 25]}
             component="div"
-            count={salarytable.length}
+            count={filteredUsers.length}
             rowsPerPage={rowsPerPage}
             page={page}
             onPageChange={handleChangePage}

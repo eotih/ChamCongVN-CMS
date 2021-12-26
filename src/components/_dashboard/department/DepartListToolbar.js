@@ -42,9 +42,10 @@ const SearchStyle = styled(OutlinedInput)(({ theme }) => ({
 DepartListToolbar.propTypes = {
   numSelected: PropTypes.number,
   filterName: PropTypes.string,
-  onFilterName: PropTypes.func
+  onFilterName: PropTypes.func,
+  handleDelete: PropTypes.func
 };
-export default function DepartListToolbar({ numSelected, filterName, onFilterName }) {
+export default function DepartListToolbar({ numSelected, filterName, onFilterName, handleDelete }) {
   return (
     <RootStyle
       sx={{
@@ -73,7 +74,7 @@ export default function DepartListToolbar({ numSelected, filterName, onFilterNam
 
       {numSelected > 0 ? (
         <Tooltip title="Delete">
-          <IconButton>
+          <IconButton onClick={handleDelete}>
             <Icon icon={trash2Fill} />
           </IconButton>
         </Tooltip>

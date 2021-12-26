@@ -1,3 +1,5 @@
+/* eslint-disable array-callback-return */
+/* eslint-disable no-restricted-globals */
 import * as React from 'react';
 import { filter } from 'lodash';
 import { Icon } from '@iconify/react';
@@ -87,7 +89,10 @@ function applySortFilter(array, comparator, query) {
     return a[1] - b[1];
   });
   if (query) {
-    return filter(array, (_user) => _user.name.toLowerCase().indexOf(query.toLowerCase()) !== -1);
+    return filter(
+      array,
+      (_user) => _user.FullName.toLowerCase().indexOf(query.toLowerCase()) !== -1
+    );
   }
   return stabilizedThis.map((el) => el[0]);
 }
@@ -140,7 +145,7 @@ export default function Advance() {
 
   const handleSelectAllClick = (event) => {
     if (event.target.checked) {
-      const newSelecteds = advance.map((n) => n.name);
+      const newSelecteds = filteredadvances.map((n) => n.Advance.AdvanceID);
       setSelected(newSelecteds);
       return;
     }
@@ -230,6 +235,37 @@ export default function Advance() {
         });
     }
   });
+  const handleDelete = (data) => {
+    if (confirm(`Are you sure you want to delete ${selected.length} advance?`)) {
+      const list = selected.map((item) => {
+        if (item.headline === data.headline) {
+          axios.delete(`salary/Advance/${item}`).then((res) => {
+            if (res.data.Status === 200) {
+              setOpen(false);
+              handleOpenToast({
+                isOpen: true,
+                horizontal: 'right',
+                vertical: 'top',
+                message: 'Successfully deleted',
+                color: 'info'
+              })();
+              setLoading(false);
+              setSelected([]);
+            } else {
+              handleOpenToast({
+                isOpen: true,
+                horizontal: 'right',
+                vertical: 'top',
+                message: 'Fail deleted',
+                color: 'error'
+              })();
+              setLoading(false);
+            }
+          });
+        }
+      });
+    }
+  };
   const { handleSubmit, getFieldProps } = formik;
 
   const handleChange = (event) => {
@@ -350,6 +386,7 @@ export default function Advance() {
             numSelected={selected.length}
             filterName={filterName}
             onFilterName={handleFilterByName}
+            handleDelete={handleDelete}
           />
 
           <Scrollbar>
@@ -359,18 +396,18 @@ export default function Advance() {
                   order={order}
                   orderBy={orderBy}
                   headLabel={TABLE_HEAD}
-                  rowCount={advance.length}
+                  rowCount={filteredadvances.length}
                   numSelected={selected.length}
                   onRequestSort={handleRequestSort}
                   onSelectAllClick={handleSelectAllClick}
                 />
                 <TableBody>
-                  {advance
+                  {filteredadvances
                     .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                     .map((row) => {
                       const { AdvanceID, Signer, AdvanceDate, Reason, Amount } = row.Advance;
                       const { FullName, Image } = row;
-                      const isItemSelected = selected.indexOf(FullName) !== -1;
+                      const isItemSelected = selected.indexOf(AdvanceID) !== -1;
 
                       return (
                         <TableRow
@@ -384,7 +421,7 @@ export default function Advance() {
                           <TableCell padding="checkbox">
                             <Checkbox
                               checked={isItemSelected}
-                              onChange={(event) => handleClick(event, FullName)}
+                              onChange={(event) => handleClick(event, AdvanceID)}
                             />
                           </TableCell>
                           <TableCell align="left">{AdvanceID}</TableCell>
@@ -428,7 +465,7 @@ export default function Advance() {
           <TablePagination
             rowsPerPageOptions={[5, 10, 25]}
             component="div"
-            count={advance.length}
+            count={filteredadvances.length}
             rowsPerPage={rowsPerPage}
             page={page}
             onPageChange={handleChangePage}

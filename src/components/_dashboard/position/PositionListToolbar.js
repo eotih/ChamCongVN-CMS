@@ -42,9 +42,15 @@ const SearchStyle = styled(OutlinedInput)(({ theme }) => ({
 PositionListToolbar.propTypes = {
   numSelected: PropTypes.number,
   filterName: PropTypes.string,
-  onFilterName: PropTypes.func
+  onFilterName: PropTypes.func,
+  handleDelete: PropTypes.func
 };
-export default function PositionListToolbar({ numSelected, filterName, onFilterName }) {
+export default function PositionListToolbar({
+  numSelected,
+  filterName,
+  onFilterName,
+  handleDelete
+}) {
   return (
     <RootStyle
       sx={{
@@ -73,7 +79,7 @@ export default function PositionListToolbar({ numSelected, filterName, onFilterN
 
       {numSelected > 0 ? (
         <Tooltip title="Delete">
-          <IconButton>
+          <IconButton onClick={handleDelete}>
             <Icon icon={trash2Fill} />
           </IconButton>
         </Tooltip>

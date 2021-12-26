@@ -1,3 +1,5 @@
+/* eslint-disable array-callback-return */
+/* eslint-disable no-restricted-globals */
 /* eslint-disable jsx-a11y/label-has-associated-control */
 import { filter } from 'lodash';
 import { Icon } from '@iconify/react';
@@ -74,7 +76,10 @@ function applySortFilter(array, comparator, query) {
     return a[1] - b[1];
   });
   if (query) {
-    return filter(array, (_user) => _user.name.toLowerCase().indexOf(query.toLowerCase()) !== -1);
+    return filter(
+      array,
+      (_user) => _user.DegreeName.toLowerCase().indexOf(query.toLowerCase()) !== -1
+    );
   }
   return stabilizedThis.map((el) => el[0]);
 }
@@ -121,7 +126,7 @@ export default function Degree() {
 
   const handleSelectAllClick = (event) => {
     if (event.target.checked) {
-      const newSelecteds = degree.map((n) => n.name);
+      const newSelecteds = filteredDegrees.map((n) => n.DegreeID);
       setSelected(newSelecteds);
       return;
     }
@@ -203,13 +208,44 @@ export default function Degree() {
         });
     }
   });
+  const handleDelete = (data) => {
+    if (confirm(`Are you sure you want to delete ${selected.length} degrees?`)) {
+      const list = selected.map((item) => {
+        if (item.headline === data.headline) {
+          axios.delete(`Component/Degree/${item}`).then((res) => {
+            if (res.data.Status === 200) {
+              setOpen(false);
+              handleOpenToast({
+                isOpen: true,
+                horizontal: 'right',
+                vertical: 'top',
+                message: 'Successfully deleted',
+                color: 'info'
+              })();
+              setLoading(false);
+              setSelected([]);
+            } else {
+              handleOpenToast({
+                isOpen: true,
+                horizontal: 'right',
+                vertical: 'top',
+                message: 'Fail deleted',
+                color: 'error'
+              })();
+              setLoading(false);
+            }
+          });
+        }
+      });
+    }
+  };
   const { handleSubmit, getFieldProps } = formik;
 
   const emptyRows = page > 0 ? Math.max(0, (1 + page) * rowsPerPage - degree.length) : 0;
 
-  const filteredUsers = applySortFilter(degree, getComparator(order, orderBy), filterName);
+  const filteredDegrees = applySortFilter(degree, getComparator(order, orderBy), filterName);
 
-  const isUserNotFound = filteredUsers.length === 0;
+  const isUserNotFound = filteredDegrees.length === 0;
   if (!isLoaded) {
     return (
       <Box sx={{ display: 'flex' }}>
@@ -291,6 +327,7 @@ export default function Degree() {
             numSelected={selected.length}
             filterName={filterName}
             onFilterName={handleFilterByName}
+            handleDelete={handleDelete}
           />
 
           <Scrollbar>
@@ -300,17 +337,17 @@ export default function Degree() {
                   order={order}
                   orderBy={orderBy}
                   headLabel={TABLE_HEAD}
-                  rowCount={degree.length}
+                  rowCount={filteredDegrees.length}
                   numSelected={selected.length}
                   onRequestSort={handleRequestSort}
                   onSelectAllClick={handleSelectAllClick}
                 />
                 <TableBody>
-                  {filteredUsers
+                  {filteredDegrees
                     .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                     .map((row) => {
                       const { DegreeID, DegreeName, Note } = row;
-                      const isItemSelected = selected.indexOf(DegreeName) !== -1;
+                      const isItemSelected = selected.indexOf(DegreeID) !== -1;
 
                       return (
                         <TableRow
@@ -324,7 +361,7 @@ export default function Degree() {
                           <TableCell padding="checkbox">
                             <Checkbox
                               checked={isItemSelected}
-                              onChange={(event) => handleClick(event, DegreeName)}
+                              onChange={(event) => handleClick(event, DegreeID)}
                             />
                           </TableCell>
                           <TableCell align="left">{DegreeID}</TableCell>
@@ -358,7 +395,7 @@ export default function Degree() {
           <TablePagination
             rowsPerPageOptions={[5, 10, 25]}
             component="div"
-            count={degree.length}
+            count={filteredDegrees.length}
             rowsPerPage={rowsPerPage}
             page={page}
             onPageChange={handleChangePage}
