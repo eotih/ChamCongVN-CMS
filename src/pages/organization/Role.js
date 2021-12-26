@@ -70,7 +70,10 @@ function applySortFilter(array, comparator, query) {
     return a[1] - b[1];
   });
   if (query) {
-    return filter(array, (_user) => _user.name.toLowerCase().indexOf(query.toLowerCase()) !== -1);
+    return filter(
+      array,
+      (_user) => _user.RoleName.toLowerCase().indexOf(query.toLowerCase()) !== -1
+    );
   }
   return stabilizedThis.map((el) => el[0]);
 }
@@ -116,7 +119,7 @@ export default function Role() {
 
   const handleSelectAllClick = (event) => {
     if (event.target.checked) {
-      const newSelecteds = role.map((n) => n.name);
+      const newSelecteds = filteredRoles.map((n) => n.RoleID);
       setSelected(newSelecteds);
       return;
     }
@@ -201,9 +204,9 @@ export default function Role() {
 
   const emptyRows = page > 0 ? Math.max(0, (1 + page) * rowsPerPage - role.length) : 0;
 
-  const filteredUsers = applySortFilter(role, getComparator(order, orderBy), filterName);
+  const filteredRoles = applySortFilter(role, getComparator(order, orderBy), filterName);
 
-  const isUserNotFound = filteredUsers.length === 0;
+  const isUserNotFound = filteredRoles.length === 0;
   if (!isLoaded) {
     return (
       <Box sx={{ display: 'flex' }}>
@@ -284,39 +287,41 @@ export default function Role() {
                   order={order}
                   orderBy={orderBy}
                   headLabel={TABLE_HEAD}
-                  rowCount={role.length}
+                  rowCount={filteredRoles.length}
                   numSelected={selected.length}
                   onRequestSort={handleRequestSort}
                   onSelectAllClick={handleSelectAllClick}
                 />
                 <TableBody>
-                  {role.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((row) => {
-                    const { RoleID, RoleName } = row;
-                    const isItemSelected = selected.indexOf(RoleName) !== -1;
+                  {filteredRoles
+                    .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+                    .map((row) => {
+                      const { RoleID, RoleName } = row;
+                      const isItemSelected = selected.indexOf(RoleID) !== -1;
 
-                    return (
-                      <TableRow
-                        hover
-                        key={RoleID}
-                        tabIndex={-1}
-                        role="checkbox"
-                        selected={isItemSelected}
-                        aria-checked={isItemSelected}
-                      >
-                        <TableCell padding="checkbox">
-                          <Checkbox
-                            checked={isItemSelected}
-                            onChange={(event) => handleClick(event, RoleName)}
-                          />
-                        </TableCell>
-                        <TableCell align="left">{RoleID}</TableCell>
-                        <TableCell align="left">{RoleName}</TableCell>
-                        <TableCell align="right">
-                          <RoleMoreMenu dulieu={row} handleOpenToast={handleOpenToast} />
-                        </TableCell>
-                      </TableRow>
-                    );
-                  })}
+                      return (
+                        <TableRow
+                          hover
+                          key={RoleID}
+                          tabIndex={-1}
+                          role="checkbox"
+                          selected={isItemSelected}
+                          aria-checked={isItemSelected}
+                        >
+                          <TableCell padding="checkbox">
+                            <Checkbox
+                              checked={isItemSelected}
+                              onChange={(event) => handleClick(event, RoleID)}
+                            />
+                          </TableCell>
+                          <TableCell align="left">{RoleID}</TableCell>
+                          <TableCell align="left">{RoleName}</TableCell>
+                          <TableCell align="right">
+                            <RoleMoreMenu dulieu={row} handleOpenToast={handleOpenToast} />
+                          </TableCell>
+                        </TableRow>
+                      );
+                    })}
                   {emptyRows > 0 && (
                     <TableRow style={{ height: 53 * emptyRows }}>
                       <TableCell colSpan={6} />

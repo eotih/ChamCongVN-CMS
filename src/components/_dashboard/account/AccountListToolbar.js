@@ -42,9 +42,15 @@ const SearchStyle = styled(OutlinedInput)(({ theme }) => ({
 AccountListToolbar.propTypes = {
   numSelected: PropTypes.number,
   filterName: PropTypes.string,
-  onFilterName: PropTypes.func
+  onFilterName: PropTypes.func,
+  handleDelete: PropTypes.func
 };
-export default function AccountListToolbar({ numSelected, filterName, onFilterName }) {
+export default function AccountListToolbar({
+  numSelected,
+  filterName,
+  onFilterName,
+  handleDelete
+}) {
   return (
     <RootStyle
       sx={{
@@ -62,7 +68,7 @@ export default function AccountListToolbar({ numSelected, filterName, onFilterNa
         <SearchStyle
           value={filterName}
           onChange={onFilterName}
-          placeholder="Search Account..."
+          placeholder="Search Employee..."
           startAdornment={
             <InputAdornment position="start">
               <Box component={Icon} icon={searchFill} sx={{ color: 'text.disabled' }} />
@@ -73,7 +79,7 @@ export default function AccountListToolbar({ numSelected, filterName, onFilterNa
 
       {numSelected > 0 ? (
         <Tooltip title="Delete">
-          <IconButton>
+          <IconButton onClick={handleDelete}>
             <Icon icon={trash2Fill} />
           </IconButton>
         </Tooltip>
