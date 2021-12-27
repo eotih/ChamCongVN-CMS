@@ -148,7 +148,7 @@ export default function EditAccount() {
   useEffect(() => {
     if (account && Employee) {
       formik.setFieldValue('AccountID', account.AccountID);
-      formik.setFieldValue('Image', account.Image);
+      formik.setFieldValue('Image', Employee.Image);
       formik.setFieldValue('Password', Account.Password);
       formik.setFieldValue('Phone', Employee.Phone);
       formik.setFieldValue('TemporaryAddress', Employee.TemporaryAddress);

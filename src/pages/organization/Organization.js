@@ -182,6 +182,7 @@ export default function Organization() {
       Email: '',
       Latitude: '',
       Longitude: '',
+      Radius: '',
       Website: '',
       PublicIP: '',
       PythonIP: '',
@@ -295,6 +296,12 @@ export default function Organization() {
                     fullWidth
                     label="Email"
                     {...getFieldProps('Email')}
+                    variant="outlined"
+                  />
+                  <TextField
+                    fullWidth
+                    label="Radius"
+                    {...getFieldProps('Radius')}
                     variant="outlined"
                   />
                 </Stack>
