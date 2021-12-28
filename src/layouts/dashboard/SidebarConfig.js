@@ -65,6 +65,7 @@ const sidebarConfig = [
   {
     title: 'Component',
     path: '/component',
+    position: 'Quản Lý',
     icon: getIcon(briefcaseFill),
     children: [
       { title: 'State', path: '/component/state' },
@@ -93,6 +94,7 @@ const sidebarConfig = [
   {
     title: 'Salary',
     path: '/salary',
+    position: 'Kế Toán',
     icon: getIcon(roundAttachMoney),
     children: [
       { title: 'Salary Table', path: '/salary/salarytable' },
@@ -104,6 +106,7 @@ const sidebarConfig = [
   {
     title: 'Principle',
     path: '/principle',
+    position: 'Quản Lý',
     icon: getIcon(bookOpenFill),
     children: [
       { title: 'Laudatory', path: '/principle/laudatory' },
@@ -113,6 +116,7 @@ const sidebarConfig = [
   {
     title: 'Application',
     path: '/application',
+    position: 'Quản Lý',
     icon: getIcon(archiveFill),
     children: [
       { title: 'Asbent', path: '/application/asbent' },
@@ -122,6 +126,7 @@ const sidebarConfig = [
   {
     title: 'TimeKeeper',
     path: '/timekeeper',
+    position: 'Quản Lý',
     icon: getIcon(lockFill),
     children: [
       { title: 'Standard', path: '/timekeeper/standard' },

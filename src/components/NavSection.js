@@ -1,3 +1,4 @@
+/* eslint-disable no-nested-ternary */
 import { useState } from 'react';
 import PropTypes from 'prop-types';
 import { Icon } from '@iconify/react';
@@ -7,6 +8,7 @@ import arrowIosDownwardFill from '@iconify/icons-eva/arrow-ios-downward-fill';
 // material
 import { alpha, useTheme, styled } from '@mui/material/styles';
 import { Box, List, Collapse, ListItemText, ListItemIcon, ListItemButton } from '@mui/material';
+import { accountContext } from '../context/Hooks';
 
 // ----------------------------------------------------------------------
 
@@ -155,14 +157,18 @@ NavSection.propTypes = {
 
 export default function NavSection({ navConfig, ...other }) {
   const { pathname } = useLocation();
+  const account = accountContext();
   const match = (path) => (path ? !!matchPath({ path, end: false }, pathname) : false);
-
+  const isHRM = navConfig.filter((item) => item.position === 'Quản Lý');
+  const isAccountant = navConfig.filter((item) => item.position === 'Kế Toán');
   return (
     <Box {...other}>
       <List disablePadding>
-        {navConfig.map((item) => (
-          <NavItem key={item.title} item={item} active={match} />
-        ))}
+        {account.PositionName === 'Kế Toán'
+          ? isAccountant.map((item) => <NavItem key={item.title} item={item} active={match} />)
+          : account.PositionName === 'Quản Lý'
+          ? isHRM.map((item) => <NavItem key={item.title} item={item} active={match} />)
+          : navConfig.map((item) => <NavItem key={item.title} item={item} active={match} />)}
       </List>
     </Box>
   );

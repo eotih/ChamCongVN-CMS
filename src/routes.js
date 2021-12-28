@@ -1,3 +1,5 @@
+/* eslint-disable import/extensions */
+/* eslint-disable import/no-unresolved */
 import { Navigate, useRoutes } from 'react-router-dom';
 // layouts
 import DashboardLayout from './layouts/dashboard';
@@ -45,9 +47,12 @@ import Regulation from './pages/principle/Regulation';
 // Application
 import AsbentApp from './pages/application/AsbentApp';
 import OvertimeApp from './pages/application/OvertimeApp';
+import { accountContext } from './context/Hooks';
 // ----------------------------------------------------------------------
 
 export default function Router() {
+  const account = accountContext();
+  console.log(account);
   return useRoutes([
     {
       path: '/dashboard',
@@ -63,9 +68,13 @@ export default function Router() {
     },
     {
       path: '/employee',
-      element: <DashboardLayout />,
+      element:
+        account.PositionName === 'Giám Đốc' || account.PositionName === 'Quản Lý' ? (
+          <DashboardLayout />
+        ) : (
+          <NotFound />
+        ),
       children: [
-        // { path: 'employeelist', element: <Profile /> },
         { path: 'recruitments', element: <Recruitment /> },
         { path: 'recruitments/add_recruit/:id', element: <AddRecruit /> },
         { path: 'employeelist', element: <Employee /> },
@@ -75,11 +84,10 @@ export default function Router() {
     },
     {
       path: '/organization',
-      element: <DashboardLayout />,
+      element: account.PositionName === 'Giám Đốc' ? <DashboardLayout /> : <NotFound />,
       children: [
         { path: 'organization', element: <Organization /> },
         { path: 'account', element: <Account /> },
-        { path: 'profile', element: <Profile /> },
         { path: 'shift', element: <Shift /> },
         { path: 'overtime', element: <Overtime /> },
         { path: 'role', element: <Role /> },
@@ -89,7 +97,12 @@ export default function Router() {
     },
     {
       path: '/component',
-      element: <DashboardLayout />,
+      element:
+        account.PositionName === 'Giám Đốc' || account.PositionName === 'Quản Lý' ? (
+          <DashboardLayout />
+        ) : (
+          <NotFound />
+        ),
       children: [
         { path: 'state', element: <State /> },
         { path: 'work', element: <Work /> },
@@ -101,7 +114,12 @@ export default function Router() {
     },
     {
       path: '/salary',
-      element: <DashboardLayout />,
+      element:
+        account.PositionName === 'Giám Đốc' || account.PositionName === 'Kế Toán' ? (
+          <DashboardLayout />
+        ) : (
+          <NotFound />
+        ),
       children: [
         { path: 'standard', element: <Salary /> },
         { path: 'salarytable', element: <SalaryTable /> },
@@ -111,7 +129,12 @@ export default function Router() {
     },
     {
       path: '/principle',
-      element: <DashboardLayout />,
+      element:
+        account.PositionName === 'Giám Đốc' || account.PositionName === 'Quản Lý' ? (
+          <DashboardLayout />
+        ) : (
+          <NotFound />
+        ),
       children: [
         { path: 'laudatory', element: <Laudatory /> },
         { path: 'regulation', element: <Regulation /> }
@@ -119,7 +142,12 @@ export default function Router() {
     },
     {
       path: '/application',
-      element: <DashboardLayout />,
+      element:
+        account.PositionName === 'Giám Đốc' || account.PositionName === 'Quản Lý' ? (
+          <DashboardLayout />
+        ) : (
+          <NotFound />
+        ),
       children: [
         { path: 'asbent', element: <AsbentApp /> },
         { path: 'overtime', element: <OvertimeApp /> }
@@ -127,7 +155,12 @@ export default function Router() {
     },
     {
       path: '/timekeeper',
-      element: <DashboardLayout />,
+      element:
+        account.PositionName === 'Giám Đốc' || account.PositionName === 'Quản Lý' ? (
+          <DashboardLayout />
+        ) : (
+          <NotFound />
+        ),
       children: [
         { path: 'standard', element: <TimeKeeper /> },
         { path: 'overtime', element: <OTTimeKeeper /> }
