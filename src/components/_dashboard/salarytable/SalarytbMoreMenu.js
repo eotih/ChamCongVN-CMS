@@ -31,7 +31,7 @@ import { LoadingButton } from '@mui/lab';
 import axios from '../../../functions/Axios';
 // ----------------------------------------------------------------------
 
-export default function SalarytbMoreMenu({ dulieu, handleOpenToast }) {
+export default function SalarytbMoreMenu({ dulieu, handleOpenToast, emailLoginUser }) {
   const { SalaryTableID, SalaryTableName, MinSalary, TotalTimeRegulation, Year, Month } = dulieu;
   const [year, setYear] = useState([]);
   const [month, setMonth] = React.useState('');
@@ -61,7 +61,7 @@ export default function SalarytbMoreMenu({ dulieu, handleOpenToast }) {
       Year: convertDate(year),
       MinSalary: '',
       TotalTimeRegulation: '',
-      UpdatedBy: '',
+      UpdatedBy: emailLoginUser,
       remember: true
     },
     onSubmit: () => {
@@ -73,7 +73,7 @@ export default function SalarytbMoreMenu({ dulieu, handleOpenToast }) {
           Month: formik.values.Month,
           MinSalary: formik.values.MinSalary,
           TotalTimeRegulation: formik.values.TotalTimeRegulation,
-          UpdatedBy: formik.values.UpdatedBy,
+          UpdatedBy: emailLoginUser,
           Year: convertDate(year)
         })
         .then((res) => {

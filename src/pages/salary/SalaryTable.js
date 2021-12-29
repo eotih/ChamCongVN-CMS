@@ -48,6 +48,7 @@ import {
 } from '../../components/_dashboard/salarytable';
 import { getAllSalaryTables } from '../../functions/Salary';
 import Toast from '../../components/Toast';
+import { accountContext } from '../../context/Hooks';
 //
 
 // ----------------------------------------------------------------------
@@ -177,6 +178,8 @@ export default function User() {
   const handleFilterByName = (event) => {
     setFilterName(event.target.value);
   };
+  const account = accountContext();
+  const emailLoginUser = account.Account.Email;
   const style = {
     position: 'relative',
     borderRadius: '10px',
@@ -191,7 +194,7 @@ export default function User() {
       Year: convertDate(year),
       SalaryPerHour: '',
       OTCoefficient: '',
-      CreatedBy: '',
+      CreatedBy: emailLoginUser,
       remember: true
     },
     onSubmit: () => {
@@ -202,6 +205,7 @@ export default function User() {
           Month: formik.values.SalaryTableName,
           SalaryPerHour: formik.values.SalaryTableName,
           OTCoefficient: formik.values.SalaryTableName,
+          CreatedBy: emailLoginUser,
           Year: convertDate(year)
         })
         .then((res) => {
@@ -446,7 +450,11 @@ export default function User() {
                           <TableCell align="left">{SalaryPerHour}</TableCell>
                           <TableCell align="left">{OTCoefficient}</TableCell>
                           <TableCell align="right">
-                            <SalarytbMoreMenu dulieu={row} handleOpenToast={handleOpenToast} />
+                            <SalarytbMoreMenu
+                              dulieu={row}
+                              handleOpenToast={handleOpenToast}
+                              emailLoginUser={emailLoginUser}
+                            />
                           </TableCell>
                         </TableRow>
                       );

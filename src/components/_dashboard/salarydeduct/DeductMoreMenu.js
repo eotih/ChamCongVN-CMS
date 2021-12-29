@@ -31,7 +31,7 @@ import axios from '../../../functions/Axios';
 import { getAllEmployees } from '../../../functions/Employee';
 // ----------------------------------------------------------------------
 
-export default function DeductMoreMenu({ dulieu, handleOpenToast }) {
+export default function DeductMoreMenu({ dulieu, handleOpenToast, emailLoginUser }) {
   const { EmployeeID, DeductionEmployee } = dulieu;
   const { DeductionEmployeeID, DeductionName, DeductionDate, Reason, Amount } = DeductionEmployee;
   const ref = useRef(null);
@@ -62,7 +62,7 @@ export default function DeductMoreMenu({ dulieu, handleOpenToast }) {
       DeductionDate: deductdate,
       Reason: '',
       Amount: '',
-      UpdatedBy: '',
+      UpdatedBy: emailLoginUser,
       remember: true
     },
     onSubmit: () => {
@@ -74,7 +74,7 @@ export default function DeductMoreMenu({ dulieu, handleOpenToast }) {
           DeductionName: formik.values.DeductionName,
           Reason: formik.values.Reason,
           Amount: formik.values.Amount,
-          UpdatedBy: formik.values.UpdatedBy,
+          UpdatedBy: emailLoginUser,
           DeductionDate: deductdate
         })
         .then((res) => {

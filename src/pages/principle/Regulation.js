@@ -50,6 +50,7 @@ import { getAllRegulations } from '../../functions/Principle';
 import { getAllEmployees } from '../../functions/Employee';
 import { convertDate } from '../../utils/formatDatetime';
 import Toast from '../../components/Toast';
+import { accountContext } from '../../context/Hooks';
 //
 
 // ----------------------------------------------------------------------
@@ -215,6 +216,8 @@ export default function Regulation() {
   const handleFilterByName = (event) => {
     setFilterName(event.target.value);
   };
+  const account = accountContext();
+  const emailLoginUser = account.Account.Email;
   const style = {
     position: 'relative',
     borderRadius: '10px',
@@ -229,7 +232,7 @@ export default function Regulation() {
       RegulationDate: date,
       RegulationFormat: '',
       Reason: '',
-      CreatedBy: '',
+      CreatedBy: emailLoginUser,
       remember: true
     },
     onSubmit: () => {
@@ -239,7 +242,7 @@ export default function Regulation() {
           RegulationName: formik.values.RegulationName,
           Reason: formik.values.Reason,
           RegulationFormat: formik.values.RegulationFormat,
-          CreatedBy: formik.values.CreatedBy,
+          CreatedBy: emailLoginUser,
           RegulationDate: date
         })
         .then((res) => {
@@ -458,7 +461,11 @@ export default function Regulation() {
                           <TableCell align="left">{RegulationFormat}</TableCell>
                           <TableCell align="left">{Reason}</TableCell>
                           <TableCell align="right">
-                            <RegulationMoreMenu dulieu={row} handleOpenToast={handleOpenToast} />
+                            <RegulationMoreMenu
+                              dulieu={row}
+                              handleOpenToast={handleOpenToast}
+                              emailLoginUser={emailLoginUser}
+                            />
                           </TableCell>
                         </TableRow>
                       );

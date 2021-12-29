@@ -46,6 +46,7 @@ import {
 } from '../../components/_dashboard/account';
 import { getAllAccount, getAllRole, GetEmployeeForAccount } from '../../functions/Organization';
 import Toast from '../../components/Toast';
+import { accountContext } from '../../context/Hooks';
 //
 
 // ----------------------------------------------------------------------
@@ -115,6 +116,8 @@ export default function Account() {
     });
     setOpen(true);
   };
+  const acc = accountContext();
+  const emailLoginUser = acc.Account.Email;
   const handleClose = () => setOpen(false);
   const [openToast, setOpenToast] = useState({
     isOpen: false,
@@ -193,7 +196,7 @@ export default function Account() {
       RoleID: '',
       Email: '',
       Password: '',
-      CreatedBy: '',
+      CreatedBy: emailLoginUser,
       remember: true
     },
     onSubmit: () => {
@@ -435,7 +438,11 @@ export default function Account() {
                           <TableCell align="left">{Email}</TableCell>
                           <TableCell align="left">{StateName}</TableCell>
                           <TableCell align="right">
-                            <AccountMoreMenu dulieu={row} handleOpenToast={handleOpenToast} />
+                            <AccountMoreMenu
+                              dulieu={row}
+                              handleOpenToast={handleOpenToast}
+                              emailLoginUser={emailLoginUser}
+                            />
                           </TableCell>
                         </TableRow>
                       );

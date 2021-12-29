@@ -53,6 +53,7 @@ import Toast from '../../components/Toast';
 import { getAllOvertimes } from '../../functions/Organization';
 import { getAllDepartments } from '../../functions/Component';
 import { convertTime, convertDate } from '../../utils/formatDatetime';
+import { accountContext } from '../../context/Hooks';
 
 // ----------------------------------------------------------------------
 
@@ -131,7 +132,8 @@ export default function Overtime() {
     color: '',
     horizontal: 'right'
   });
-
+  const account = accountContext();
+  const emailLoginUser = account.Account.Email;
   const handleOpenToast = (newState) => () => {
     setOpenToast({ isOpen: true, ...newState });
   };
@@ -212,7 +214,7 @@ export default function Overtime() {
       DepartmentID: '',
       IsActive: '',
       Quantity: '',
-      CreatedBy: '',
+      CreatedBy: emailLoginUser,
       OverTimeDate: date,
       StartTime: convertTime(timeStart),
       EndTime: convertTime(timeEnd)
@@ -227,6 +229,7 @@ export default function Overtime() {
           Quantity: formik.values.Quantity,
           OverTimeDate: date,
           StartTime: convertTime(timeStart),
+          CreatedBy: emailLoginUser,
           EndTime: convertTime(timeEnd)
         })
         .then((res) => {
@@ -498,7 +501,11 @@ export default function Overtime() {
                           <TableCell align="left">{Quantity}</TableCell>
                           <TableCell align="left">{convertIsActive(IsActive)}</TableCell>
                           <TableCell align="right">
-                            <OvertimeMoreMenu dulieu={row} handleOpenToast={handleOpenToast} />
+                            <OvertimeMoreMenu
+                              dulieu={row}
+                              handleOpenToast={handleOpenToast}
+                              emailLoginUser={emailLoginUser}
+                            />
                           </TableCell>
                         </TableRow>
                       );

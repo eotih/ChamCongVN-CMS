@@ -32,7 +32,7 @@ import { convertTime } from '../../../utils/formatDatetime';
 import { getAllDepartments } from '../../../functions/Component';
 // ----------------------------------------------------------------------
 
-export default function OvertimeMoreMenu({ dulieu, handleOpenToast }) {
+export default function OvertimeMoreMenu({ dulieu, handleOpenToast, emailLoginUser }) {
   const {
     OverTimeID,
     OverTimeDate,
@@ -73,7 +73,7 @@ export default function OvertimeMoreMenu({ dulieu, handleOpenToast }) {
       DepartmentID: '',
       IsActive: '',
       Quantity: '',
-      CreatedBy: '',
+      UpdatedBy: emailLoginUser,
       OverTimeDate: date,
       StartTime: convertTime(timeStart),
       EndTime: convertTime(timeEnd)
@@ -88,6 +88,7 @@ export default function OvertimeMoreMenu({ dulieu, handleOpenToast }) {
           IsActive: formik.values.IsActive,
           Quantity: formik.values.Quantity,
           OverTimeDate: date,
+          UpdatedBy: emailLoginUser,
           StartTime: convertTime(timeStart),
           EndTime: convertTime(timeEnd)
         })

@@ -24,7 +24,7 @@ const MENU_OPTIONS = [
   {
     label: 'Profile',
     icon: personFill,
-    linkTo: '/profile'
+    linkTo: '/dashboard/profile'
   },
   {
     label: 'Settings',
@@ -72,7 +72,7 @@ export default function AccountPopover() {
           })
         }}
       >
-        <Avatar src={account.Image} alt="photoURL" />
+        <Avatar src={Employee.Image} alt="photoURL" />
       </IconButton>
       {account && Employee && (
         <MenuPopover

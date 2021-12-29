@@ -9,7 +9,7 @@ import { Menu, MenuItem, IconButton, ListItemIcon, ListItemText } from '@mui/mat
 import axios from '../../../functions/Axios';
 // ----------------------------------------------------------------------
 
-export default function OvertimeAppMoreMenu({ dulieu, handleOpenToast }) {
+export default function OvertimeAppMoreMenu({ dulieu, handleOpenToast, emailLoginUser }) {
   const { OverTimeApplicationID } = dulieu.OverTimeApplications;
   const ref = useRef(null);
   const [loading, setLoading] = useState(false);
@@ -70,7 +70,8 @@ export default function OvertimeAppMoreMenu({ dulieu, handleOpenToast }) {
               axios
                 .put(`Application/OverTimeApplication/EditState/${OverTimeApplicationID}`, {
                   OverTimeApplicationID,
-                  StateID: 2
+                  StateID: 2,
+                  UpdatedBy: emailLoginUser
                 })
                 .then((res) => {
                   if (res.data.Status === 200) {
@@ -112,7 +113,8 @@ export default function OvertimeAppMoreMenu({ dulieu, handleOpenToast }) {
               axios
                 .put(`Application/AbsentApplication/EditState/${OverTimeApplicationID}`, {
                   OverTimeApplicationID,
-                  StateID: 3
+                  StateID: 3,
+                  UpdatedBy: emailLoginUser
                 })
                 .then((res) => {
                   if (res.data.Status === 200) {

@@ -34,6 +34,7 @@ import { getAllAbsentApplication } from '../../functions/Application';
 import { convertDate } from '../../utils/formatDatetime';
 import Toast from '../../components/Toast';
 import axios from '../../functions/Axios';
+import { accountContext } from '../../context/Hooks';
 //
 
 // ----------------------------------------------------------------------
@@ -185,7 +186,8 @@ export default function Asbent() {
     setRowsPerPage(parseInt(event.target.value, 10));
     setPage(0);
   };
-
+  const account = accountContext();
+  const emailLoginUser = account.Account.Email;
   const handleFilterByName = (event) => {
     setFilterName(event.target.value);
   };
@@ -276,7 +278,11 @@ export default function Asbent() {
                           <TableCell align="left">{Reason}</TableCell>
                           <TableCell align="left">{StateName}</TableCell>
                           <TableCell align="right">
-                            <AsbentMoreMenu dulieu={row} handleOpenToast={handleOpenToast} />
+                            <AsbentMoreMenu
+                              dulieu={row}
+                              handleOpenToast={handleOpenToast}
+                              emailLoginUser={emailLoginUser}
+                            />
                           </TableCell>
                         </TableRow>
                       );

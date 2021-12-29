@@ -32,7 +32,7 @@ import { getAllEmployees } from '../../../functions/Employee';
 // --------------------------------------------------
 // ----------------------------------------------------------------------
 
-export default function LaudatoryMoreMenu({ dulieu, handleOpenToast }) {
+export default function LaudatoryMoreMenu({ dulieu, handleOpenToast, emailLoginUser }) {
   const { LaudatoryEmployee, EmployeeID } = dulieu;
   const { LaudatoryEmployeeID, LaudatoryName, Reason, Amount, LaudatoryDate } = LaudatoryEmployee;
   const ref = useRef(null);
@@ -63,7 +63,7 @@ export default function LaudatoryMoreMenu({ dulieu, handleOpenToast }) {
       LaudatoryDate: laudate,
       Reason: '',
       Amount: '',
-      CreatedBy: '',
+      UpdatedBy: emailLoginUser,
       remember: true
     },
     onSubmit: () => {
@@ -75,7 +75,7 @@ export default function LaudatoryMoreMenu({ dulieu, handleOpenToast }) {
           LaudatoryName: formik.values.LaudatoryName,
           Reason: formik.values.Reason,
           Amount: formik.values.Amount,
-          UpdatedBy: formik.values.UpdatedBy,
+          UpdatedBy: emailLoginUser,
           LaudatoryDate: laudate
         })
         .then((res) => {
