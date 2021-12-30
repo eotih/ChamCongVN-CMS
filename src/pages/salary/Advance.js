@@ -50,6 +50,7 @@ import { getAllAdvances } from '../../functions/Salary';
 import { getAllEmployees } from '../../functions/Employee';
 import { convertDate } from '../../utils/formatDatetime';
 import Toast from '../../components/Toast';
+import { accountContext } from '../../context/Hooks';
 //
 
 // ----------------------------------------------------------------------
@@ -182,6 +183,8 @@ export default function Advance() {
   const handleFilterByName = (event) => {
     setFilterName(event.target.value);
   };
+  const account = accountContext();
+  const emailLoginUser = account.Account.Email;
   const style = {
     position: 'relative',
     borderRadius: '10px',
@@ -195,7 +198,7 @@ export default function Advance() {
       Reason: '',
       AdvanceDate: date,
       Amount: '',
-      Signer: '',
+      Signer: emailLoginUser,
       remember: true
     },
     onSubmit: () => {
@@ -204,7 +207,7 @@ export default function Advance() {
           EmployeeID: formik.values.EmployeeID,
           Reason: formik.values.Reason,
           Amount: formik.values.Amount,
-          Signer: formik.values.Signer,
+          Signer: emailLoginUser,
           AdvanceDate: date
         })
         .then((res) => {
@@ -438,7 +441,11 @@ export default function Advance() {
                           <TableCell align="left">{Amount}</TableCell>
                           <TableCell align="left">{Signer}</TableCell>
                           <TableCell align="right">
-                            <AdvanceMoreMenu dulieu={row} handleOpenToast={handleOpenToast} />
+                            <AdvanceMoreMenu
+                              dulieu={row}
+                              handleOpenToast={handleOpenToast}
+                              emailLoginUser={emailLoginUser}
+                            />
                           </TableCell>
                         </TableRow>
                       );

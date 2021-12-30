@@ -167,7 +167,6 @@ export default function Level() {
     setRowsPerPage(parseInt(event.target.value, 10));
     setPage(0);
   };
-
   const handleFilterByName = (event) => {
     setFilterName(event.target.value);
   };

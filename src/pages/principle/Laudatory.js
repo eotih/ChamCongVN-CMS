@@ -50,6 +50,7 @@ import { getAllLaudatorys } from '../../functions/Principle';
 import { getAllEmployees } from '../../functions/Employee';
 import { convertDate } from '../../utils/formatDatetime';
 import Toast from '../../components/Toast';
+import { accountContext } from '../../context/Hooks';
 //
 
 // ----------------------------------------------------------------------
@@ -125,7 +126,8 @@ export default function Laudatory() {
     color: '',
     horizontal: 'right'
   });
-
+  const account = accountContext();
+  const emailLoginUser = account.Account.Email;
   const handleOpenToast = (newState) => () => {
     setOpenToast({ isOpen: true, ...newState });
   };
@@ -197,7 +199,7 @@ export default function Laudatory() {
       LaudatoryDate: laudate,
       Reason: '',
       Amount: '',
-      CreatedBy: '',
+      CreatedBy: emailLoginUser,
       remember: true
     },
     onSubmit: () => {
@@ -208,7 +210,7 @@ export default function Laudatory() {
           LaudatoryName: formik.values.LaudatoryName,
           Reason: formik.values.Reason,
           Amount: formik.values.Amount,
-          CreatedBy: formik.values.CreatedBy,
+          CreatedBy: emailLoginUser,
           LaudatoryDate: laudate
         })
         .then((res) => {
@@ -449,7 +451,11 @@ export default function Laudatory() {
                           <TableCell align="left">{Reason}</TableCell>
                           <TableCell align="left">{Amount}</TableCell>
                           <TableCell align="right">
-                            <LaudatoryMoreMenu dulieu={row} handleOpenToast={handleOpenToast} />
+                            <LaudatoryMoreMenu
+                              dulieu={row}
+                              handleOpenToast={handleOpenToast}
+                              emailLoginUser={emailLoginUser}
+                            />
                           </TableCell>
                         </TableRow>
                       );

@@ -32,7 +32,7 @@ import { getAllEmployees } from '../../../functions/Employee';
 // --------------------------------------------------
 // ----------------------------------------------------------------------
 
-export default function AdvanceMoreMenu({ dulieu, handleOpenToast }) {
+export default function AdvanceMoreMenu({ dulieu, handleOpenToast, emailLoginUser }) {
   const { Advance, EmployeeID } = dulieu;
   const { AdvanceID, Reason, Amount, AdvanceDate } = Advance;
   const ref = useRef(null);
@@ -62,7 +62,7 @@ export default function AdvanceMoreMenu({ dulieu, handleOpenToast }) {
       AdvanceDate: date,
       Reason: '',
       Amount: '',
-      UpdatedBy: '',
+      UpdatedBy: emailLoginUser,
       remember: true
     },
     onSubmit: () => {
@@ -73,7 +73,7 @@ export default function AdvanceMoreMenu({ dulieu, handleOpenToast }) {
           EmployeeID: formik.values.EmployeeID,
           Reason: formik.values.Reason,
           Amount: formik.values.Amount,
-          UpdatedBy: formik.values.UpdatedBy,
+          UpdatedBy: emailLoginUser,
           AdvanceDate: date
         })
         .then((res) => {

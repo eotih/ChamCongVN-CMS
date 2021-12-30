@@ -9,7 +9,7 @@ import { Menu, MenuItem, IconButton, ListItemIcon, ListItemText } from '@mui/mat
 import axios from '../../../functions/Axios';
 // ----------------------------------------------------------------------
 
-export default function AsbentMoreMenu({ dulieu, handleOpenToast }) {
+export default function AsbentMoreMenu({ dulieu, handleOpenToast, emailLoginUser }) {
   const { AbsentApplicationID } = dulieu.AbsentApplications;
   const ref = useRef(null);
   const [loading, setLoading] = useState(false);
@@ -68,7 +68,8 @@ export default function AsbentMoreMenu({ dulieu, handleOpenToast }) {
               axios
                 .put(`Application/AbsentApplication/EditState/${AbsentApplicationID}`, {
                   AbsentApplicationID,
-                  StateID: 2
+                  StateID: 2,
+                  UpdatedBy: emailLoginUser
                 })
                 .then((res) => {
                   if (res.data.Status === 200) {
@@ -110,7 +111,8 @@ export default function AsbentMoreMenu({ dulieu, handleOpenToast }) {
               axios
                 .put(`Application/AbsentApplication/EditState/${AbsentApplicationID}`, {
                   AbsentApplicationID,
-                  StateID: 3
+                  StateID: 3,
+                  UpdatedBy: emailLoginUser
                 })
                 .then((res) => {
                   if (res.data.Status === 200) {

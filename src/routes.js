@@ -52,7 +52,6 @@ import { accountContext } from './context/Hooks';
 
 export default function Router() {
   const account = accountContext();
-  console.log(account);
   return useRoutes([
     {
       path: '/dashboard',

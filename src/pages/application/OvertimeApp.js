@@ -35,6 +35,7 @@ import { getAllOverTimeApplication } from '../../functions/Application';
 import { convertDate } from '../../utils/formatDatetime';
 import Toast from '../../components/Toast';
 import axios from '../../functions/Axios';
+import { accountContext } from '../../context/Hooks';
 //
 
 // ----------------------------------------------------------------------
@@ -207,6 +208,8 @@ export default function OvertimeApp() {
       </Box>
     );
   }
+  const account = accountContext();
+  const emailLoginUser = account.Account.Email;
   return (
     <Page title="OvertimeApp | ChamCongVN">
       {openToast.isOpen === true && <Toast open={openToast} handleCloseToast={handleCloseToast} />}
@@ -273,7 +276,11 @@ export default function OvertimeApp() {
                           <TableCell align="left">{Note}</TableCell>
                           <TableCell align="left">{StateName}</TableCell>
                           <TableCell align="right">
-                            <OvertimeAppMoreMenu dulieu={row} handleOpenToast={handleOpenToast} />
+                            <OvertimeAppMoreMenu
+                              dulieu={row}
+                              handleOpenToast={handleOpenToast}
+                              emailLoginUser={emailLoginUser}
+                            />
                           </TableCell>
                         </TableRow>
                       );

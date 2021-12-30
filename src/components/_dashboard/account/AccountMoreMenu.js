@@ -30,7 +30,7 @@ import { getAllState } from '../../../functions/Component';
 import { getAllRole } from '../../../functions/Organization';
 // ----------------------------------------------------------------------
 
-export default function AccountMoreMenu({ dulieu, handleOpenToast }) {
+export default function AccountMoreMenu({ dulieu, handleOpenToast, emailLoginUser }) {
   const { AccountID, Email, StateID, EmployeeID, RoleID } = dulieu.Account;
   const { FullName } = dulieu.Employee;
   const ref = useRef(null);
@@ -67,7 +67,7 @@ export default function AccountMoreMenu({ dulieu, handleOpenToast }) {
     initialValues: {
       AccountID: '',
       StateID: '',
-      UpdatedBy: '',
+      UpdatedAt: emailLoginUser,
       remember: true
     },
     onSubmit: () => {

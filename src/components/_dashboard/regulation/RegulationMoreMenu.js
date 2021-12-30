@@ -32,7 +32,7 @@ import { getAllEmployees } from '../../../functions/Employee';
 // --------------------------------------------------
 // ----------------------------------------------------------------------
 
-export default function RegulationMoreMenu({ dulieu, handleOpenToast }) {
+export default function RegulationMoreMenu({ dulieu, handleOpenToast, emailLoginUser }) {
   const { RegulationEmployees, EmployeeID } = dulieu;
   const { RegulationEmployeeID, RegulationName, RegulationDate, Reason, RegulationFormat } =
     RegulationEmployees;
@@ -64,7 +64,7 @@ export default function RegulationMoreMenu({ dulieu, handleOpenToast }) {
       RegulationDate: date,
       Reason: '',
       RegulationFormat: '',
-      CreatedBy: '',
+      UpdatedBy: emailLoginUser,
       remember: true
     },
     onSubmit: () => {
@@ -76,7 +76,7 @@ export default function RegulationMoreMenu({ dulieu, handleOpenToast }) {
           RegulationName: formik.values.RegulationName,
           Reason: formik.values.Reason,
           RegulationFormat: formik.values.RegulationFormat,
-          UpdatedBy: formik.values.UpdatedBy,
+          UpdatedBy: emailLoginUser,
           RegulationDate: date
         })
         .then((res) => {

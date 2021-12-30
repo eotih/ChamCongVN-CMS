@@ -52,6 +52,7 @@ import { getAllDeductions } from '../../functions/Salary';
 import { getAllEmployees } from '../../functions/Employee';
 import { convertDate } from '../../utils/formatDatetime';
 import Toast from '../../components/Toast';
+import { accountContext } from '../../context/Hooks';
 // ----------------------------------------------------------------------
 
 const TABLE_HEAD = [
@@ -187,6 +188,8 @@ export default function User() {
   const handleFilterByName = (event) => {
     setFilterName(event.target.value);
   };
+  const account = accountContext();
+  const emailLoginUser = account.Account.Email;
   const style = {
     position: 'relative',
     borderRadius: '10px',
@@ -201,7 +204,7 @@ export default function User() {
       DeductionDate: deductdate,
       Reason: '',
       Amount: '',
-      CreatedBy: '',
+      CreatedBy: emailLoginUser,
       remember: true
     },
     onSubmit: () => {
@@ -212,7 +215,7 @@ export default function User() {
           DeductionName: formik.values.DeductionName,
           Reason: formik.values.Reason,
           Amount: formik.values.Amount,
-          CreatedBy: formik.values.CreatedBy,
+          CreatedBy: emailLoginUser,
           DeductionDate: deductdate
         })
         .then((res) => {
@@ -451,7 +454,11 @@ export default function User() {
                           <TableCell align="left">{Reason}</TableCell>
                           <TableCell align="left">{Amount}</TableCell>
                           <TableCell align="right">
-                            <DeductMoreMenu dulieu={row} handleOpenToast={handleOpenToast} />
+                            <DeductMoreMenu
+                              dulieu={row}
+                              handleOpenToast={handleOpenToast}
+                              emailLoginUser={emailLoginUser}
+                            />
                           </TableCell>
                         </TableRow>
                       );

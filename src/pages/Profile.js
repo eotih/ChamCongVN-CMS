@@ -73,7 +73,7 @@ export default function EditAccount() {
     onSubmit: () => {
       setLoading(true);
       axios
-        .put(`Employee/Employee/${account.EmployeeID}`, formik.values)
+        .put(`Employee/Employee/${Employee.EmployeeID}`, formik.values)
         .then((res) => {
           if (res.data.Status === 200) {
             setOpen(false);
