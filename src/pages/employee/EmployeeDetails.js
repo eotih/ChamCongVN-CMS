@@ -21,8 +21,6 @@ import {
 import Page from '../../components/Page';
 import Scrollbar from '../../components/Scrollbar';
 import { getEmployeeByID } from '../../functions/Employee';
-import { EmployeeDetailCartWidget } from '../../components/_dashboard/employeedetails';
-
 // ----------------------------------------------------------------------
 
 export default function EmployeeDetails() {
@@ -218,7 +216,6 @@ export default function EmployeeDetails() {
             </Grid>
           </>
         )}
-        <EmployeeDetailCartWidget />
       </Container>
     </Page>
   );
