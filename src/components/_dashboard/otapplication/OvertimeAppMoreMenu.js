@@ -4,6 +4,8 @@ import { useRef, useState } from 'react';
 import { useFormik } from 'formik';
 import trash2Outline from '@iconify/icons-eva/trash-2-outline';
 import moreVerticalFill from '@iconify/icons-eva/more-vertical-fill';
+import checkmarkCircleFill from '@iconify/icons-eva/checkmark-circle-fill';
+import closeCircleOutline from '@iconify/icons-eva/close-circle-outline';
 // material
 import { Menu, MenuItem, IconButton, ListItemIcon, ListItemText } from '@mui/material';
 import axios from '../../../functions/Axios';
@@ -103,7 +105,7 @@ export default function OvertimeAppMoreMenu({ dulieu, handleOpenToast, emailLogi
           sx={{ color: 'text.secondary' }}
         >
           <ListItemIcon>
-            <Icon icon={trash2Outline} width={24} height={24} />
+            <Icon icon={checkmarkCircleFill} width={24} height={24} />
           </ListItemIcon>
           <ListItemText primary="Approved" primaryTypographyProps={{ variant: 'body2' }} />
         </MenuItem>
@@ -146,7 +148,7 @@ export default function OvertimeAppMoreMenu({ dulieu, handleOpenToast, emailLogi
           sx={{ color: 'text.secondary' }}
         >
           <ListItemIcon>
-            <Icon icon={trash2Outline} width={24} height={24} />
+            <Icon icon={closeCircleOutline} width={24} height={24} />
           </ListItemIcon>
           <ListItemText primary="Not Approved" primaryTypographyProps={{ variant: 'body2' }} />
         </MenuItem>
