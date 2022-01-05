@@ -72,7 +72,7 @@ export default function AccountPopover() {
           })
         }}
       >
-        <Avatar src={Employee.Image} alt="photoURL" />
+        {account && Employee && <Avatar src={Employee.Image} alt="photoURL" />}
       </IconButton>
       {account && Employee && (
         <MenuPopover
